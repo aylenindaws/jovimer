@@ -23,7 +23,7 @@ class ProductTemplate(models.Model):
     invoice_line_id = fields.Many2one('account.move.line', string='Lin ALB/FACT', store=True, copy=True, ondelete='set null')
     kg_net_bulge = fields.Float(string='KG/NET Confección', store=True, copy=True)
     brand = fields.Many2one('jovimer.marca', string='Marca', store=True, copy=True, ondelete='set null')
-    name = fields.Char(string='Nombre', store=True, copy=True)
+    name = fields.Char(string='Nombre', store=True, copy=True, required=False)
     not_active = fields.Boolean('NO Activo', store=True, copy=True, tracking=True)
     not_calculate_lumps = fields.Boolean('No Calcula Bultos', store=True, copy=True, tracking=True)
     partner_id = fields.Many2one('res.partner', string='Cliente', store=True, copy=True, ondelete='set null')
