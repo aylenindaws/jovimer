@@ -31,9 +31,11 @@
                         </group>
                         <notebook>
                             <page string="Precios" name="jovimer_price">
-                                <field name="week"/>
-                                <field name="sale"/>
-                                <field name="pvp_type"/>
+                                <group name="template_right">
+                                    <field name="week"/>
+                                    <field name="sale"/>
+                                    <field name="pvp_type"/>
+                                </group>
                             </page>
                         </notebook>
                     </group>
