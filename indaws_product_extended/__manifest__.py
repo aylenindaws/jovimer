@@ -8,7 +8,7 @@
     "data": [
         "security/security.xml",
         'views/product_template.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
     ],
     "images": ["static/description/background.png",],              
     "application": True,
