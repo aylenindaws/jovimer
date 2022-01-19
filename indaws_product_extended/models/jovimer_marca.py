@@ -14,3 +14,7 @@ class JovimerMarca(models.Model):
     _description = 'jovimer marca'
 
     name = fields.Char('Nombre')
+    code = fields.Char(string='Código')
+    abr = fields.Char(string='abrev')
+    print_name = fields.Char(string='Impresión')
+    import_velneo = fields.Boolean(string='Importado Velneo')

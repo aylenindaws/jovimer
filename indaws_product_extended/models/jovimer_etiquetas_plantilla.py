@@ -14,3 +14,9 @@ class JovimerEtiquetasPlantilla(models.Model):
     _description = 'jovimer etiquetas plantilla'
 
     name = fields.Char('Nombre')
+    content = fields.Text(string='Contenido Etiqueta TXT')
+    content_uom = fields.Text(string='Contenido Etiqueta TXT UNIDAD')
+    lang = fields.Many2one('res.lang', string='Lenguaje', help='Lengua Nativa de la Etiqueta')
+    content_html = fields.Html(string='Contenido Etiqueta Enriquecida')
+    template_id = fields.One2many('product.template', 'plantillaetiquetas', string='Plantilla Producto')
+    label_id = fields.One2many('jovimer.etiquetas', 'plantillas', string='Plantilla Producto')

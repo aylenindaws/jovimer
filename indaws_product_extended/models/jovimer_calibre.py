@@ -14,4 +14,7 @@ class JovimerCalibre(models.Model):
     _description = 'jovimer calibre'
 
     name = fields.Char('Nombre')
-    
+    code = fields.Char(string='Código')
+    abr = fields.Char(string='abrev')
+    print_name = fields.Char(string='Impresion')
+    import_velneo = fields.Boolean(string='Importado Velneo')
