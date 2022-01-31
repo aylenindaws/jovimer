@@ -5,7 +5,27 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='date_order']" position="before">
+            <xpath expr="//div[hasclass('oe_title')]" position="replace">
+                <group name="title">
+                    <group name="oe_title">
+                        <field name="dossier_id" readonly="1"/>
+                        <field name="name" string="Numero" readonly="1"/>
+                    </group>
+                    <group name="oe_subtitle">
+                        <div name="paletsv">
+                            <label for="paletsv"/>
+                            <field name="paletsv" readonly="1"/>
+                            <span> / </span>
+                            <label for="palets"/>
+                            <field name="palets" readonly="1"/>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="platform"/>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="id" readonly="1"/>
                 <field name="edi_file"/>
             </xpath>
