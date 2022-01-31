@@ -7,7 +7,7 @@
     "depends" : ['sale', "base", "product"],
     "data": [
         "security/security.xml",
-        'views/sale_order.xml',
+        'views/product_template.xml',
         'security/ir.model.access.csv',
     ],
     "images": ["static/description/background.png",],              
