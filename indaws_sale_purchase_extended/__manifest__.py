@@ -4,7 +4,7 @@
     "name" : "Ajustes de Ventas y Compras",
     "author" : "Indaws",
     "version":"14.0.1",
-    "depends" : ['sale', "base", "indaws_product_extended"],
+    "depends" : ['sale', "base", "indaws_product_extended",'purchase'],
     "data": [
         "security/security.xml",
         'views/sale_order.xml',
