@@ -15,10 +15,10 @@ class JovimerExpedientes(models.Model):
     _order = "name asc"
 
     name = fields.Integer(string='Número', help='Número Expediente')
-    partner_id = fields.Many2one('res.partner', string='Cliente', related='order_id.partner_id')
-    download_partner_id = fields.Many2one('res.partner', string='Direccion Descarga', related='order_id.partner_shipping_id')
-    date_end = fields.Date(string='Fecha de Salida', related='order_id.fechasalida')
-    date_start = fields.Date(string='Fecha de Llegada', related='order_id.fechallegada')
+    #partner_id = fields.Many2one('res.partner', string='Cliente', related='order_id.partner_id')
+    #download_partner_id = fields.Many2one('res.partner', string='Direccion Descarga', related='order_id.partner_shipping_id')
+    #date_end = fields.Date(string='Fecha de Salida', related='order_id.fechasalida')
+    #date_start = fields.Date(string='Fecha de Llegada', related='order_id.fechallegada')
     time_arrive = fields.Char(string='Hora de Llegada', help='Permite caracteres Alfanuméricos')
     registration = fields.Char(string='Matrícula', help='Permite varias')
     transport_int_partner_id = fields.Many2one('res.partner', string='Transporte Internacional')
@@ -49,7 +49,7 @@ class JovimerExpedientes(models.Model):
     #cti = fields.One2many('jovimer.cti', 'dossier_id', string='Control Trans Internacional')
     #claims = fields.One2many('jovimer.reclamaciones', 'dossier_id', string='Etiquetas')
     #label_id = fields.One2many('jovimer.etiquetas', 'dossier_id', string='Etiquetas')
-    order_close = fields.Boolean(string='Pedido Cerrado', related='order_id.pedidocerrado')
+    #order_close = fields.Boolean(string='Pedido Cerrado', related='order_id.pedidocerrado')
 
     #@api.depends('serie', 'name')
     #def _compute_fields_combination(self):
