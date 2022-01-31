@@ -25,4 +25,4 @@ class JovimerConfeccion(models.Model):
     print_name = fields.Char(string='Impresion')
     tara = fields.Float(string='Tara')
     uom_bulto = fields.Many2one('uom.uom', string='Tipo Cálculo / Ud Venta', domain=[('invisible', '=', 'NO')])
-    template_id = fields.One2many('product.template', 'confeccion', string='Plantillas Afectadas')
+    #template_id = fields.One2many('product.template', 'confeccion', string='Plantillas Afectadas')

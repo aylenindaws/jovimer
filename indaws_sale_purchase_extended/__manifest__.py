@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Softhealer Technologies.
 {
-    "name" : "Ajustes de Productos",
+    "name" : "Ajustes de Ventas y Compras",
     "author" : "Indaws",
     "version":"14.0.1",
-    "depends" : ['sale', "base", "product"],
+    "depends" : ['sale', "base", "indaws_product_extended"],
     "data": [
         "security/security.xml",
         'views/sale_order.xml',
