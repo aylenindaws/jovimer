@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_supplierinfo_import_tree_view" model="ir.ui.view">
+            <field name="name">product.supplierinfo.import.tree.view</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="replace">
+                    <field name="product_id" readonly="1" optional="hide"
+                        invisible="context.get('product_template_invisible_variant', False)"
+                        groups="product.group_product_variant" width="110px"/>
+                </field>
+                <field name="product_name" position="replace">
+                    <field name="product_name" optional="hide" width="150px"/>
+                </field>
+                <field name="name" position="replace">
+                    <field name="name" readonly="1" width="150px"/>
+                </field>
+                <field name="currency_id" position="replace">
+                    <field name="currency_id" groups="base.group_multi_currency" width="75px"/>
+                </field>
+                <field name="price" position="replace">
+                    <field name="price" string="Price" width="49px"/>
+                </field>
+                <field name="delay" position="replace">
+                    <field name="delay" optional="hide" width="150px"/>
+                </field>
+                <field name="product_uom" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="price" position="after">
+                    <field name="transport_cost" width="120px"/>
+                    <field name="margin" width="72px"/>
+                    <field name="not_update_prices" width="135px"/>
+                    <field name="price_entregado" width="110px"/>
+                    <field name="price_sale_recommend" width="130px"/>
+                    <field name="cantidad" width="110px"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_supplierinfo_tree_view_inherit_indaws" model="ir.ui.view">
+            <field name="name">product.supplierinfo.import.tree.view.inherit.indaws</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="purchase_requisition.product_supplierinfo_tree_view_inherit"/>
+            <field name="arch" type="xml">
+                <field name="purchase_requisition_id" position="replace">
+                    <field name="purchase_requisition_id" readonly="1" optional="hide" width="75px"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- PRECIOS PROVEEDORES -->
+        
+        <record model="ir.ui.view" id="view_supplier_analysis_tree">
+            <field name="name">product.supplierinfo.analysis.tree</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="priority" eval="86"/>
+            <field name="arch" type="xml">
+                <tree string="Supplier analysis">
+                    <field name="product_tmpl_id"/>
+					<field name="name"/>
+                    <field name="price"/>
+                    <field name="transport_cost"/>
+                    <field name="margin"/>
+                    <field name="not_update_prices"/>
+                    <field name="price_entregado"/>
+                    <field name="price_sale_recommend"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="inc_cost"/>
+                    <field name="min_supplier_id"/>
+                    <field name="min_cost"/>
+                    <field name="date_min_cost"/>
+                    <field name="median_cost"/>
+					<field name="variation_median_cost"/>
+                    <field name="average_cost"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_product_supplier_analysis" model="ir.actions.act_window" >
+			<field name="name">Supplier analysis</field>
+			<field name="res_model">product.supplierinfo</field>
+            <field name="view_id" ref="indaws_affinity_import_prices.view_supplier_analysis_tree"/>
+			<field name="view_mode">tree</field>
+		</record>
+
+		<menuitem name="Supplier analysis" parent="purchase.menu_purchase_products" id="menu_supplier_analysis" action="action_product_supplier_analysis" sequence="201"/>
+
+    </data>
+</odoo>

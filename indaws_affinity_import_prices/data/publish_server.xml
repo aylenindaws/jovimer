@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_sync_product_bulk" model="ir.actions.server">
+        <field name="name">Website Publish Check Product</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.cron_published_schedule()
+        </field>
+    </record>
+
+    <record id="schduler_check_product_published" model="ir.cron">
+        <field name="name">Check Product Website Publish</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_published_schedule()</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=0)).strftime('%Y-%m-%d 23:30:00')"/>
+    </record>
+
+    <record id="schduler_check_product_e_commerce_category_2" model="ir.cron">
+        <field name="name">Check Product e-Commerce Category</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.check_product_e_commerce_category_schedule()</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=0)).strftime('%Y-%m-%d 23:30:00')"/>
+    </record>
+</odoo>
