@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id='schedule_test_tree' model='ir.ui.view'>
+            <field name='name'>schedule.test.tree</field>
+            <field name='model'>schedule.test</field>
+            <field name='arch' type='xml'>
+                <tree string='Schedule Run History'>
+                    <field name='name' />
+                    <field name='run_date' />
+                    <field name='count_product' />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="schedule_test_action">
+            <field name="name">Schedule Run History</field>
+            <field name="res_model">schedule.test</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Create New Record </p>
+            </field>
+        </record>
+
+        <menuitem id='schedule_test_menu' name='Schedule Run History'
+            parent='sale.product_menu_catalog' action='schedule_test_action' groups="base.group_no_one"/>
+
+</odoo>
+

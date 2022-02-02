@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"manager_product_pricelist_load","product_pricelist_load group","model_product_pricelist_load","sales_team.group_sale_manager",1,1,1,1
+"manager_product_pricelist_load_line","product_pricelist_load_line group","model_product_pricelist_load_line","sales_team.group_sale_manager",1,1,1,1
+access_schedule_test,access_schedule_test,model_schedule_test,base.group_user,1,1,1,1
+access_vendor_product_code,access_vendor_product_code,model_vendor_product_code,base.group_user,1,1,1,1

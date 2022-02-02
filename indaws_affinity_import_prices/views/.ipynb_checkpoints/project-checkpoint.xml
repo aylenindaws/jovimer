@@ -1,0 +1,201 @@
+﻿<openerp>
+    <data>
+        
+        <menuitem name="Planificación" parent="project.menu_main_pm" id="menu_project_planification" sequence="90" groups="project.group_project_manager"/>
+        
+
+        
+        <!-- project.planification.line -->
+        
+        <record model="ir.ui.view" id="view_project_planification_line_tree">
+            <field name="name">project.planification.line.tree</field>
+            <field name="model">project.planification.line</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Planificación líneas" editable="top">
+                    <field name="fecha_ini"/>
+                    <field name="fecha_fin"/>
+                    <field name='project_id' />
+                    <field name='task_id' />
+                    <field name='type_id' />
+                    <field name="finalizado"/>
+                    <field name='horas_planificadas' sum="horas planificadas" widget="float_time"/>
+                    <field name='horas_reales' sum="horas reales" widget="float_time"/>
+                    <field name='notas' />
+                    
+                </tree>
+            </field>
+        </record>
+        
+        
+        <!--<record model="ir.ui.view" id="view_project_planification_line_search">
+            <field name="name">project.planification.line.search</field>
+            <field name="model">project.planification.line</field>
+            <field name="arch" type="xml">
+                <search string="Budget">
+                    <field name="project_id"/>
+                    <field name="fecha_ini"/>
+                    <field name="fecha_fin"/>
+                    <field name="user_id"/>
+                    <group expand="0" string="Group by">
+                       <filter string="Proyecto" context="{'group_by': 'project_id'}"/>
+                       <filter string="Usuario" context="{'group_by': 'user_id'}"/>
+                       <filter string="Fecha" context="{'group_by': 'fecha_ini'}"/>
+                       <filter string="Tipo" context="{'group_by': 'type_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>-->
+        
+        <record model="ir.actions.act_window" id="action_project_planification_line">
+            <field name="name">Planificación horas detalle</field>
+            <field name="res_model">project.planification.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem name="Detalle Planificación" parent="menu_project_planification" id="menu_project_planification_line" action="action_project_planification_line" sequence="220"/>
+        
+        
+        
+        
+
+        <!-- project.planification -->
+        
+        <record model="ir.ui.view" id="view_project_planification_tree">
+            <field name="name">project.planification.tree</field>
+            <field name="model">project.planification</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Informe rentabilidad">
+                    <field name="fecha_ini"/>
+                    <field name="fecha_fin"/>
+                    <field name="user_id"/>
+                    <field name="finalizado"/>
+                    <field name="total_horas_planificadas" sum="horas planificadas" widget="float_time"/>
+                    <field name="total_horas_reales" sum="horas reales" widget="float_time"/>
+                    
+                    <field name="total_horas_restantes" widget="float_time"/>
+                    <field name="progress" widget="progressbar"/>
+                    
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="view_project_planification_form">
+            <field name="name">project.planification.form</field>
+            <field name="model">project.planification</field>
+            <field name="arch" type="xml">
+                <form string="Informe rentabilidad">
+                    <header>
+                        <button string="Cargar plantilla" type="object" name="cargar_plantilla"
+                                class="oe_highlight" />
+                        <button string="Calcular reales" type="object" name="calcular_reales_resumen"
+                                class="oe_highlight" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="fecha_ini"/>
+                            <field name="fecha_fin"/>
+                            <field name="user_id"/>
+                            <field name="finalizado"/>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Detalle">
+                                <group>
+                                    <field name="line_ids" context="{'planification_id': active_id, }">
+                                        <tree string="Líneas" editable="top">
+                                            <field name='project_id' />
+                                            <field name='task_id' />
+                                            <field name='type_id' />
+                                            <field name="finalizado"/>
+                                            <field name='horas_planificadas' sum="horas planificadas" widget="float_time"/>
+                                            <field name='horas_reales' sum="horas reales" widget="float_time"/>
+                                            <field name="progress" widget="progressbar"/>
+                                            <field name='notas' />
+                                           
+                                        </tree>
+                                    </field>   
+                                    
+                                </group>
+                                
+                                
+                                <group>
+                                    <field name="total_horas_planificadas" widget="float_time"/>
+                                    <field name="total_horas_reales" widget="float_time"/>
+                                    
+                                    <field name="total_horas_restantes" widget="float_time"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    
+                                </group>
+                                
+                                
+                            </page>
+                            
+                            
+
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+
+				
+        <record model="ir.actions.act_window" id="action_project_planification">
+            <field name="name">Planificación horas</field>
+            <field name="res_model">project.planification</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem name="Planificación horas" parent="menu_project_planification" id="menu_project_planification_horas" action="action_project_planification" sequence="200"/>
+        
+        
+        
+        
+        <!-- project.planification.template -->
+        
+        <record model="ir.ui.view" id="view_project_planification_template_tree">
+            <field name="name">project.planification.template.tree</field>
+            <field name="model">project.planification.template</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree editable="top" string="Tareas plantilla">
+                    <field name="user_id"/>
+                    <field name="project_id"/>
+                    <field name="type_id"/>
+                    <field name="horas_planificadas"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        
+        
+        <record model="ir.actions.act_window" id="action_project_planification_template">
+            <field name="name">Plantilla planificación horas</field>
+            <field name="res_model">project.planification.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem name="Plantilla planificación" parent="menu_project_planification" id="menu_project_planification_template" action="action_project_planification_template" sequence="221"/>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+    </data>
+</openerp>
