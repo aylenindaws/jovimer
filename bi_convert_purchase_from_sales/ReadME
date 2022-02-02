@@ -1,0 +1,7 @@
+
+> 10-11-2020 = 14.0.0.1 = Source Document Issue.
+> 10-11-2020 = 14.0.0.2 = Added supplier on sale order line.
+> 18-11-2021 = 14.0.0.3 = Changed purchase order creation flow,create purchase order per supplier wise
+> 22-02-2021 = 14.0.0.4 = changed field sequence in sale order line.
+> 23-02-2021 = 14.0.0.5 = Added price_entregado in sale order line.
+> 23-02-2021 = 14.0.0.6 = Fixed the onchange method issue.
