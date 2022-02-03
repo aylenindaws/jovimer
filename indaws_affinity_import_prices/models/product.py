@@ -196,13 +196,13 @@ class product_template(models.Model):
         warehouse = self.env['stock.warehouse'].search([('company_id', '=', self.env.user.company_id.id)])
         for record in label:
             product = record.product_tmpl_id.with_context(warehouse=warehouse.ids)
-            product_qty = 0 if product.stock_available_website == '' else float(product.stock_available_website.split(' ')[0])
+            product_qty = 0 if product.stock_available_website == '' and product.stock_available_website is not False else float(product.stock_available_website.split(' ')[0])
             if product_qty >= 0:
                 record.unlink()
         categ = self.env['product.public.category'].search([('name','=','OFERTAS ESPECIALES')])
         product = self.env['product.template'].search([('public_categ_ids','in',categ.id)])
         for record in product.with_context(warehouse=warehouse.ids):
-            product_qty = 0 if record.stock_available_website == '' else float(record.stock_available_website.split(' ')[0])
+            product_qty = 0 if record.stock_available_website == '' and product.stock_available_website is not False else float(record.stock_available_website.split(' ')[0])
             if product_qty <= 0:
                 record.write({"public_categ_ids": [(3, categ.id)]})
 
@@ -257,7 +257,7 @@ class product_template(models.Model):
                     date_end_supplier = sup.date_end
                     date_start_supplier = sup.date_start
 
-                if min_cost == 0.0 and sup.price > 0.0 and sup.cantidad > 0 and sup.name.not_update_prices == False and sup.date_end >= today:
+                if min_cost == 0.0 and sup.price > 0.0 and sup.cantidad > 0 and sup.name.not_update_prices == False and sup.date_end and sup.date_end >= today:
                     min_cost = sup.price_entregado
                     sup_id = sup.name.id
                     variation_median_cost = sup.variation_median_cost

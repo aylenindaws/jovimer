@@ -21,7 +21,6 @@
         "views/purchase.xml",
         "views/schedule_test.xml",
         "views/product_template_view.xml",
-        "views/website_sale_inherit.xml",
         "views/product_pricelist_load_view.xml",
         "views/product_supplierinfo_view.xml",
         "views/res_partner_view.xml",
