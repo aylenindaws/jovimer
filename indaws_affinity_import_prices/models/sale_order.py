@@ -15,7 +15,7 @@ class SaleOrder(models.Model):
             if order.product_id:
                 product_qty = 0
                 if not order.display_type:
-                    product_qty = 0 if order.product_id.product_tmpl_id.stock_available_website == '' else float(order.product_id.product_tmpl_id.stock_available_website.split(' ')[0])
+                    product_qty = 0 if order.product_id.product_tmpl_id.stock_available_website == '' and item.stock_available_website is not False else float(order.product_id.product_tmpl_id.stock_available_website.split(' ')[0])
                 if product_qty <= 0:
                     if not order.product_id.label_line_ids:
                         label = self.env['product.label.line'].create({
@@ -32,7 +32,7 @@ class SaleOrder(models.Model):
                             })]
                 item = self.pricelist_id.item_ids.filtered(lambda x:x.applied_on == "1_product" and x.product_tmpl_id==order.product_id.product_tmpl_id)
                 if item:
-                    item_product_qty = 0 if item.product_tmpl_id.stock_available_website == '' else float(item.product_tmpl_id.stock_available_website.split(' ')[0])
+                    item_product_qty = 0 if item.product_tmpl_id.stock_available_website == '' and item.stock_available_website is not False else float(item.product_tmpl_id.stock_available_website.split(' ')[0])
                     if item_product_qty <= 0:
                         item.sudo().unlink()
         return res
