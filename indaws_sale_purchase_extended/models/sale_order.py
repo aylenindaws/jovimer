@@ -22,7 +22,6 @@ class SaleOrder(models.Model):
     lote_char = fields.Char(string='Lote', store=True, copy=True)
     close_sale = fields.Boolean(string='Pedido Cerrado')
 
-    @api.multi
     def update_edi_file(self, default=None):
         id = str(self.id)
         args = ["/opt/jovimer12/bin/importaedi_pedido.sh", id, "&"]
