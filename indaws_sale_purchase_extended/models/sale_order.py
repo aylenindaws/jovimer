@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os.path
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
@@ -24,6 +25,9 @@ class SaleOrder(models.Model):
 
     def update_edi_file(self, default=None):
         id = str(self.id)
-        args = ["/opt/jovimer12/bin/importaedi_pedido.sh", id, "&"]
+        path = 'static/sh/importaedi_pedido.sh'
+        dir = os.path.dirname(__file__)
+        file_dir = dir.replace('models','')
+        args = [file_dir+path, id, "&"]
         subprocess.call(args)
         return {}
