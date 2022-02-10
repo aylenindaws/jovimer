@@ -18,7 +18,6 @@ class sale_order_line(models.Model):
         digits='Product Price', store=True, readonly=False,
         groups="base.group_user")
     supplier_id = fields.Many2one('res.partner', string="Supplier")
-    price_entregado = fields.Float(string="Price Entregado")
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
@@ -26,7 +25,6 @@ class sale_order_line(models.Model):
             seller_ids = self.product_id.seller_ids.mapped('name')
             if seller_ids:
                 self.supplier_id = seller_ids[0]
-                self.price_entregado = self.product_id.seller_ids and self.product_id.seller_ids[0].price_entregado
 
     @api.depends('product_id', 'company_id', 'currency_id', 'product_uom')
     def _compute_purchase_price_adapt(self):
