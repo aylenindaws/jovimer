@@ -12,18 +12,8 @@ class SaleOrderLine(models.Model):
     def sub_total(self):
         ''' calculate cost real total from cost real amount and qty of product'''
         for rec in self:
-            if rec.product_id.seller_ids:
-                if rec.cost_real != rec.product_id.seller_ids[0].price_entregado:
-                    rec.cost_real = rec.cost_real
-                else:
-                    rec.cost_real = rec.product_id.seller_ids[0].price_entregado
             rec.cost_real_total = rec.cost_real * rec.product_uom_qty
             # rec.purchase_price = rec.product_id.seller_ids and rec.product_id.seller_ids[0].price
-
-    @api.onchange('product_id')
-    def _onchange_product_id_cost_real(self):
-        if self.product_id and self.product_id.seller_ids:
-            self.cost_real = self.product_id.seller_ids[0].price_entregado
 
     def _prepare_invoice_line(self, **optional_values):
         invoice_line = super(SaleOrderLine, self)._prepare_invoice_line(**optional_values)

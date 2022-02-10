@@ -27,7 +27,11 @@
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="id" readonly="1"/>
-                <field name="edi_file"/>
+                <label for="edi_file"/>
+				<div>
+				    <field name="edi_file" class="oe_inline" domain="[('res_id','=', id)]" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}" options="{'no_quick_create': True}"/>
+                    <button name="update_edi_file" string="Leer Fichero" type="object" class="oe_inline" attrs="{'invisible': [('editxt', '=', False)]}"/>
+                </div>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="date_end"/>
