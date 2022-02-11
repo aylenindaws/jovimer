@@ -7,3 +7,6 @@
 [submodule "sale-workflow"]
 	path = sale-workflow
 	url = https://github.com/OCA/sale-workflow.git
+[submodule "community-data-files"]
+	path = community-data-files
+	url = https://github.com/OCA/community-data-files.git
