@@ -18,3 +18,6 @@
 	path = OCA/edi
 	url = git@github.com:OCA/edi.git
 	branch = 14.0
+[submodule "queue"]
+	path = queue
+	url = https://github.com/OCA/queue.git
