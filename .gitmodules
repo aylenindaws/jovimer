@@ -1,0 +1,3 @@
+[submodule "edi"]
+	path = edi
+	url = https://github.com/OCA/edi.git
