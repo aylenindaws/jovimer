@@ -10,3 +10,6 @@
 [submodule "community-data-files"]
 	path = community-data-files
 	url = https://github.com/OCA/community-data-files.git
+[submodule "connector"]
+	path = connector
+	url = https://github.com/OCA/connector.git
