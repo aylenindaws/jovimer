@@ -13,3 +13,8 @@
 [submodule "connector"]
 	path = connector
 	url = https://github.com/OCA/connector.git
+
+[submodule "OCA/edi"]
+	path = OCA/edi
+	url = git@github.com:OCA/edi.git
+	branch = 14.0
