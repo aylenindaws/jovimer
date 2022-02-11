@@ -1,3 +1,6 @@
 [submodule "edi"]
 	path = edi
 	url = https://github.com/OCA/edi.git
+[submodule "server-tools"]
+	path = server-tools
+	url = https://github.com/OCA/server-tools.git
