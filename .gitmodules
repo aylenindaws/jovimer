@@ -4,3 +4,6 @@
 [submodule "server-tools"]
 	path = server-tools
 	url = https://github.com/OCA/server-tools.git
+[submodule "sale-workflow"]
+	path = sale-workflow
+	url = https://github.com/OCA/sale-workflow.git
