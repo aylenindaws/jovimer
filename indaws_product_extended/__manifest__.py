@@ -9,6 +9,7 @@
         "security/security.xml",
         'views/product_template.xml',
         'security/ir.model.access.csv',
+        'views/prints.xml',
     ],
     "images": ["static/description/background.png",],              
     "application": True,
