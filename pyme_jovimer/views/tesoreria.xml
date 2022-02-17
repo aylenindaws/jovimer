@@ -1,0 +1,279 @@
+<odoo>
+  <data>
+
+
+
+    <record model="ir.ui.view" id="payment_invoice_tree2">
+        <field name="name">Facturas PAGOS/COBROS</field>
+        <field name="model">account.invoice</field>
+		<field name="priority">100</field>
+        <field name="arch" type="xml"><tree editable="top">
+						  	<field name="bloqueapago" readonly="1"/>
+						  	<field name="expediente_serien" string="Exp" invisible="1"/>
+					        <field name="expediente" invisible="1"/>
+							<field name="fechafacturapago" string="Fecha Documento" readonly="1"/>
+							<field name="number" string="Numero Interno" readonly="1"/>
+							<field name="refcliente" invisible="1"/>
+							<field name="reference" string="Número Proveedor" readonly="1"/>
+							<field name="partner_id" string="Cliente" readonly="1"/>
+							<field name="date_due" invisible="1"/>
+							<field name="origin" string="Doc Origen" invisible="1"/>
+							<field name="amount_untaxed" string="Base Imponible" sum="Total" invisible="1"/>
+							<field name="amount_tax" string="Impuestos" sum="Total" invisible="1"/>
+							<field name="residual_signed" string="Pendiente" sum="To pay" invisible="1"/>
+							<field name="currency_id" invisible="1"/>
+							<field name="company_currency_id" invisible="1"/>
+							<field name="state" invisible="1"/>
+							<field name="type" invisible="1"/>
+							<field name="traspasocontfecha" invisible="1"/>
+							<field name="amount_total" string="Total Fact" readonly="1"/>
+							<field name="amount_topay" sum="Total" readonly="1"/>
+							<field name="amount_topayc" sum="Total" readonly="1"/>							
+							<field name="residual" string="Saldo" readonly="1"/>
+							<field name="importeapagar" sum="Total"/>
+							<field name="pagadopy"/>
+							<button name="parcial" string="Parcial" type="object"/>
+							<!-- <button name="quitarpago" string="Quitar" type="object"/> -->
+							
+						  </tree>
+                    </field>
+    </record>
+
+
+
+
+    <record model="ir.ui.view" id="payment_tree2">
+        <field name="name">Pyme - Registrar Pago / Cobro</field>
+        <field name="model">account.payment</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+
+<tree decoration-info="state == 'draft'" decoration-muted="state in ['reconciled', 'cancelled']" edit="false" default_order='id desc'>
+                    <field name="payment_date"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="payment_method_id"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="amount" sum="Amount" widget="monetary"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_type" invisible="1"/>
+					<field name="traspasado"/>
+                </tree>
+
+                    </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="payment_form2">
+        <field name="name">Pyme - Registrar Pago / Cobro</field>
+        <field name="model">account.payment</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+
+<form string="Registros de Cobros y Pagos">
+                    <header>
+                        <button name="post2" class="oe_highlight" states="draft" string="Confirmar" type="object"/>
+                        <button name="action_draft" class="oe_highlight" states="cancelled" string="Volver a Pendiente" type="object"/>
+						 <button name="cancel2" attrs="{'invisible': [('state', 'in', ['draft','cancelled'])]}" string="Cancelar" type="object" confirm="¿Desea Cancelar este Pago?"/>
+                        <button name="action_imprimetalon" attrs="{'invisible': [('payment_type', '=', 'inbound')]}" string="Talón Santander" type="object"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,posted,reconciled,cancelled"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="button_journal_entries" string="Journal Items" type="object" groups="account.group_account_user" attrs="{'invisible':[('move_line_ids','=',[])]}" icon="fa-bars"/>
+                            <field name="move_line_ids" invisible="1"/>
+                            <!-- <button class="oe_stat_button" name="button_invoices" string="Invoices" type="object" attrs="{'invisible':[('has_invoices','=',False)]}" icon="fa-bars"/> -->
+                            <button class="oe_stat_button" name="open_payment_matching_screen" string="Payment Matching" type="object" attrs="{'invisible':[('move_reconciled','=',True)]}" icon="fa-university"/>
+                            <field name="has_invoices" invisible="1"/>
+                            <field name="move_reconciled" invisible="1"/>
+                        </div>
+                        <field name="id" invisible="1"/>
+                        <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="payment_type" string="Tipo" widget="radio" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="partner_type" string="Tipo de Entidad" widget="selection" attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="partner_id" attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}" context="{'default_is_company': True, 'default_supplier': payment_type == 'outbound', 'default_customer': payment_type == 'inbound'}"/>
+                                <field name="partnername"/>
+                                <label for="amount" string="Cantidad"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <button type="object" name="calcamount" string="Calc"/>
+									<field name="currency_id" invisible="1" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </div>
+								<label for="importetexto"/>
+								<div>
+								<field name="importetexto" class="oe_inline"/>
+								
+								</div>
+
+                                <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="destination_journal_id" widget="selection" attrs="{'required': [('payment_type', '=', 'transfer')], 'invisible': [('payment_type', '!=', 'transfer')], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="hide_payment_method" invisible="1"/>
+                                <field name="payment_method_id" string=" " widget="radio" attrs="{'invisible': [('hide_payment_method', '=', True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="payment_method_code" invisible="1"/>
+								
+                            </group>
+                            <group>
+                                
+                                
+								<field name="payment_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								
+								<field name="banco" options="{'no_create': True}"/>
+								<field name="fechapagare" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                               
+                                <field name="communication" string="Nº Pagaré" attrs="{'invisible': [('state', '!=', 'draft'), ('communication', '=', False)], 'readonly': [('state', '!=', 'draft')]}"/>
+								<label for="traspasado"/>
+								<div>
+								<field name="traspasado" class="oe_inline"/>
+								<field name="traspasocontfecha" readonly="1" class="oe_inline"/>
+								</div>
+								
+                            </group>
+                        </group>
+						<notebook>
+						<page string="Facturas">
+						  <!-- <field name="facturas" domain="['|','&amp;',('partnerpart','=', partner_id),('partner_id','=', partner_id),('journal_id','in',[11,12,13,14,15,16,17,18,19,20,21,22,23,24])]" context="{'search_default_nofactpagadas': 1}"> -->
+						  <!-- <tree editable="top" delete="false"> -->
+						  <field name="facturas" domain="['&amp;','|',('partnerpart','=', partner_id),('partner_id','=', partner_id),('journal_id','in',[11,12,13,14,15,16,17,18,19,20,21,22,23,24,33])]" context="{'search_default_nofactpagadas': 1}">
+						  <tree editable="top">
+						  	<field name="bloqueapago" readonly="1"/>
+						  	<field name="expediente_serien" string="Exp" invisible="1"/>
+					        <field name="expediente" invisible="1"/>
+							<field name="fechafacturapago" string="Fecha Documento" readonly="1"/>
+							<field name="number" string="Numero Interno" readonly="1"/>
+							<field name="refcliente" invisible="1"/>
+							<field name="reference" string="Número Proveedor" readonly="1"/>
+							<field name="partner_id" string="Cliente" readonly="1"/>
+							<field name="date_due" invisible="1"/>
+							<field name="origin" string="Doc Origen" invisible="1"/>
+							<field name="amount_untaxed" string="Base Imponible" sum="Total" invisible="1"/>
+							<field name="amount_tax" string="Impuestos" sum="Total" invisible="1"/>
+							<field name="residual_signed" string="Pendiente" sum="To pay" invisible="1"/>
+							<field name="currency_id" invisible="1"/>
+							<field name="company_currency_id" invisible="1"/>
+							<field name="state" invisible="1"/>
+							<field name="type" invisible="1"/>
+							<field name="traspasocontfecha" invisible="1"/>
+							<field name="amount_total" string="Total Fact" readonly="1"/>
+							<field name="amount_topay" sum="Total" readonly="1"/>
+							<field name="amount_topayc" sum="Total" readonly="1"/>							
+							<field name="residual" string="Saldo" readonly="1"/>
+							<field name="importeapagar" sum="Total"/>
+							<field name="pagadopy"/>
+							<button name="parcial" string="Parcial" type="object"/>
+							<field name="numfactnorm"/>
+							<!-- <button name="quitarpago" string="Quitar" type="object"/> -->
+							
+						  </tree>
+						  </field>
+						
+						</page>
+						<page string="Texto Carta">
+						  <group>
+						    <field name="textocarta"/>
+							<label for="payment_date" string="Fecha Talón"/>
+								<div>
+								 <field name="diafp" class="oe_inline"/> 
+								 <label for="payment_date" string=" - " class="oe_inline"/>
+								 <field name="mesfp" class="oe_inline"/> 
+								 <label for="payment_date" string=" - " class="oe_inline"/>
+								 <field name="anyofp" class="oe_inline" /> 
+								</div>
+							 <label for="fechapagare" string="Fecha Talón"/>
+								<div>
+								 <field name="diafd" class="oe_inline"/> 
+								 <label for="fechapagare" string=" - " class="oe_inline"/>
+								 <field name="mesfd" class="oe_inline"/> 
+								 <label for="fechapagare" string=" - " class="oe_inline"/>
+								 <field name="anyofd" class="oe_inline" /> 
+								</div>
+						  </group>
+						</page>
+						</notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                  </div>
+                </form>
+                    </field>
+    </record>
+
+
+
+
+    <record id="view_acount_journal_paymentbank_form" model="ir.ui.view">
+        <field name="name">view_acount_journal_paymentbank_form</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <data>
+				    <field name="type" position="after">
+					  <field name="banco"/>
+					</field>
+
+            </data>
+        </field>
+    </record>
+
+
+
+
+
+<!-- Action Series Facturas Comrpa -->
+    <record model="ir.actions.act_window" id="action_payment_cobro_pymes">
+      <field name="name">Cobros</field>
+      <field name="res_model">account.payment</field>
+      <field name="view_mode">tree,form</field>
+	  <field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'customer'}</field>
+      <field name="domain">[('partner_type', '=', 'customer')]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('payment_tree2')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('payment_form2')})]"/>
+    </record>
+
+<!-- Action Series Facturas Venta -->
+    <record model="ir.actions.act_window" id="action_payment_pago_pymes">
+      <field name="name">Pagos</field>
+      <field name="res_model">account.payment</field>
+      <field name="view_mode">tree,form</field>
+	  <field name="context">{'default_payment_type': 'outbound', 'default_partner_type': 'supplier'}</field>
+      <field name="domain">[('partner_type', '=', 'supplier')]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('payment_tree2')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('payment_form2')})]"/>
+    </record>
+
+
+<!-- **************************************** MENUS **************************************** -->
+
+
+    <menuitem id="menu_tesoreria" 
+              name="Tesoreria" 
+			  parent="menu_jovimerfactu"
+              web_icon="pyme_menus,static/menu/tesoreria.png"
+              sequence="130"/>
+
+
+   <menuitem name="Cobros"
+              id="item_action_menucobros_pyme"
+              parent="menu_tesoreria"
+			  action="action_payment_cobro_pymes"/>
+
+   <menuitem name="Pagos"
+              id="item_action_menupagos_pyme"
+              parent="menu_tesoreria"
+			  action="action_payment_pago_pymes"/>
+
+
+
+    
+	
+  
+  </data>
+</odoo>

@@ -1,0 +1,2155 @@
+<openerp>
+    <data>
+
+
+<!-- EXPEDIENTES -->
+<!-- EXPEDIENTES -->
+<!-- EXPEDIENTES -->
+
+<record model="ir.ui.view" id="jovimer_wizardsaleexp_view_tree">
+      <field name="name">Cambio Expedientes</field>
+      <field name="model">jovimer_wizardsaleexp</field>
+      <field name="arch" type="xml">  
+			<tree>
+
+					<field name="expediente_serien" />
+                    <field name="expediente" />
+			        <field name="order_id" />
+                    <field name="partner_id" />
+
+           </tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_wizardsaleexp_view_form">
+      <field name="name">Cambio Expedientes</field>
+      <field name="model">jovimer_wizardsaleexp</field>
+      <field name="arch" type="xml">  
+			<form>
+			<sheet>
+			   <group>
+			   <group>
+                    
+					<label for="expediente" string="Expediente Actual"/>
+					<div>
+					<field name="expediente_serien" class="oe_inline" readonly="1"/>
+					<label for="expediente_serien" string=" / " class="oe_inline"/>
+                    <field name="expediente" class="oe_inline" readonly="1"/>
+					</div>
+			        <field name="order_id" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+				</group>
+				<group>
+				<label for="expedientenuevo" string="Expediente Nuevo"/>
+					<div>
+					<field name="expedientenuevo_serien" class="oe_inline" readonly="1"/>
+					<label for="expedientenuevo_serien" string=" / " class="oe_inline"/>
+                    <field name="expedientenuevo" class="oe_inline" options="{'no_create': True}"/>
+					</div>				
+				</group>
+				</group>
+			
+			<footer>
+			<button string="Cambiar Expediente" type="object" name="cambiar_expediente"  class="oe_link"/>
+			<button name="cancel" string="Cancelar" special="cancel"/>
+			</footer>
+			</sheet>
+           </form>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_expedientes_view_tree">
+      <field name="name">Expedientes</field>
+      <field name="model">jovimer_expedientes</field>
+      <field name="arch" type="xml">  
+			<tree import="false" create="false" default_order='name'>
+			
+			        <field name="serie" string="Serie"/>
+                    <field name="name" string="Expediente"/>
+                    <field name="cliente"/>
+                    <field name="fechasalida"/>
+                    <field name="fechallegada"/>
+                    <field name="pedidocerrado"/>
+                    <field name="clogistica"/>
+                    <field name="csalidas"/>
+                    <field name="cfacturacion"/>
+                    <field name="cliquidaciones"/>
+                    <field name="ccuentadeventas"/>
+           </tree>
+      </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="pyme_comprasline_view_form">
+      <field name="name">Pyme - Detalle Lineas Compra</field>
+      <field name="model">purchase.order.line</field>
+	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+<form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            
+											<group>
+
+
+  					  <field name="expediente_serien" string="Exp"/>
+					  <field name="expediente" string="Num"/>
+					  <field name="partner_id" domain="[('supplier','=',True),('noactivo','!=',True)]"/>
+					  <field name="order_id" string="Pedido Compra"/>
+					  <field name="saleorderline" string="Linea Venta que lo pide"/>
+					  <field name="id" />
+					  <field name="plantilla" domain="[('noactivo', '!=', True)]"/>
+					  <field name="product_id" options="{'no_quick_create': True}"/>
+
+					  <field name="variedad" />
+					  <field name="calibre" />
+					  <field name="categoria" />
+					  <field name="confeccion" />
+					  <field name="envase" />
+					  <field name="marca" />
+					</group>
+											
+
+											<group>
+                                                
+                                                <label for="cantidadpedido"/>
+                                                <div>
+                                                    <field name="cantidadpedido" widget="integer" class="oe_inline"/>
+                                                    <span class="oe_inline"> </span>
+                                                    <field name="unidadpedido" class="oe_inline"/>
+                                                </div>
+                                                <field name="bultos" widget="integer" />
+												 <field name="totalbultos" widget="integer" />
+                                                <field name="kgnetbulto"/>
+                                                <field name="product_uom" string="Pago por: "/>
+
+                                                <field name="price_unit" string="Precio"/>
+												<field name="discount"/>
+                                        
+                                                <field invisible="1" name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}"/>
+                                                <field name="date_planned" widget="date"/>
+												<field name="viajedirecto"/>
+                                                
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+												
+												<button type="object" name="purchase_abre_asig" string="Asignar" confirm="¿Deseas Asignar una Cantidad a Otra Venta?"/>
+                                            </group>
+                                        </group>
+										 </sheet>
+										</form>
+      </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="pyme_ventasline_view_form">
+      <field name="name">Pyme - Detalle Lineas Venta</field>
+      <field name="model">sale.order.line</field>
+	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+      <form>
+			  <sheet>
+				  <center>
+				      <field name="statusrecla" invisible="1"/>
+				      <b><label for="statusrecla" style="color:red;font-size:18pt;" string="Linea Pendiente de RECLAMACIÓN" attrs="{'invisible': [('statusrecla', '=', 'OK')]}"/></b>
+				      </center>
+				  <group>
+					<group>
+					  <field name="id"/>
+					  <field name="order_id" invisible="1"/>
+					  <field name="partner_id" invisible="1"/>
+				      <field name="plantilla" options="{'no_quick_create': True}" required="1" domain="[('noactivo', '!=', True)]"/>
+					  <field name="product_id" required="1" options="{'no_quick_create': True}" />
+					  <field invisible="1" name="product_updatable"/>
+					  <field name="variedad" required="1" />
+					  <field name="calibre" required="1" />
+					  <field name="categoria" required="1" />
+					  <field name="confeccion" required="1" />
+					  <field name="envase" required="1" />
+					  <field name="marca" required="1" />
+					</group>
+					<group>
+					<field invisible="1" string="Cliente" name="partner_id" readonly="1"/>
+					<label for="cantidadpedido" widget="integer" string="Palets:"/>
+					<div>
+					 <field name="cantidadpedido"  widget="integer" class="oe_inline"/>
+                     <field name="unidadpedido" required="1" class="oe_inline"  options="{'no_create': True}"/>
+					</div>
+					 <field name="bultos" widget="integer"/>
+					 <field name="unidadesporbulto" widget="integer" />
+					 <field name="kgnetbulto"/>	
+					<field name="qty_delivered" invisible="1"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+					<label for="product_uom_qty" string="Cantidad Vta:"/>
+					<div>
+					 <field name="product_uom_qty"  class="oe_inline" />
+                     <field name="unidabulto" options="{'no_create': True}"/>
+					 <field name="tipouom" class="oe_inline"  invisible="1" options="{'no_create': True}"/>
+					 <field invisible="1" name="product_uom" class="oe_inline"  options="{'no_create': True}"/>
+					</div>
+                    <field name="analytic_tag_ids"  invisible="1"/>
+					<field invisible="1" name="pvpvta" readonly="1" string="Precio Lista" />
+					<field name="price_unit" string="Precio" />
+                    <field invisible="1" name="tax_id" widget="many2many_tags" options="{'no_create': True}" />
+					<field name="discount" invisible="1"/>
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="price_total" widget="monetary" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					</group>
+				  </group>
+				  <group>
+				   <field name="name"/>
+				  </group>
+				  <notebook>
+				  <page string="Compra">
+				  <field name="multicomp">
+				  <tree editable="bottom">
+				     <field name="fechacompra"/>
+				     <field name="name" options="{'no_create': True}"/>
+				     <field name="comision"/>
+				     <field name="numpalets" widget="integer" />
+				     <field name="bultos" widget="integer"  required="1"/>
+				     <field name="pvpcompra" required="1"/>
+ 				     <field name="unidad" options="{'no_create': True}" required="1"/>
+ 				     <!-- <button name="creaasignacioncomp" string="Asignar" type="object"/> -->
+					 <field creaasignacioncompname="expediente_serien" readonly="1"/>	
+ 				     <field invisible="1" name="asignacion" options="{'no_create': True}"/>
+				  </tree>
+				  </field>
+				  </page>
+				  <page string="Habituales">
+				  </page>
+				  <page string="Provisionales">
+					 <button name="buscaprovisionales" type="object" string="Busca Provisionales"/>
+				  	 <field name="provisionaleso2m">
+
+					 <tree editable="top">
+					  <button name="asignaj" type="object" string="+"/>
+					  <field name="cantidadasignada"/>
+					  <field name="expediente_serien" string="Serie" readonly="1"/>
+					  <field name="expediente_num" string="Num" readonly="1"/>
+					  <field name="plantilla" readonly="1"/>
+					  <field name="product_id" readonly="1"/>
+					  <field name="cantidadpedido" widget="integer"  readonly="1"/>
+					  <field name="unidadpedido" readonly="1"/>
+					  <field name="state" readonly="1"/>
+					 </tree>
+					 </field>
+				  </page>
+				  <page string="Reclamaciones">
+				  <button name="action_crearreclamacion" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> 
+				  <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/> 
+				  <br/>
+				  <field name="reclamaciones"/>
+				  </page>
+				  <page string="Etiquetas">
+				  <button name="regeneraetiqueta" string="GeneraEtiqueta"  type="object" confirm="Esta accion Eliminará la etiqueta actual y la volverá a Generar desde la plantilla. ¿Estás Seguro?"/> 
+				   <group><group>
+				   <field name="plantillaetiqueta"/>
+				   <field name="etiqueta"/>
+				   <group><group>
+				   <field name="etiquetatxt"/>				  
+				   </group><group>
+				   <field name="etiquetatxtu"/>				  
+				   </group></group>
+				 </group></group>
+				  </page>				  
+				  </notebook>
+				  </sheet>
+
+				  </form>
+
+
+      </field>
+    </record>
+
+
+
+
+
+  <record model="ir.ui.view" id="jovimer_detalleventas_view_tree">
+      <field name="name">Pyme - Detalle Lineas Venta</field>
+      <field name="model">sale.order.line</field>
+	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+	  
+	  <tree editable="top">
+	   <field name="sequence" widget="handle"/>
+                    
+					
+					<field name="product_updatable" invisible="1"/>
+                    <field name="expediente_serien" readonly="1"/>
+					<field name="expediente" readonly="1"/>
+					<field name="partner_id" string="Cliente" readonly="1"/>
+					<field name="proveedores" readonly="1"/>
+
+                    <field name="product_id" invisible="1" options="{'no_quick_create': True}" attrs="{'readonly': [('product_updatable', '=', False)]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                    <field name="name" invisible="1"/>
+                    <field name="plantilla" invisible="1" readonly="1"/>
+                    <field name="variedad" readonly="1"/>
+                    <field name="marca" readonly="1"/>
+                    <field name="envase" readonly="1"/>
+                    <field name="bultos" widget="integer" readonly="1"/>
+                    <field name="cantidadpedido" widget="integer"  string="C. Venta" readonly="1"/>
+                    <field name="paletsc" string="C. Compra" readonly="1"/>
+                    <field name="unidadpedido" readonly="1"/>
+					<field name="unidabulto" options="{'no_create': True}"/>
+                    <field name="product_uom_qty" readonly="1" string="Cantidad Vta" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                    <field name="qty_delivered" invisible="1" attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                    <field name="qty_invoiced" invisible="1" attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+                    <field name="product_uom" string="Unidad Vta" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" groups="product.group_uom" options="{&quot;no_open&quot;: True}"/>
+                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="price_unit" string="Precio" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                    <!-- <field name="tax_id" invisible="1" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                    <field name="discount" invisible="1"/>
+					-->
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="price_total" widget="monetary" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					<field name="statusrecla" invisible="1"/>
+	  </tree>
+	  
+      </field>
+    </record>	  
+
+
+<record model="ir.ui.view" id="jovimer_asignaciones_view_tree">
+      <field name="name">Asignaciones</field>
+      <field name="model">jovimer_asignaciones</field>
+      <field name="arch" type="xml">  
+			<tree import="false" default_order='name'>
+			
+                    <field name="fechaoperacion"/>
+                    <field name="name"/>
+                    <field name="purchaseorder"/>
+                    <field name="purchaseorderline"/>
+                    <field name="expedienteorigen"/>
+                    <field name="expedientedestino"/>
+                    <field name="saleorderdestino"/>
+                    <field name="saleorderlinedestino"/>
+                    <field name="cantidad"/>
+					<field name="unidad"/>
+					<field name="cantidadasignada"/>
+					<field name="libreasignada"/>	
+           </tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_asignaciones_view_form">
+      <field name="name">Asignaciones</field>
+      <field name="model">jovimer_asignaciones</field>
+	  <field name="priority">10</field>
+      <field name="arch" type="xml">  
+			<form import="false" default_order='name'>
+			<header>
+			<button name="generaasignacion" string="Genera Asignación"  type="object" confirm="Esta accion modificará las lineas del Pedido Interno según asignaciones a J diferentes. ¿Estás Seguro?"/> 
+			</header>
+			<field name="name" readonly="1"/>
+			<group>
+                    <separator
+                        string="Asignacion de Compra a Otra Venta"
+                        colspan="4" />
+                    <p>
+                        Ten En cuenta:<br/><br/>
+                        * Vas a Asignar una cantidad de una linea de compra existente a una venta.<br/>
+                        * Restarás a la Linea de compra una cantidad a trasladadar.<br/>
+                        * Si el actual Pedido de Compra esta asignado ya a un viaje deberás Avisar a Transporte.<br/>
+                        <br/><br/>
+                        Se generarán varias lineas en el pedido referenciado a un Origen al actual Expediente y este generará en su venta la correspondiente asignacion<br/>
+					    <br/>
+					    Si te equivocas deberás modificar el pedido manualmente y volver a crear la asignación<br/>
+                    </p>
+                </group>
+			<group><group>
+		            <field name="id"/>
+                    <field name="name" required="1"/>
+					<field name="fechaoperacion"/>
+					<field name="purchaseorderline" options="{'no_create': True}"/>
+                    <field name="saleorderlinedestino" options="{'no_create': True}"/>
+                    <label for="cantidad"/>
+					<div>
+					 <field name="cantidad"/>
+					 <field name="unidad"/>
+					</div>
+           </group><group>
+					 <field name="cantidadasignada"/>
+					 <field name="libreasignada"/>		       
+		            <separator string="Pedidos Cabecera" />
+                    <field name="purchaseorder" readonly="1"/>
+                    <field name="saleorderdestino" readonly="1"/>
+					<separator string="Expedientes" />
+                    <field name="expedienteorigen" readonly="1"/>
+					<field name="expedientedestino" readonly="1"/>
+		   </group></group>
+		   </form>
+      </field>
+    </record>
+
+<record model="ir.ui.view" id="jovimer_expedientes_view_form">
+      <field name="name">Expedientes</field>
+      <field name="model">jovimer_expedientes</field>
+      <field name="arch" type="xml">  
+			<form string="Expedientes">
+				<sheet>
+					<group>
+						<group>
+							<field name="campanya" string="Campaña" readonly="1"/>
+							<field name="serie" required="1" string="Serie" options="{'no_create': True, 'no_create_edit':True}"/>
+							<field name="name" string="Expediente"/>
+							
+                            <field name="fechasalida" readonly="1"/>
+                            <field name="fechallegada" readonly="1"/> 
+                            <field name="horallegada"/>
+                            <field name="matricula"/>
+							
+							<label for="transporteinterior"/>
+                            <div>
+								<field name="transporteinterior" class="oe_inline"/>
+                                <field name="preciotransporteinterior" class="oe_inline"/>
+                            </div>
+ 
+							<label for="transporteinternacional"/>
+                            <div>
+								<field name="transporteinternacional" class="oe_inline"/>
+								<field name="preciotransporteinternacional" class="oe_inline"/>
+							</div>
+						</group>
+
+						<group>
+							<field name="id"/>
+							<field name="cliente"/>
+							<field name="dccdescarga"/>
+							<field name="abono"/>
+						</group>
+
+                    </group>
+					<group>
+						<group>
+                            <field name="cpedidos" invisible="1"/>
+							<field name="pedidocerrado"/>
+                            <field name="clogistica"/>
+                            <field name="csalidas"/>
+                            <field name="cliquidaciones"/>
+                            <field name="cfacturacion"/>
+                            <field name="ccuentadeventas"/>
+							<field name="nobio"/>
+						</group>
+						<group>
+                            <field name="observaciones"/>
+						</group>
+					</group>
+
+ <notebook>
+    <page string="Pedidos Venta">
+	<field name="pedvta"/>
+	</page>
+    
+	<page string="Pedidos Compra">
+	<field name="pedcompra"/>	
+	</page>
+    
+	<page string="Logística">
+	<label for="viajes"/>
+	<field name="viajes"/>
+	<label for="ctn"/>
+	<field name="ctn"/>
+	<label for="cti"/>
+	<field name="cti"/>
+	</page>
+                      
+	<page string="Calidad">
+
+	</page>
+	
+	<page string="Etiquetas">
+		<group>
+			<field name="etiquetas"/>
+		</group>			
+	</page> 
+
+	<page string="Facturación">
+	
+	<group>
+			<field name="facturacionv" string="Lin ALB VTA"/>
+			
+
+			<field name="lineascomrpa" string="Lin ALB Comp"/>
+
+		</group>
+	
+	
+	</page>
+	
+	<page string="Reclamaciones">
+		<group>
+			<field name="reclamaciones"/>
+		</group>
+	</page>
+    
+	<page string="Análisis Económico">
+	</page>
+
+</notebook>
+
+</sheet>
+</form>
+
+      </field>
+    </record>
+
+
+
+<!-- VENTAS -->
+<!-- VENTAS -->
+<!-- VENTAS -->
+
+
+
+
+<record model="ir.ui.view" id="jovimer_compras_lineas_view_tree">
+      <field name="name">JOVIMER - Lineas de Compra</field>
+      <field name="model">purchase.order.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+			<tree string="Purchase Order Lines" create="false" >
+                    <field name="expediente_serien" string="Serie"/>
+                    <field name="expediente_num" string="Serie"/>
+					<field name="asignado"/>
+					<field name="idasignacion"/>
+					<field name="asignacionj"/>
+                    <field name="order_id"/>
+                    <field name="name"/>
+                    <field name="partner_id" string="Vendor"/>
+                    <field name="product_id"/>
+					<field name="variedad"/>
+					<field name="plantilla"/>
+					<field name="cantidadpedido" widget="integer" />
+					<field name="unidadpedido"/>
+                    <field name="price_unit" string="Precio"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom" groups="uom.group_uom"/>
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="date_planned" widget="date"/>
+                </tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_ventas_lineas_view_tree">
+      <field name="name">JOVIMER - Lineas de Venta</field>
+      <field name="model">sale.order.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+			<tree string="Sale Order Lines" create="false" editable="top">
+                    <!-- <field name="expediente_serien" string="Serie" readonly="1"/>
+                    <field name="expediente_num" string="Serie" readonly="1"/>
+                    <field name="order_id" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="partner_id" string="Cliente" readonly="1"/>
+                    <field name="name" readonly="1"/>
+					<field name="plantilla" readonly="1"/>
+					<field name="confeccion" readonly="1"/>
+					<field name="marca" readonly="1"/>
+					<field name="envase" readonly="1"/>					
+					<field name="cantidadpedido" widget="integer"  readonly="1"/>
+					<field name="unidadpedido" readonly="1"/>
+                    <field name="price_unit" string="Precio"/>
+                    <field name="price_subtotal" widget="monetary"/>  -->
+					
+					                    <field name="paletsc" widget="integer" invisible="1" string="Comp"/>
+                    <field name="sequence" widget="handle"/>
+                    <field invisible="1"  name="product_updatable"/>
+                    <field name="product_id" options="{'no_quick_create': True}" attrs="{'readonly': [('product_updatable', '=', False)]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                    <field name="name" invisible="1"/>
+                    <field name="plantilla" invisible="1" options="{'no_quick_create': True}"/>
+                    <field name="variedad"  options="{'no_create': True}"/>
+					<field name="calibre"  options="{'no_create': True}"/>
+					<field name="categoria"  options="{'no_create': True}"/>
+					<field name="confeccion"    options="{'no_create': True}"/>
+                    <field name="marca"  options="{'no_create': True}"/>
+                    <field name="envase"  options="{'no_create': True}"/>
+					<field name="cantidadpedido" widget="integer" string="Vta"  options="{'no_create': True}"/>
+					<field name="unidadpedido" string="Pal" options="{'no_create': True}" readonly="1"/>
+                    <field name="bultos" widget="integer" string="BxP" readonly="1"/>
+					<field name="totalbultos" widget="integer" string="Bultos" readonly="1"/>
+
+                    
+                    <field name="product_uom_qty"  readonly="1" string="Cantidad" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                   
+					<field name="qty_delivered" invisible="1"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+                    <field name="product_uom" string="" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" groups="product.group_uom" options="{&quot;no_open&quot;: True}"/>
+                    <field name="analytic_tag_ids" invisible="1"/>
+                    <field name="precioscompra" string="Detalles de CONF y PRECIO de la Compra" readonly="1"/>
+					<field name="price_unit" string="P.Venta"/>
+					<field name="unidabulto" options="{'no_create': True}" string="Ud-Venta"/>
+                    
+                    <!-- <field name="tax_id" invisible="1" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                    <field name="discount" invisible="1"/>
+					-->
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="price_total" widget="monetary" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					<field name="statusrecla" invisible="1"/>
+					
+					
+                </tree>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_ventas_view_search">
+      <field name="name">JOVIMER - Buscador Ventas</field>
+      <field name="model">sale.order</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+<search string="Search Sales Order">
+
+
+<field name="expediente" string="Expediente" context="{'active_test': False}" filter_domain="[('expediente','=',self)]"/>
+                    <field name="partner_id" operator="child_of"/>
+<field name="expediente_serien" string="Serie" context="{'active_test': False}" filter_domain="[('expediente_serien','=',self)]"/>
+				
+					<field name="name" invisible="1" string="Número Interno" filter_domain="['|','|',('name','ilike',self),('client_order_ref','ilike',self),('partner_id','child_of',self)]"/>
+                    <field name="refcliente"/>                    
+
+<field name="expediente" string="Expediente Contiene ..."/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="team_id" string="Sales Team" invisible="1"/>
+                    <field name="analytic_account_id" invisible="1" groups="analytic.group_analytic_accounting"/>
+                    <!-- We only allow to search on the following sale order line fields (product, name) because the other fields, such as price, quantity, ...
+                        will not be searched as often, and if they need to be searched it's usually in the context of products
+                        and then they can be searched from the page listing the sale order lines related to a product (from the product itself).
+                    -->
+
+                    <field name="order_line" string="Producto" filter_domain="[('order_line.product_id', 'ilike', self)]"/>
+                    <filter invisible="1" string="My Orders" domain="[('user_id','=',uid)]" name="my_sale_orders_filter"/>
+                    <separator/>
+                    <filter invisible="1" string="My Activities" name="activities_my" domain="[('activity_ids.user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Pendientes de Facturar" name="pendientes_facturar" domain="[('state', '=', 'done')]"/>
+					<filter string="Pendientes Finalizar" name="pendientes_finalizar" domain="[('state', '=', 'sale')]"/>
+					<filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]" help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today" domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))                         ]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by':'user_id'}" invisible="1"/>
+                        <filter name="customer" string="Cliente" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Fecha Pedido" name="order_month" domain="[]" context="{'group_by':'date_order'}"/>
+						<filter string="Fecha Salida" name="s_fecha_salida" domain="[]" context="{'group_by':'fechasalida'}"/>
+						<filter string="Fecha Llegada" name="s_fechallegada" domain="[]" context="{'group_by':'fechallegada'}"/>
+						<filter string="Expediente" name="s_expediente" domain="[]" context="{'group_by':'expediente'}"/>
+						
+                    </group>
+               </search>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_ventas_view_tree">
+      <field name="name">JOVIMER - Ventas</field>
+      <field name="model">sale.order</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+	  <tree string="Sales Orders" decoration-success="state=='sale'" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'" default_order='id desc'>
+                    <field name="pedidocerrado" invisible="1"/>
+					<field name="message_needaction" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="type_id" string="Serie" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="expediente_serien" string="Exp." options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="expediente_num" string="Exp." invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="expediente" string="Num." options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="name" string="Ref/Num" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="fechasalida" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="fechallegada" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="partner_id" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="refcliente" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+					<field name="paletsv" widget="integer"  options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+					<field name="palets" widget="integer"  options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+					<field name="faltanpalets" widget="integer"  options='{"fg_color": "red: estadopalets == True"}'/>
+                    <field name="user_id" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Base Imponible" widget="monetary" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="amount_total" sum="Imp. Incluidos" widget="monetary" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="moneda" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="invoice_status" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+					<field name="estadopalets" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="state" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+					<field name="type_sale" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+                    <field name="type_doc" invisible="1" options="{'bg_color': '#C4FF33:pedidocerrado== True'}"/>
+		</tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_compras_view_tree">
+      <field name="name">JOVIMER - Compras</field>
+      <field name="model">purchase.order</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+	  <tree duplicate="false" delete="false" string="Purchase Orders" default_order="id desc" decoration-muted="state=='cancel'">
+
+                    <field name="expediente_serien" string="Exp."/>
+                    <field name="expediente" string="Num."/>
+                    <field name="expediente_num" string="Exp." invisible="1"/>
+                    <field name="name" string="Referencia / Numero"/>
+					 <field name="partner_ref"/>
+                    <field name="partner_id"/>
+					<field name="fechasalida"/>
+					<field name="fechallegada"/>
+					<field name="is_shipped" invisible="1"/>
+                    <field name="state"/>
+                    <field name="estadodesc" />
+		</tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_compras_view_form">
+      <field name="name">JOVIMER - Compras</field>
+      <field name="model">purchase.order</field>
+   	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+
+
+<form string="Purchase Order" delete="false">
+                <header>
+                   <!-- <button name="action_rfq_send" states="draft" string="Send RFQ by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
+                    --><button name="action_rfq_send" string="Enviar Email" type="object"/>
+                    <button name="button_pedido" states="draft,to approve,sent" string="Pasar a pedido" class="oe_highlight" type="object" invisible="1"/>
+                    <button invisible="1" name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
+                    <button invisible="1" name="print_quotation" string="Print RFQ" type="object" states="sent" groups="base.group_user"/>
+                    <button name="button_confirm" class="oe_highlight" type="object" states="draft" string="Confirmar compra" id="draft_confirm" confirm="¿Estas Seguro de confirmar la acción?"/>
+                    <button name="button_confirm" type="object" states="draft" invisible="1" string="Facturar" id="bid_confirm"/>
+                    <button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" groups="purchase.group_purchase_manager"/>
+					<button invisible="1" name="action_creaviajes" type="object" states="purchase,done" string="Genera los Viajes" class="oe_highlight"/>
+                    <button name="action_validayenvia" states="draft" string="Valida y Envia Enviar Email" type="object" context="{'send_rfq':False}"/>
+                    <button invisible="1" name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
+                    
+
+                   <button name="action_pedidocu" string="Pasar a Pedido" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['cancel','apedido']),('type_doc', 'not in', ['Presupuesto'])]}" confirm="Vas a pasar a Pedido de Compra este Documento. ¿Estas Seguro?"/>
+                   <button name="action_albaranc" string="Pasar a Albarán" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['cancel','aalbaran']),('type_doc', 'not in', ['Pedido'])]}" confirm="Vas a pasar a Albarán de Compra este Documento. ¿Estas Seguro?"/>
+                   <button type="object" name="action_facturarc" string="Crear Factura" attrs="{'invisible': ['|',('type_doc','!=','Albaran'),('state','=','purchase')]}" confirm="Vas a pasar a Factura de Compra este Documento. ¿Estas Seguro?"/>
+
+                  <button invisible="1" name="action_pedidoc" states="draft,sent,sale,apedido,aalbaran" string="Copiar Documento" type="object" confirm="¿Desea Copiar este documento?"/>
+                  <button name="button_cancel" states="draft,sent,sale,apedido,aalbaran,confirm,purchase" type="object" string="Cancelar Documento" confirm="Esta accion Cancelará el Documento. ¿Estas Seguro?"/>
+                  <button name="button_draft" states="cancel" type="object" string="Importar / Volver a Activo" confirm="Esta accion volverá a Activar el Documento. ¿Estas Seguro?"/>
+
+                    <button invisible="1" name="button_draft" states="cancel" string="Volver a Borrador" type="object"/>
+                    <button invisible="1" name="button_cancel" states="draft,to approve,sent,purchase,done,pedido" string="Cancel" type="object"/>
+                    <button invisible="1" name="button_done" type="object" string="Lock" states="purchase"/>
+                    
+                    <button invisible="1" name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pedido,purchase" readonly="1"/>
+					<field name="estadodesc" invisible="1"/>
+					
+                </header>
+		  <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('estadodesc','=',False)]}">
+                   <br/><center><h1><bold><a class="alert-link" href="#outstanding" role="button"><field name="estadodesc"/></a></bold> </h1></center>
+          </div>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button invisible="1" type="object" name="action_view_picking" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('picking_ids','=',[])]}">
+                            <field name="picking_count" widget="statinfo" string="Shipment" help="Incoming Shipments"/>
+                            <field name="picking_ids" invisible="1"/>
+                        </button>
+                        <!-- button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('invoice_ids','=',[])]}" -->
+                          <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': ['|',('type_doc','!=','Albaran'),('state','!=','purchase')]}">
+                            <field name="invoice_count" widget="statinfo" string="Facturas"/>
+                            <field name="invoice_ids" invisible="1"/>
+                        </button> 
+                    </div>
+                   <group>
+                        <group>
+                    
+					<label for="name" string="Serie/Numero"/>
+                    <div>
+
+                            <field name="name" class="oe_inline" readonly="1"/>
+                    </div>
+					<label for="expediente_serien" string="Expediente"/>
+                    <div>
+
+                            <field name="expediente_serien" class="oe_inline" readonly="1"/>
+							 <field name="expediente" options="{'no_create': True}" class="oe_inline"/>
+
+                    </div>
+                    
+                     </group>
+                     <group>
+                       <div>
+                         <h2> <field name="type_doc" options="{'no_create': True}" string="" readonly="1"/></h2>
+                         
+                       </div>
+                       
+                     </group>
+                        </group>
+                    
+                    <group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': True}" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True),('noactivo','!=',True)]"/>
+                            <field name="partner_ref"/>
+                            <field name="att"/>
+                            <field name="paisdestino" options="{'no_create': True}"/>
+
+                            <field name="currency_id"/>
+                            <field name="is_shipped" invisible="1"/>
+                        </group>
+                        <group>
+                            
+                            <field name="id"/>
+							<field name="pedidocerrado"/>
+                            
+                            <field name="fechasalida"/>
+                            						
+                            <field name="origin" attrs="{'invisible': [('origin','=',False)]}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+							<field name="destino" invisible="1"/>
+							<field name="destinodonde" attrs="{'invisible': [('destino', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
+                                 <tree string="Purchase Order Lines">
+								    <button invisible="1" name="purchase_abre_form" type="object" string="Detalle" attrs="{'invisible': [('id', '=', False)]}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+  					                <field name="expediente_serien" string="Exp"/>
+					                <field name="expediente" string="Num"/>
+                                    <field name="sequence" widget="handle" invisible="1"/>
+									<field name="asignado" invisible="1"/>
+                                    <field name="viajedirecto" invisible="1"/>
+                                    <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
+                                    <field name="name" invisible="1"/>
+									<field name="variedad"/>
+									<field name="confeccion"/>
+									<field name="marca"/>
+									<field name="envase"/>
+									<field name="bultos" widget="integer" />
+                                    <field name="date_planned" invisible="1"/>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting" invisible="1"/>
+                                    <field name="analytic_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" invisible="1"/>
+                                    <field name="product_qty" invisible="1"/>
+                                    <field name="qty_received" invisible="1"/>
+                                    <field name="qty_invoiced" invisible="1"/>
+                                    <field name="product_uom" invisible="1"/>
+                                    <field name="cantidadpedido" widget="integer" />
+                                    <field name="unidadpedido"/>									
+                                    <field name="price_unit" string="Precio"/>
+                                    <field name="product_uom" string="Se paga por"/>
+									<field name="discount"/>
+									<field name="etiquetau" invisible="1"/>
+									<field name="etiquetab" invisible="1"/>
+									<field name="lineaalbarancompra" readonly="1"/>
+									<field name="viajerel" readonly="1"/>
+                                    <field name="taxes_id"  invisible="1" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" options="{'no_create': True}"/>
+                                    <field name="price_subtotal" widget="monetary" invisible="1"/>
+                                </tree>
+                                <form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            
+											<group>
+
+
+					  
+                      
+					  <field name="id" invisible="1"/>
+                      <label for="expediente"/>
+					  <div>
+					   <field name="expediente_serie" class="oe_inline"/>
+					   <label for="expediente" string=" / " class="oe_inline"/>
+                       <field name="expediente" class="oe_inline"/>
+					  </div>
+					  <field name="plantilla"  required="1" domain="[('noactivo', '!=', True)]"/>
+					  <field name="product_id" options="{'no_create': True}"/>
+
+					  <field name="variedad" options="{'no_create': True}"/>
+					  <field name="calibre" options="{'no_create': True}"/>
+					  <field name="categoria" options="{'no_create': True}"/>
+					  <field name="confeccion" options="{'no_create': True}"/>
+					  <field name="envase" options="{'no_create': True}"/>
+					  <field name="marca" options="{'no_create': True}"/>
+					</group>
+											
+
+											<group>
+                                                
+                                                <label for="cantidadpedido"/>
+                                                <div>
+                                                    <field name="cantidadpedido" required="1" widget="integer"  class="oe_inline"/>
+                                                    <span class="oe_inline"> </span>
+                                                    <field name="unidadpedido" class="oe_inline"  domain="[('invisiblecp','=','SI')]" options="{'no_create': True}"/>
+                                                </div>
+                                                <field name="bultos" widget="integer" />
+                                                <field name="kgnetbulto"/>
+                                                <field name="product_uom" string="Pago por: " domain="[('invisibleudvta','=','SI')]"/>
+
+                                                <field name="price_unit"/>
+												<field name="discount"/>
+                                        
+                                                <field invisible="1" name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}"/>
+                                                <field name="date_planned" widget="date"/>
+												<field name="viajedirecto" invisible="1"/>
+												<field name="asignado" invisible="1"/>
+												<field name="expediente_serieo" invisible="1" class="oe_inline"/>
+												<field name="expedienteo" invisible="1" class="oe_inline"/>
+												<field name="idasignacion" invisible="1"/>
+                                                <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/>
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+												<button invisible="1" type="object" name="purchase_abre_asig" string="Asignar" confirm="¿Deseas Asignar una Cantidad a Otra Venta?"/>
+                                            </group>
+                                        </group>
+										<group>
+										<field name="saleorderline" required="1" string="Venta que lo pide"  options="{'no_create': True}"/>
+										<field name="lineaalbarancompra" invisible="1"/>
+										<field name="albarancomprarel" readonly="1"/>
+										
+										</group>
+                                        <notebook>
+
+                                        <page string="Etiquetas">
+                                            <group><group>
+											<field name="plantillaetiquetasc" options="{'no_create': True}"/>
+											</group></group>
+											<group><group>
+											<field name="etiquetau"/>
+												</group>
+												<group>
+											<field name="etiquetab"/>
+												</group>
+											</group>
+
+                                        </page>
+										
+										<page string="Extra Info" invisible="1">
+											<group><group>
+					                           <field name="asignado"/>
+					                           <field name="idasignacion"  attrs="{'invisible': [('asignado', '!=', True)]}"/>
+					                           <field name="asignacionj"  attrs="{'invisible': [('asignado', '!=', True)]}"/>
+					                           <field name="expedienteo"  attrs="{'invisible': [('asignado', '!=', True)]}"/>
+											   
+											    <field name="cantidadasignada"  attrs="{'invisible': [('asignado', '=', True)]}"/>
+					                           <field name="libreasignada"  attrs="{'invisible': [('asignado', '=', True)]}"/>
+											</group></group>
+                                        </page>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page><page string="Invoices and Incoming Shipments" invisible="1">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+										<page string="Reclamaciones" invisible="1">
+										<field name="statusrecla" invisible="1"/>
+										   <button name="action_crearreclamacioncr" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> 
+									       <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/> 
+											<br/>
+										<field name="reclamaciones"/>
+									    </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+							 
+                            
+                           <!-- 
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+							
+							-->
+							<group>
+                            <field name="notes" class="oe_inline" placeholder="Notas internas del Pedido ..."/>
+							<field name="obspartnersale" class="oe_inline" placeholder="Observaciones del Cliente ..."/>
+                            </group>
+							
+							
+							<div class="oe_clear"/>
+                        </page>
+                        <page string="Transporte y Facturación">
+                            <group>
+                                <group>
+								    <field name="date_order"/>
+								    <field name="fechallegada"/>	
+                                    <label for="date_planned"/>
+                                    <div>
+                                        <field name="date_planned" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}" invisible="1"/>
+                                        <button name="action_set_date_planned" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only"/>
+                                    </div>
+                                    <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                                    <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
+                                    <field name="default_location_dest_id_usage" invisible="1"/>
+                                    <field name="incoterm_id"/>
+                                </group>
+                                <group>
+                                    <field name="invoice_status"/>
+									<field name="estadodesc"/>
+                                    <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                                    <field name="fiscal_position_id" options="{'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                                    <field name="date_approve" groups="base.group_no_one"/>
+                                </group>
+                            </group>
+                        </page>
+                         <page string="Relación">
+                           
+<group string="Correos">
+                                <div>
+                                  <field name="relacionmailpr" attrs="{'invisible': [('type_doc','!=','Presupuesto')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                  
+                                  
+                                  <field name="relacionmailpv" attrs="{'invisible': [('type_doc','!=','Pedido')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                  
+                                  <field name="relacionmailab" attrs="{'invisible': [('type_doc','!=','Albaran')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                </div>
+                            </group>
+       
+                  
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" invisible="1"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            
+
+
+
+
+
+      </field>
+    </record>
+	
+	
+<record model="ir.ui.view" id="jovimer_ventaseditable_view_form">
+      <field name="name">JOVIMER - Ventas</field>
+      <field name="model">sale.order</field>
+   	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+        <form duplicate="false" string="Sales Order" class="o_sale_order">
+          <header>
+           <button name="action_creapedidocompra" string="Genera Documentos de Compra" type="object" states="draft" class="btn-primary" />
+
+            <button name="action_confirm" string="Confirmar Venta Contenedor" states="done" type="object" confirm="Esta acción Preparará el Pedido para Factura. ¿Estas Seguro?" attrs="{'invisible': [('expediente_serien', '!=', 5)]}"/>
+			<button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" attrs="{'invisible': ['|', ('state', '=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
+            <button name="action_crea_factura" string="Facturar" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['sale','done']),('type_doc', 'not in', ['Albaran'])]}" confirm="Vas a pasar a Factura de Venta este Documento. ¿Estas Seguro?"/>
+            <button name="action_cancel" states="draft,sale,sent,done" type="object" string="Cancelar Documento" confirm="Esta accion Cancelará el Documento. ¿Estas Seguro?"/>
+            <button name="action_draft" states="cancel" type="object" string="Volver a Activo" confirm="Esta accion volverá a Activar el Documento. ¿Estas Seguro?"/>
+			<button name="827" string="IMPRIMIR" type="action"/>
+			<button name="action_quotation_send" string="Enviar EMAIL" type="object" class="btn-primary"/>
+			<button name="calcpalets" string="Palets: " type="object" invisible="1"/>
+            <field name="state" widget="statusbar"  statusbar_visible="draft,sent,sale,done,cancel"/>
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                <field name="invoice_count" widget="statinfo" string="Facturas"/>
+              </button>
+            </div>
+            <group>
+              <group>
+				<h1><b><label for="expediente"/></b></h1>
+                <div>
+                  <b><field name="expediente_serien" class="oe_inline"/> </b>
+				  <b><label for="expediente" string=" / " class="oe_inline"/></b>
+				  <b><field name="expediente" class="oe_inline" required="1"/></b>
+				  
+                </div>
+                <label for="numero"/>
+                <div>
+                  <field name="type_id" domain="[('type_doc','=','Presupuesto')]" context="{'type_doc': 'Presupuesto'}" class="oe_inline" required="1" attrs="{'invisible': [('id', '!=', False)]}" on_change="_compute_numero(self)" options="{'no_create': True, 'no_create_edit':True}"/>
+                  <field name="numero" class="oe_inline" attrs="{'invisible': ['|',('type_idname', '=', 'Seleccione >>'),('id', '!=', False)]}" required="1"/>
+                  <field name="name" class="oe_inline" attrs="{'invisible': [('id', '=', False)]}" readonly="1"/>
+                  <field name="type_idname" invisible="1"/>
+                </div>
+
+              </group>
+              <group>
+                <div>
+					<field name="estadopalets" invisible="1"/>
+				      <b>
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" FALTAN " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <field name="faltanpalets" widget="integer"  style="color:red;font-size:18pt;" readonly="1" attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" PALET/S " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  </b>
+					<br/>
+                    <h2><b><label for="paletsv"/>
+					<field name="paletsv" widget="integer" readonly="1"  options='{"fg_color": "red: estadopalets == True"}'/> / 
+					<label for="palets"/>
+			        <field name="palets"  widget="integer" options='{"fg_color": "red: estadopalets == True"}' readonly="1"/> <button name="action_calcpedido" type="object" string=" - Recalcular Pedido - "/>
+					</b></h2>
+				  <h2>
+                    <b>
+                      <field name="type_doc" string="" readonly="1" />
+                    </b>
+                  </h2>
+				  
+                </div>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="partner_id" readonly="1" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1}"  options="{'no_create': True}"/>
+                <field name="partner_invoice_id" readonly="1" context="{'default_type':'invoice'}"  options="{'no_create': True}"/>
+                <field name="partner_shipping_id" readonly="1" context="{'default_type':'delivery'}"  options="{'no_create': True}"/>
+				<field name="moneda" readonly="1" />
+                <field name="refcliente"/>
+                <field name="plataforma"/>
+              </group>
+              <group>
+                <field name="id"/>
+				<field name="date_order" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="fechasalida" required="1" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="fechallegada" required="1" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="horallegada" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="conformalote" options="{'no_create': True}"/>
+				<label for="reslote"/>
+                <div>
+				 <field name="reslote" class="oe_inline"/>
+				 <button name="on_change_conformalote" type="object" string="Calc" class="oe_inline" invisible="1"/>
+				 </div>
+				 <field name="pedidocerrado"/>
+              </group>
+            </group>
+            <notebook>
+			
+						  
+			
+              <page string="Lineas Documento">
+			  <button invisible="1" type="object" name="sale_createline_detalle" string="Agrega Linea"/>
+			  <button name="jovimer_view_lineasventa" string="Abrir Lineas de Venta" type="object" class="oe_highlight" context="{'order_id': id}"/>
+               <field name="order_line">
+                  <tree string="Sales Order Lines" editable="bottom">
+
+
+                    <field name="paletsc" invisible="1" string="Comp"/>
+                    <field invisible="1"  name="product_updatable"/>
+                    <field name="product_id" readonly="1" options="{'no_quick_create': True}"/>
+                    <field name="name" invisible="1"/>
+                    <field name="plantilla" invisible="1" options="{'no_quick_create': True}"/>
+                    <field name="variedad"  invisible="1" readonly="1" options="{'no_create': True}"/>
+					<field name="calibre"  readonly="1" options="{'no_create': True}"/>
+					<field name="categoria"  readonly="1" options="{'no_create': True}"/>
+					<field name="confeccion"  readonly="1"  options="{'no_create': True}"/>
+                    <field name="marca" readonly="1"  options="{'no_create': True}"/>
+                    <field name="envase" readonly="1"  options="{'no_create': True}"/>
+					<field name="cantidadpedido" readonly="1" string="Vta"  options="{'no_create': True}"/>
+					<field name="unidadpedido" string="Pal" options="{'no_create': True}" readonly="1"/>
+                    <field name="bultos" string="BxP" readonly="1"/>
+					<field name="unidadesporbulto" invisible="1" />
+					<field name="kgnetbulto" invisible="1"/>	
+					<field name="totalbultos" string="Bultos" readonly="1"/>
+                    <field name="product_uom_qty" readonly="1" string="Cantidad"/>
+					<field name="qty_delivered" invisible="1"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+                    <field  invisible="1" name="product_uom" string="" />
+    				<field name="tipouom" invisible="1" class="oe_inline"  options="{'no_create': True}"/>
+                    <field name="analytic_tag_ids" invisible="1"/>
+                    <field name="precioscompra" string="Detalles de CONF y PRECIO de la Compra" readonly="1"/>
+					<field name="price_unit" string="P.Venta"/>
+					<field name="unidabulto" options="{'no_create': True}" string="Ud-Venta"/>
+                   <button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline"/>                    
+                    <!-- <field name="tax_id" invisible="1" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                    <field name="discount" invisible="1"/>
+					-->
+                    <field name="price_subtotal" />
+					<field name="pvpcoste" />
+					<field name="pvptrans"  string="Trans" invisible="1"/>
+					<field name="pvpres" string="Resultado"/>
+                    <field name="price_total" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					<field name="statusrecla" invisible="1"/>
+                  </tree>
+               </field>
+                <group>
+                  <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                    <field name="amount_untaxed" widget="monetary" string="Venta"/>
+					<field name="coste" widget="monetary" string="Compra"/>
+					<field name="costetrans" widget="monetary" string="Transporte"/>
+					<field name="resultado" widget="monetary"/>
+					
+					
+                    <field invisible="1" name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <!-- 
+					<div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                      <label for="amount_total"/>
+                    </div>
+                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  -->
+				  </group>
+                </group>
+
+				<field name="note" placeholder="Escribe aqui las Observaciones INTERNAS sobre el Documento..."/>
+				<field name="obspedido" placeholder="Escribe aqui las Observaciones para el Cliente..."/>
+                <div class="oe_clear"/>
+              </page>
+			  
+		  
+              <page string="Pedidos de Compra">
+			  <group>
+			  <field name="pedcompra">
+			  
+			  <tree duplicate="false" string="Purchase Orders" default_order="id desc">
+                    <button name="743" type="action" string="Imprimir Pedido"/>  
+
+					<button invisible="1" name="button_confirm" type="object" string="Guarda y Genera Viajes" attrs="{'invisible': [('state','=','purchase')]}"/>
+                    <field name="expediente_serien" string="Exp."/>
+                    <field name="expediente" string="Num."/>
+                    <field name="expediente_num" string="Exp." invisible="1"/>
+                    <field name="name" string="Referencia / Numero"/>
+                    <field name="partner_id"/>
+					<field name="fechasalida"/>
+					<field name="totaleuro"/>
+                    <field name="state" />
+                    <field name="estadodesc" />
+		            </tree>
+			  </field>
+			  
+			  </group>
+			  </page>
+              <page string="Other Information" invisible="1">
+                <group>
+                  <group string="Sales Information" name="sales_person">
+                    <field name="pricelist_id"/>
+					<field name="user_id"/>
+                    <field name="team_id" options="{'no_create': True}"/>
+                    <field name="client_order_ref"/>
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    <field name="analytic_account_id" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" attrs="{'readonly': ['|',('analytic_account_id','!=',False),('invoice_count','!=',0),('state','=','sale')]}" groups="analytic.group_analytic_accounting"/>
+                  </group>
+                  <group name="sale_pay" string="Invoicing">
+                    <field name="date_order" string="Fecha Pedido" attrs="{'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+                    <field name="fiscal_position_id" options="{'no_create': True}"/>
+                    <field name="invoice_status" states="sale,done" invisible="1"/>
+                  </group>
+                  <group string="Reporting" name="technical" groups="base.group_no_one">
+                    <field groups="base.group_no_one" name="origin"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Etiquetas de Documento">
+                <group>
+                      <field name="etiquetas"/>				
+				</group>
+			  </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" invisible="1"/>
+            <field name="activity_ids" widget="mail_activity" invisible="1"/>
+            <field name="message_ids" widget="mail_thread" invisible="1"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_ventas_view_form">
+      <field name="name">JOVIMER - Ventas</field>
+      <field name="model">sale.order</field>
+   	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+        <form duplicate="false" string="Sales Order" class="o_sale_order">
+          <header>
+            <button name="action_creapedidocompra" string="Genera Documentos de Compra" type="object" states="draft" class="btn-primary" />
+			
+            <button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
+            <button invisible="1" name="print_quotation" string="IMPRIMIR" type="object" states="draft" class="btn-primary o_sale_print"/>
+     
+            <button name="action_confirm" string="Confirmar Venta Contenedor" states="done" type="object" confirm="Esta acción Preparará el Pedido para Factura. ¿Estas Seguro?" attrs="{'invisible': [('expediente_serien', '!=', 5)]}"/>
+            
+			
+			
+			<button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" attrs="{'invisible': ['|', ('state', '=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
+           
+            <button name="action_draft" states="cancel" type="object" string="Set to Quotation" invisible="1"/>
+            <button name="action_draft" states="draft" type="object" string="Volver a Borrador" invisible="1"/>
+            <button invisible="1" name="action_done" type="object" string="Confirmar Venta" states="cancel" confirm="Esta acción no permitirá la edicion de las lineas confirmadas. ¿Estas seguro?"/>
+            <button invisible="1" name="action_unlock" type="object" string="Unlock" states="done" groups="sales_team.group_sale_manager"/>
+
+            <button name="action_crea_factura" string="Facturar" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['sale','done']),('type_doc', 'not in', ['Albaran'])]}" confirm="Vas a pasar a Factura de Venta este Documento. ¿Estas Seguro?"/>
+            <button name="copy_sale" invisible="1" string="Copia Documento" type="object"/>
+            <button name="action_cancel" states="draft,sale,sent,done" type="object" string="Cancelar Documento" confirm="Esta accion Cancelará el Documento. ¿Estas Seguro?"/>
+            <button name="action_draft" states="cancel" type="object" string="Volver a Activo" confirm="Esta accion volverá a Activar el Documento. ¿Estas Seguro?"/>
+			
+			<button name="827" string="IMPRIMIR" type="action"/>
+			<button name="action_quotation_send" string="Enviar EMAIL" type="object" class="btn-primary"/>
+			
+			<button name="calcpalets" string="Palets: " type="object" invisible="1"/>
+            <field name="state" widget="statusbar"  statusbar_visible="draft,sent,sale,done,cancel"/>
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                <field name="invoice_count" widget="statinfo" string="Facturas"/>
+              </button>
+            </div>
+            <group>
+              <group>
+                <h1><b><label for="expediente"/></b></h1>
+                <div>
+                  <b><field name="expediente_serien" class="oe_inline"/> </b>
+				  <b><label for="expediente" string=" / " class="oe_inline"/></b>
+				  <b><field name="expediente" class="oe_inline" readonly="1"  options="{'no_quick_create': True}"/></b>
+				  
+                </div>
+                <label for="numero"/>
+                <div>
+                  <field name="type_id" domain="[('type_doc','=','Presupuesto')]" context="{'type_doc': 'Presupuesto'}" class="oe_inline" required="1" attrs="{'invisible': [('id', '!=', False)]}" on_change="_compute_numero(self)" options="{'no_create': True, 'no_create_edit':True}"/>
+                  <field name="numero" class="oe_inline" attrs="{'invisible': ['|',('type_idname', '=', 'Seleccione >>'),('id', '!=', False)]}" required="1"/>
+                  <field name="name" class="oe_inline" attrs="{'invisible': [('id', '=', False)]}" readonly="1"/>
+                  <field name="type_idname" invisible="1"/>
+                </div>
+
+              </group>
+              <group>
+                <div>
+					<field name="estadopalets" invisible="1"/>
+				      <b>
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" FALTAN " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <field name="faltanpalets" widget="integer"  style="color:red;font-size:18pt;" readonly="1" attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  <label for="estadopalets" style="color:red;font-size:18pt;" string=" PALET/S " attrs="{'invisible': [('estadopalets', '!=', True)]}"/> 
+					  </b>
+					<br/>
+                    <h2><b><label for="paletsv"/>
+					<field name="paletsv" widget="integer" readonly="1"  options='{"fg_color": "red: estadopalets == True"}'/> / 
+					<label for="palets"/>
+			        <field name="palets"  widget="integer" options='{"fg_color": "red: estadopalets == True"}' readonly="1"/><button name="calcpalets" type="object" string="Calc"/>
+					</b></h2>
+				  <h2>
+                    <b>
+                      <field name="type_doc" readonly="1" string=""/>
+                    </b>
+                  </h2>
+				  
+                </div>
+              </group>
+            </group>
+            <group>
+              <group>
+                <label for="serieexpnuevo" string="Nuevo Expediente"  attrs="{'invisible': [('expediente', '!=', False)]}"/>
+                <div  attrs="{'invisible': [('expediente', '!=', False)]}">
+				   <field name="serieexpnuevo" class="oe-inline" options="{'no_create': True}" attrs="{'required': [('expediente', '=', False)]}"/>
+                   <label for="expediente" string=" - "  class="oe-inline"/>
+				   <field name="numexpnuevo" class="oe-inline" attrs="{'required': [('expediente', '=', False)]}"/>
+				   <button type="object" class="oe-inline"  attrs="{'invisible': [('expediente', '!=', False)]}" name="creaexpediente" string="Crear Expediente"/>
+                </div>
+                <field name="partner_id" domain="[('customer','=',True),('noactivo','!=',True)]" context="{'search_default_customer':1, 'show_address': 1}"  options="{'no_create': True}"/>
+                <field name="partner_invoice_id" domain="[('noactivo','!=',True)]" context="{'default_type':'invoice'}"  options="{'no_create': True}"/>
+                <field name="partner_shipping_id" domain="[('noactivo','!=',True)]" context="{'default_type':'delivery'}"  options="{'no_create': True}"/>
+				<field name="moneda"/>
+                <field name="refcliente"/>
+                <field name="plataforma"/>
+              </group>
+              <group>
+                <field name="id"/>
+				<label for="editxt"/>
+				<div>
+				    <field name="editxt" class="oe_inline" domain="[('res_id','=', id)]" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}" options="{'no_quick_create': True}">
+					
+					
+					
+					</field>
+					<button name="cargaredi" string="Leer Fichero" type="object" class="oe_inline" attrs="{'invisible': [('editxt', '=', False)]}"/>
+				</div>
+				<field name="date_order" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="fechasalida" required="1" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="fechallegada" required="1" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="horallegada" attrs="{'readonly': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+				<field name="conformalote" options="{'no_create': True}"/>
+				<label for="reslote"/>
+                <div>
+				 <field name="reslote" class="oe_inline"/>
+				 <button name="on_change_conformalote" type="object" string="Calc" class="oe_inline"/>
+				 </div>
+				 <field name="pedidocerrado"/>
+              </group>
+            </group>
+            <notebook>
+			
+						  
+			
+              <page string="Lineas Documento">
+			  <button invisible="1" type="object" name="sale_createline_detalle" string="Agrega Linea"/>
+               <field name="order_line" mode="tree,form" attrs="{'readonly': [('state', 'in', ('done','cancel','apedido'))]}">
+                  <tree string="Sales Order Lines" >
+
+					<button invisible="1" type="object" name="sale_abredetalle_form" string="Detalle"/>
+                    <field name="sequence" widget="handle"/>
+                    <field invisible="1"  name="product_updatable"/>
+					<!-- <field name="multicomp" readonly="1" widget="many2many_tags" /> -->
+					<field name="proveedores"/>
+                    <field name="product_id" invisible="1" options="{'no_quick_create': True}" attrs="{'readonly': [('product_updatable', '=', False)]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                    <field name="name" invisible="1"/>
+                    <field name="plantilla" options="{'no_quick_create': True}"/>
+                    <field name="variedad" readonly="1"/>
+					<field name="calibre" readonly="1"/>
+					<field name="categoria" invisible="1"/>
+					<field name="confeccion"   readonly="1" options="{'no_create': True}"/>
+                    <field name="marca" options="{'no_create': True}" readonly="1"/>
+                    <field name="envase" options="{'no_create': True}" readonly="1"/>
+                    
+					<field name="cantidadpedido" widget="integer" string="Vta" readonly="1"/>
+                    <field name="paletsc" widget="integer" readonly="1" string="Comp"/>
+					<field name="unidadpedido" string="Pal" options="{'no_create': True}" readonly="1"/>
+                    <field name="bultos" widget="integer" string="BxP" readonly="1"/>
+					<field name="totalbultos" widget="integer" string="Bultos" readonly="1"/>
+
+                    
+                    <field name="product_uom_qty"  readonly="1" string="Cantidad" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                    <field name="unidabulto" readonly="1"/>
+					<field name="udfacturacion" string="U.Fact" readonly="1"/>
+					<field name="qty_delivered" invisible="1"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+                    <field name="product_uom" string="" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" groups="product.group_uom" options="{&quot;no_open&quot;: True}"/>
+                    <field name="analytic_tag_ids" invisible="1"/>
+                    <field name="precioscompra" string="Detalles de la Compra" readonly="1" style="width:20%"/>
+					<field name="price_unit" string="P.Venta"/>
+                    
+                    <!-- <field name="tax_id" invisible="1" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                    <field name="discount" invisible="1"/>
+					-->
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="price_total" widget="monetary" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					<field name="statusrecla" invisible="1"/>
+                  </tree>
+                  <form>
+				  <sheet>
+				  <center>
+				      <field name="statusrecla" invisible="1"/>
+				      <b><label for="statusrecla" style="color:red;font-size:18pt;" string="Linea Pendiente de RECLAMACIÓN" attrs="{'invisible': [('statusrecla', '=', 'OK')]}"/></b>
+				      </center>
+				  <group>
+					<group>
+					  <field name="id"/>
+				  <field name="plantilla"  options="{'no_create': True}" required="1" context="{'partner':parent.partner_id}" domain="[('partner', '=', parent.partner_id),('noactivo', '!=', True)]"/>
+					  <field name="product_id" required="1" options="{'no_quick_create': True}" attrs="{'readonly': [('product_updatable', '=', False)]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+					  <field invisible="1" name="product_updatable"/>
+					  <field name="variedad" required="1" />
+					  <field name="calibre" required="1" />
+					  <field name="categoria" required="1" />
+					  <field name="confeccion" required="1" />
+					  <field name="envase" required="1" />
+					  <field name="marca" required="1" />
+	
+					</group>
+					<group>
+					<field invisible="1" string="Cliente" name="partner_id" readonly="1"/>
+					<label for="cantidadpedido" widget="integer" string="Palets:"/>
+					<div>
+					 <field name="cantidadpedido"  widget="integer" class="oe_inline"/>
+                     <field name="unidadpedido" required="1" class="oe_inline"  options="{'no_create': True}"/>
+					</div>
+					 <field name="bultos" widget="integer"/>
+					 <field name="unidadesporbulto" widget="integer" />
+					 <field name="kgnetbulto"/>	
+					<field name="qty_delivered" invisible="1"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="qty_to_invoice" invisible="1"/>
+					<label for="product_uom_qty" string="Cantidad Vta:"/>
+					<div>
+					 <field name="product_uom_qty"  class="oe_inline" />
+                     <field name="unidabulto" options="{'no_create': True}"/>
+					 <field name="tipouom" class="oe_inline"  invisible="1" options="{'no_create': True}"/>
+					 <button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline"/>
+					 <field invisible="1" name="product_uom" class="oe_inline"  options="{'no_create': True}"/>
+					</div>
+					<field name="udfacturacion" string="U.Fact" readonly="1"/>
+                    <field name="analytic_tag_ids"  invisible="1"/>
+					<field invisible="1" name="pvpvta" readonly="1" string="Precio Lista" />
+					<field name="price_unit" string="Precio" />
+                    <field invisible="1" name="tax_id" widget="many2many_tags" options="{'no_create': True}" />
+					<field name="discount" invisible="1"/>
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="price_total" widget="monetary" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="customer_lead" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="viajedirecto" invisible="1"/>
+					</group>
+				  </group>
+				  <group>
+				   <field name="name"/>
+				  </group>
+				  <group>
+				   <field name="edideslin" readonly="1"/>
+				  </group>
+				  <notebook>
+				  <page string="Compra">
+				  <field name="multicomp">
+				  <tree editable="bottom">
+				     <field name="fechacompra" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+				     <field name="name" domain="[('supplier','=',True),('noactivo','!=',True)]" options="{'no_create': True}" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+				     <field name="comision" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+				     <field name="numpalets" widget="integer" attrs="{'readonly': [('purchaseline', '!=', False)]}" />
+				     <field name="bultos" widget="integer"  required="1" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+				     <field name="pvpcompra" required="1" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+ 				     <field name="unidad" options="{'no_create': True}" required="1" attrs="{'readonly': [('purchaseline', '!=', False)]}"/>
+ 				     <field invisible="1" name="expediente_serien" readonly="1"/>	
+ 				     <field invisible="1" name="asignacion" options="{'no_create': True}"/>
+					 <field name="asignado" invisible="1"/>
+					 <field name="purchaseline" readonly="1" options="{'no_create': True}"/>
+					 <field invisible="1" name="idasignacion" attrs="{'invisible': [('asignado', '=', False)]}"/>
+				  </tree>
+				  </field>
+				  <!-- 
+				  <group><group>
+				   <label for="asignacionlineac"/>
+				  <div>
+				  <field name="asignacionlineac"  context="{'product_id': product_id}"  options="{'limit': 1, 'no_create': True}" class="oe_inline" />
+				  <button type="object" name="creaasignacioncomp" string="Asignar" class="oe_inline"/>
+				  </div>
+				  </group></group> 
+				   -->
+				  </page>
+				  
+	
+				  
+				  <!-- 
+				  <page string="Habituales">
+				  </page>
+				  <page string="Provisionales">
+					 <button name="buscaprovisionales" type="object" string="Busca Provisionales"/>
+				  	 <field name="provisionaleso2m">
+
+					 <tree editable="top">
+					  <button name="asignaj" type="object" string="+"/>
+					  <field name="cantidadasignada"/>
+					  <field name="expediente_serien" string="Serie" readonly="1"/>
+					  <field name="expediente_num" string="Num" readonly="1"/>
+					  <field name="plantilla" readonly="1"/>
+					  <field name="product_id" readonly="1"/>
+					  <field name="cantidadpedido" widget="integer"  readonly="1"/>
+					  <field name="unidadpedido" readonly="1"/>
+					  <field name="state" readonly="1"/>
+					 </tree>
+					 </field>
+				  </page>
+				  <page string="Reclamaciones" invisible="1">
+				  <button name="action_crearreclamacion" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> 
+				  <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/> 
+				  <br/>
+				  <field name="reclamaciones"/>
+				  </page>
+				  -->
+				  <page string="Etiquetas">
+				  <button name="regeneraetiqueta" string="GeneraEtiqueta"  type="object" confirm="Esta accion Eliminará la etiqueta actual y la volverá a Generar desde la plantilla. ¿Estás Seguro?"/> 
+				   <group><group>
+				   <field name="plantillaetiqueta"/>
+				   <field name="etiqueta"/>
+				   <group><group>
+				   <field name="etiquetatxt"/>				  
+				   </group><group>
+				   <field name="etiquetatxtu"/>				  
+				   </group></group>
+				 </group></group>
+				  </page>				  
+				  </notebook>
+				  </sheet>
+				  </form>
+                </field>
+                <group>
+                  <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                    <field name="amount_untaxed" widget="monetary" string="Base Imponible" options="{'currency_field': 'currency_id'}"/>
+                    <field invisible="1" name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <!-- 
+					<div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                      <label for="amount_total"/>
+                    </div>
+                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  -->
+				  </group>
+                </group>
+
+				<field name="note" placeholder="Escribe aqui las Observaciones INTERNAS sobre el Documento..."/>
+				<field name="obspedido" placeholder="Escribe aqui las Observaciones para el Cliente..."/>
+                <div class="oe_clear"/>
+              </page>
+			  
+		  
+              <page string="Pedidos de Compra">
+			  <group>
+			  <field name="pedcompra">
+			  
+			  <tree delete="false" duplicate="false" string="Purchase Orders" default_order="id desc"  decoration-muted="state=='cancel'">
+                    <button invisible="1" name="743" type="action" string="Imprimir Pedido"/>  
+					<button name="action_validaeimprime" type="object" string="Imprime"/>  
+					<button name="action_validayenvia" type="object" string="Envia Email"/> 
+					<button invisible="1" name="button_confirm" type="object" string="Guarda y Genera Viajes" attrs="{'invisible': [('state','=','purchase')]}"/>
+                    <field name="expediente_serien" string="Exp."/>
+                    <field name="expediente" string="Num."/>
+                    <field name="expediente_num" string="Exp." invisible="1"/>
+                    <field name="name" string="Referencia / Numero"/>
+                    <field name="partner_id"/>
+					<field name="fechasalida"/>
+					<field name="totaleuro"/>
+                    <field name="state" />
+                    <field name="estadodesc" />
+
+		            </tree>
+			  </field>
+			  
+			  </group>
+			  </page>
+              <page string="Other Information" invisible="1">
+                <group>
+                  <group string="Sales Information" name="sales_person">
+                    <field name="user_id"/>
+                    <field name="team_id" options="{'no_create': True}"/>
+                    <field name="client_order_ref"/>
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    <field name="analytic_account_id" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" attrs="{'readonly': ['|',('analytic_account_id','!=',False),('invoice_count','!=',0),('state','=','sale')]}" groups="analytic.group_analytic_accounting"/>
+                  </group>
+                  <group name="sale_pay" string="Invoicing">
+                    <field name="date_order" string="Fecha Pedido" attrs="{'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+                    <field name="fiscal_position_id" options="{'no_create': True}"/>
+                    <field name="invoice_status" states="sale,done" invisible="1"/>
+                  </group>
+                  <group string="Reporting" name="technical" groups="base.group_no_one">
+                    <field groups="base.group_no_one" name="origin"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Etiquetas de Documento">
+                <group>
+                      <field name="etiquetas"/>				
+				</group>
+			  </page>
+              <page string="Relación">
+                <group>
+                  <field name="docrel2" string="Documentos Relacionados">
+                    <tree editable="bottom">
+                      <field name="desc3" readonly="1" invisible="1"/>
+                      <field name="docrel3" readonly="1" invisible="1"/>
+                      <field name="desc2" readonly="1"/>
+                      <field name="docrel2" readonly="1"/>
+                    </tree>
+                    <form>
+                      <field name="desc3" readonly="1" invisible="1"/>
+                      <field name="docrel3" readonly="1" invisible="1"/>
+                      <field name="desc2" readonly="1"/>
+                      <field name="docrel2" readonly="1"/>
+                    </form>
+                  </field>
+                </group>
+                <group string="Tareas">
+                  <div>
+                    <field name="relaciontareapr" attrs="{'invisible': [('type_doc','!=','Presupuesto'),('relaciontareapr','=','')]}">
+                      <tree string="Tareas">
+                        <field name="message_needaction" invisible="1"/>
+                        <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                        <field name="date_deadline"/>
+                        <field name="name"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="etiquetas_tarea" widget="many2many_tags"/>
+                        <field name="project_id" invisible="1"/>
+                        <field name="user_id" invisible="1"/>
+                        <!-- <field name="stage_id" invisible="context.get('set_visible',False)"/>-->
+                      </tree>
+                    </field>
+                    <field name="relaciontareapv" attrs="{'invisible': [('type_doc','!=','Pedido')]}">
+                      <tree string="Tareas">
+                        <field name="message_needaction" invisible="1"/>
+                        <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                        <field name="date_deadline"/>
+                        <field name="name"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="etiquetas_tarea" widget="many2many_tags"/>
+                        <field name="project_id" invisible="1"/>
+                        <field name="user_id" invisible="1"/>
+                        <!-- <field name="stage_id" invisible="context.get('set_visible',False)"/>-->
+                      </tree>
+                    </field>
+                    <field name="relaciontareaab" attrs="{'invisible': [('type_doc','!=','Albaran')]}">
+                      <tree string="Tareas">
+                        <field name="message_needaction" invisible="1"/>
+                        <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                        <field name="date_deadline"/>
+                        <field name="name"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="etiquetas_tarea" widget="many2many_tags"/>
+                        <field name="project_id" invisible="1"/>
+                        <field name="user_id" invisible="1"/>
+                        <!-- <field name="stage_id" invisible="context.get('set_visible',False)"/>-->
+                      </tree>
+                    </field>
+                  </div>
+                </group>
+                <group string="Correos">
+                  <div>
+                    <field name="relacionmailpr" attrs="{'invisible': [('type_doc','!=','Presupuesto')]}">
+                      <tree>
+                        <field name="date"/>
+                        <field name="subject"/>
+                        <field name="author_id"/>
+                        <field name="tipo_etiquetas" widget="many2many_tags"/>
+                      </tree>
+                    </field>
+                    <field name="relacionmailpv" attrs="{'invisible': [('type_doc','!=','Pedido')]}">
+                      <tree>
+                        <field name="date"/>
+                        <field name="subject"/>
+                        <field name="author_id"/>
+                        <field name="tipo_etiquetas" widget="many2many_tags"/>
+                      </tree>
+                    </field>
+                    <field name="relacionmailab" attrs="{'invisible': [('type_doc','!=','Albaran')]}">
+                      <tree>
+                        <field name="date"/>
+                        <field name="subject"/>
+                        <field name="author_id"/>
+                        <field name="tipo_etiquetas" widget="many2many_tags"/>
+                      </tree>
+                    </field>
+                  </div>
+                </group>
+              </page>
+			  <page string="Registro de Calidad">
+			  
+			  </page>
+			  			  <page string="Informacion Extra">
+				<group>
+					<group string="Informacion de Cliente">
+						<field name="pricelist_id"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="payment_term_id" options="{'no_create': True}"/>
+				<field name="mododecobro" options="{'no_create': True}"/>
+                <field name="fiscal_position_id" options="{'no_create': True}"/>
+					</group>				  
+				<group string="Datos Extra Pedido">
+				                <field name="validity_date"/>
+                <field name="confirmation_date"/>
+				<label for="confirmation_date" string="EXPEDIENTES"/>
+				<div>
+					<button name="cambiar_expediente" type="object" string="Cambair Expediente"/>
+				</div>
+				
+				</group>
+				</group>
+			  </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" invisible="1"/>
+            <field name="activity_ids" widget="mail_activity" invisible="1"/>
+            <field name="message_ids" widget="mail_thread" invisible="1"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+
+
+
+
+
+
+<!-- **************************************** VISTAS ENTIDADES **************************************** -->
+
+
+
+
+
+<!-- Action Expdientes -->
+    <record model="ir.actions.act_window" id="action_jovimer_expedientes">
+      <field name="name">Expedientes</field>
+      <field name="res_model">jovimer_expedientes</field>
+      <field name="view_mode">tree,form</field>
+	  <field name="help">Expedientes</field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_expedientes_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_expedientes_view_form')})]"/>	   
+
+    </record>
+
+<!-- Action Pedidos Venta -->
+   <record model="ir.actions.act_window" id="action_jovimer_pventa">
+      <field name="name">Pedidos Venta</field>
+      <field name="res_model">sale.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Pedidos de Venta</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_ventas_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_ventas_view_form')})]"/>	
+    </record>
+
+   <record model="ir.actions.act_window" id="action_jovimer_preciosenpedidos">
+      <field name="name">Pedidos Venta Y Precios</field>
+      <field name="res_model">sale.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Pedidos de Venta</field>
+	  <field name="context">{'form_view_initial_mode': 'edit','force_detailed_view': 'true'}</field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_ventas_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_ventaseditable_view_form')})]"/>	
+    </record>
+
+
+
+
+<!-- Action Pedidos Compra -->
+   <record model="ir.actions.act_window" id="action_jovimer_pcompra">
+      <field name="name">Pedidos Compra</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Pedidos de Venta</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_compras_view_tree')})]"/>	
+    </record>
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_detallelineascompra">
+      <field name="name">Detalle Compras</field>
+      <field name="res_model">purchase.order.line</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Detalle Compras</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+    </record>
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_asignaciones">
+      <field name="name">Asignaciones</field>
+      <field name="res_model">jovimer_asignaciones</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Asignaciones</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_asignaciones_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_asignaciones_view_form')})]"/>	
+    </record>
+
+
+<record model="ir.actions.act_window" id="action_detalle_pedidoventa">
+    <field name="name">Detalle Pedido Venta</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.order.line</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="pyme_ventasline_view_form"/>
+</record>
+
+
+
+
+
+
+
+
+<!-- Action Medios de Pago -->
+   <record model="ir.actions.act_window" id="action_jovimer_modosdepago">
+      <field name="name">Modos de Pago</field>
+      <field name="res_model">payment.acquirer</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Modos de Pago</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+    </record>
+
+  
+
+    <record model="ir.actions.act_window" id="action_pyme_productos_jovimer">
+      <field name="name">Pyme - Articulos</field>
+      <field name="res_model">product.template</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_pyme_uom_jovimer">
+      <field name="name">Pyme - Unidades de Medida</field>
+      <field name="res_model">uom.uom</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+	
+	    <!-- Bancos -->
+    <record model="ir.actions.act_window" id="action_banco_jovimer">
+      <field name="name">Pyme - Bancos</field>
+      <field name="res_model">res.bank</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+    </record>
+	
+	 <!-- Etiquetas -->
+    <record model="ir.actions.act_window" id="action_pyme_etiquetas_jovimer">
+      <field name="name">Pyme - Etiquetas</field>
+      <field name="res_model">etiquetas_relacion</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_jovimer_wizardsaleexp">
+      <field name="name">Cambiar Expediente en Pedidos</field>
+      <field name="res_model">jovimer_wizardsaleexp</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+    </record>			  
+			  
+
+
+
+    <menuitem id="menu_mantenimientos_jovimer" 
+              name="Mantenimientos" 
+              web_icon="pyme_menus,static/menu/mantenimiento.png"
+              sequence="150"/>
+
+
+
+    <menuitem name="Artículos" 
+              id="item_action_articulos_jovimer" 
+              parent="menu_mantenimientos_jovimer"
+              action="action_pyme_productos_jovimer"/>
+
+			  
+			  
+	<menuitem name="Clasificaciones" 
+              id="item_action_etiquetas_jovimer" 
+              parent="menu_mantenimientos_jovimer"
+              action="action_pyme_etiquetas_jovimer"/>
+
+
+	
+          <menuitem id="menu_jovimer" 
+              name="Venta -- Compra" 
+              web_icon="pyme_menus,static/menu/ventas.png"
+              sequence="10"/>
+
+		 <menuitem name="Pedido VENTA"
+              id="menu_jovimer_pventa"
+              parent="menu_jovimer"
+			  sequence="1"
+			  action="action_jovimer_pventa"/>      
+		 <menuitem name="Asignaciones"
+              id="menu_jovimer_asignaciones"
+              parent="menu_jovimer"
+			  sequence="1"
+			  action="action_jovimer_asignaciones"/> 
+
+		 <menuitem name="Pedido Compra"
+              id="menu_jovimer_pcompra"
+              parent="menu_jovimer"
+			  sequence="1"
+			  action="action_jovimer_pcompra"/> 
+
+	     <menuitem name="Expedientes"
+              id="menu_jovimer_expedientes"
+              parent="menu_jovimer"
+			  sequence="8"
+			  action="action_jovimer_expedientes"/>
+		 
+		 <menuitem name="Plantillas de Producto"
+         	  id="menu_jovimer_plantillasproducto"
+              parent="menu_jovimer"
+			  sequence="9"
+			  action="action_jovimer_plantillasproducto"/>  
+
+		 <menuitem name="Precios de Producto"
+         	  id="menu_jovimer_plantillasproductoprecios"
+              parent="menu_jovimer"
+			  sequence="9"
+			  action="action_jovimer_plantillasproductoprecios"/>  
+
+
+		 
+		 <menuitem name="Precios en Pedidos"
+         	  id="menu_jovimer_preciospedido"
+              parent="menu_jovimer"
+			  sequence="9"
+			  action="action_jovimer_preciosenpedidos"/>  
+
+		 <menuitem name="Detalle Lineas Compra"
+         	  id="menu_jovimer_detallecompra"
+              parent="menu_jovimer"
+			  sequence="10"
+			  action="action_jovimer_detallelineascompra"/> 
+
+
+
+		 <menuitem name="Contables"
+         	  id="menu_jovimer_contables"
+              parent="menu_mantenimientos_jovimer"
+			  sequence="70"/> 
+
+
+
+    <menuitem name="Plazos de Pago" 
+              id="item_action_plazos_pago_jovimer" 
+              parent="menu_jovimer_contables"
+              action="account.action_payment_term_form"/>
+
+	<menuitem name="Modos de Pago"
+         	  id="menu_jovimer_modosdepago_jovimer"
+              parent="menu_jovimer_contables"
+			  action="action_jovimer_modosdepago"/> 			  
+
+    <menuitem name="Cuentas Bancarias" 
+              id="item_action_cuentas_bancarias_jovimer"
+              parent="menu_jovimer_contables"
+              action="account.action_account_bank_journal_form"/>
+
+    <menuitem name="Bancos" 
+              id="item_action_bancos" 
+              parent="menu_jovimer_contables"
+              action="action_banco_jovimer"/>
+  
+  <record id="pyme_intrastat_product_action" model="ir.actions.act_window">
+    <field name="name">Spanish Intrastat Product Declaration</field>
+    <field name="res_model">intrastat.product.declaration</field>
+    <field name="view_mode">tree,form,graph</field>
+  </record>
+
+  <menuitem id="pyme_intrastat"
+  name="INTRASTAT Productos"
+    parent="menu_jovimer_contables"
+    action="pyme_intrastat_product_action"/>
+
+
+
+		 <menuitem name="Detalles Producto"
+         	  id="menu_jovimer_cdetalles"
+              parent="menu_mantenimientos_jovimer"
+			  sequence="80"/> 
+
+    <menuitem name="Productos Maestros" 
+              id="menu_jovimer_productos_maestros" 
+              parent="menu_mantenimientos_jovimer"
+              action="action_jovimer_productos_maestros"/>
+
+    <menuitem name="Unidades de Medida" 
+              id="item_action_uom_jovimer" 
+              parent="menu_jovimer_cdetalles"
+              action="action_pyme_uom_jovimer"/>
+
+
+		 <menuitem name="Confeccion"
+         	  id="menu_jovimer_confeccion"
+              parent="menu_jovimer_cdetalles"
+			  sequence="1"
+			  action="action_jovimer_confeccion"/> 
+		 
+		 <menuitem name="Calibre"
+         	  id="menu_jovimer_calibre"
+              parent="menu_jovimer_cdetalles"
+			  sequence="2"
+			  action="action_jovimer_calibre"/>  
+	     
+		 <menuitem name="Categoria"
+         	  id="menu_jovimer_categoria"
+              parent="menu_jovimer_cdetalles"
+			  sequence="3"
+			  action="action_jovimer_categoria"/> 
+  
+	  	 <menuitem name="Envase"
+         	  id="menu_jovimer_envase"
+              parent="menu_jovimer_cdetalles"
+			  sequence="4"
+			  action="action_jovimer_envase"/> 
+    
+		 <menuitem name="Marca"
+         	  id="menu_jovimer_marca"
+              parent="menu_jovimer_cdetalles"
+			  sequence="5"
+			  action="action_jovimer_marca"/> 
+			  
+		 <menuitem name="Variedad"
+         	  id="menu_jovimer_variedad"
+              parent="menu_jovimer_cdetalles"
+			  sequence="6"
+			  action="action_jovimer_variedad"/> 
+	
+	
+	
+	
+	</data>
+</openerp>
+                          
