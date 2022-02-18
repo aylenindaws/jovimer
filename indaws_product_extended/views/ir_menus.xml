@@ -4,6 +4,7 @@
             <menuitem id="jovimer_calibre_config_submenu" name="Calibres" action="jovimer_calibre_list_action"/>
             <menuitem id="jovimer_categoria_config_submenu" name="Categorias" action="jovimer_categoria_list_action"/>
             <menuitem id="jovimer_confeccion_config_submenu" name="Confecciones" action="jovimer_confeccion_list_action"/>
+            <menuitem id="jovimer_conflote_config_submenu" name="Conflotes" action="jovimer_conflote_list_action"/>
             <menuitem id="jovimer_envase_config_submenu" name="Envases" action="jovimer_envase_list_action"/>
             <menuitem id="jovimer_etiquetas_config_submenu" name="Etiquetas" action="jovimer_etiquetas_list_action"/>
             <menuitem id="jovimer_etiquetas_plantilla_config_submenu" name="Plantillas de Etiquetas" action="jovimer_etiquetas_plantilla_list_action"/>
