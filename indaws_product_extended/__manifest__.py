@@ -18,6 +18,7 @@
         'views/jovimer_expedientes_series.xml',
         'views/jovimer_marca.xml',
         'views/jovimer_variedad.xml',
+        'views/jovimer_conflote.xml',
         'views/sale_order.xml',
         'views/purchase_order.xml',
         'views/product_template.xml',
