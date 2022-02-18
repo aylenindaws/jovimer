@@ -1,0 +1,1853 @@
+<odoo>
+    <data>
+    <!-- act_window
+            id="action_crear_viaje_nacional"
+            name="Crear Viaje Nacional"
+            res_model="jovimer_viajes"
+            src_model="jovimer_ctn"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        / -->
+
+     <!-- act_window
+            id="action_crear_viaje_internacional"
+            name="Crear Viaje Internacional"
+            res_model="jovimer_viajes"
+            src_model="jovimer_cti"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        / -->
+
+
+
+     <act_window
+            id="action_crear_viaje_grupajes"
+            name="Crear Grupaje de Viajes"
+            res_model="jovimer_viajes"
+            src_model="jovimer_preparagrupaje"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"/>
+
+
+
+ <record model="ir.ui.view" id="jovimer_preparaentrada_view_form">
+      <field name="name">Pyme - Prepara Carga </field>
+      <field name="model">jovimer_preparaentrada</field>
+	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+      <form string="Bill lines">
+	  <sheet>
+      <group>
+	  <group string="Linea de Albarán">
+	  <field name="albaran"/>
+	  <field name="name" />
+	  <field name="variedad" readonly="1"/>
+	  <field name="calibre" readonly="1"/>
+	  <field name="categoria" readonly="1"/>
+	  <field name="confeccion" readonly="1"/>
+	  
+ 	  </group>
+      <group strin="Cantidades">
+	  <field name="envase"/>
+	  <field name="totalbultos"/>
+	  <field name="totalbultosentrada"/>
+      </group>
+	  </group>
+      <field name="lineas">
+	     <tree>
+		 <field name="expediente_serien"/>
+		 <field name="expediente"/>
+		 <field name="variedad"/>
+		 <field name="confeccion"/>
+		 <field name="totalbultos"/>
+		 
+		 </tree>
+		 </field>
+	  </sheet>
+	  </form>
+
+           </field>
+    </record>  
+
+ <record model="ir.ui.view" id="jovimer_albrecep_prov_view_tree">
+      <field name="name">Pyme - Recepciones </field>
+      <field name="model">account.invoice.line</field>
+	  <field name="priority">0</field>
+      <field name="arch" type="xml">
+   <tree string="Bill lines" editable="top">
+                                    <field name="sequence" widget="handle" invisible="1"/>
+                                    <field name="expediente" readonly="1" string="Exp"/>
+									<field name="partner_id" readonly="1" string="Proveedor / Origen"/>
+									<field name="paislins" readonly="1" invisible="1"/>
+									<field name="invoice_id" readonly="1" string="Documento" invisible="1"/>
+									<field name="refcliente" readonly="1" string="Ref Proveedor"/>
+                                    <field name="lineacompra" readonly="1"/>
+									<field name="lineaventa" readonly="1"/>
+									<field name="product_id"  invisible="1" context="{'partner_id': parent.partner_id}" domain="[('purchase_ok','=',True)]"/>
+                                    <field name="name" invisible="1"/>
+									<field name="variedad" readonly="1"/>
+                                    <field name="confeccion" readonly="1"/>
+									<field name="marca" readonly="1"/>
+									<field name="envase" readonly="1"/>
+									<field name="categoria" readonly="1"/>
+                                    <field name="cantidadpedido"/>
+									<field name="unidadpedido"/>
+									<field name="bultos" string="BxP"/>	
+									<field name="totalbultos" string="Tot Blt"/>									
+									
+									<field name="pricej" readonly="1" string="PVD Comp"/>
+									<field name="cantidadj" readonly="1"/>
+									<field name="unidabultoj" readonly="1" string="UD Comp"/>
+									<field name="subtotalj" readonly="1" invisible="1"/>
+                                    
+									<button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline" invisible="1"/>
+									
+									<field name="company_id" invisible="1"/>
+                                    <field name="account_id" groups="account.group_account_user" domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other'), ('deprecated', '=', False)]"/>
+                                    <field name="account_analytic_id" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
+									<field name="bultos"/>
+									<field name="price_unit" string="PVD-Alb" invisible="1"/>
+									<field name="quantity"/>
+									<field name="unidabulto" string="UD-Alb"/>
+									
+									
+                                    <field name="uom_id" groups="product.group_uom"/>
+                                    
+                                    <field name="discount" string="Dto" invisible="1"/>
+                                    <field name="invoice_line_tax_ids"  invisible="1" widget="many2many_tags" options="{'no_create': True}" context="{'type':parent.type}" domain="[('type_tax_use','=','purchase'),('company_id', '=', parent.company_id)]"/>
+                                    <field name="price_subtotal" string="Subtotal" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+									<button name="generacarga" type="object" string="CARGAR"/>
+                                </tree>
+           </field>
+    </record>  
+
+
+
+<record model="ir.ui.view" id="jovimer_ctn_view_search">
+      <field name="name">JOVIMER - Buscador</field>
+      <field name="model">jovimer_ctn</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+<search string="Search Sales Order">
+
+<field name="expediente" string="Expediente" context="{'active_test': False}" filter_domain="[('expediente','=',self)]"/>
+
+
+                    
+                    <field name="name"/>
+                    <field name="transportista"/>
+                    <field name="proveedor"/>
+                    <field name="datecompra"/>					
+                    <field name="orcarga"/>
+					<field name="expediente" string="Expediente Contiene ... "/>
+                    <separator/>
+                    <filter string="Pendientes / Borrador" name="activities_my" domain="[('orcarga','=',False)]"/>
+                    <separator/>
+                  <group expand="0" string="Group By">
+                        <filter string="Expediente" name="grexp" domain="[]" context="{'group_by':'expediente'}"/>
+                        <filter string="Origen" name="grexpo" domain="[]" context="{'group_by':'name'}"/>
+                        <filter string="Trsnsportista" name="grexpt" domain="[]" context="{'group_by':'transportista'}"/>
+                        <filter string="proveedor" name="grexpp" domain="[]" context="{'group_by':'proveedor'}"/>
+                        <filter string="Fecha Llegada" name="grexpfll" domain="[]" context="{'group_by':'fechallegada'}"/>
+                        <filter string="Fecha" name="grexpf" domain="[]" context="{'group_by':'date'}"/>
+                        <filter string="Viaje" name="grexpf" domain="[]" context="{'group_by':'orcarga'}"/>
+                    </group>
+               </search>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_viajes_view_search">
+      <field name="name">JOVIMER - Buscador</field>
+      <field name="model">jovimer_viajes</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+<search string="Search Sales Order">
+
+                    <field name="name"/>
+					<field name="expedientes" string="Expediente" context="{'active_test': False}" filter_domain="[('expedientes','=',self)]"/>
+					
+			        <field name="tipoviaje"/>
+                    <field name="transportista"/>
+					<field name="matricula"/>
+                    <field name="fechaformalizado"/>
+                    <field name="fechallegadanacional"/>					
+                    <field name="fechallegadainternacional"/>
+					<field name="expedientes" string="Expediente Contiene ..." />
+					<field name="name" string="Quitar la Orden ..." filter_domain="[('name','!=',self)]"/>
+					<separator/>
+					<filter domain="[('facturado', '=' , False)]" string="Pendiente Facturar" name="facturado" />
+                    <separator/>
+                  <group expand="0" string="Group By">
+                        <filter string="Fecha Formalizado" name="grexpo" domain="[]" context="{'group_by':'fechaformalizado'}"/>
+						<filter string="Fecha Llegada Nacional" name="grexpo" domain="[]" context="{'group_by':'fechallegadanacional'}"/>
+						<filter string="Fecha Llegada Internacional" name="grexpo" domain="[]" context="{'group_by':'fechallegadainternacional'}"/>
+                        <filter string="Transportista" name="grexpt" domain="[]" context="{'group_by':'transportista'}"/>
+                    </group>
+               </search>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_cti_view_search">
+      <field name="name">JOVIMER - Buscador</field>
+      <field name="model">jovimer_cti</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+<search string="Search Sales Order">
+
+
+<field name="expediente" string="Expediente" context="{'active_test': False}" filter_domain="[('expediente','=',self)]"/>
+                    
+                    <field name="origen"/>
+					<field name="partner"/>
+                    <field name="transportista"/>
+					<field name="proveedor"/>
+                    <field name="productomaestro"/>
+            <field name="metodo"/>
+                    <field name="llegada"/>
+                    <field name="date"/>					
+                    <field name="viaje"/>
+					<field name="expediente" string="Expediente Contiene ... "/>
+                    <separator/>
+                    <filter string="Pendientes / BOrrador" name="activities_my" domain="[('viaje','=',False)]"/>
+                    <separator/>
+                  <group expand="0" string="Group By">
+                        <filter string="Expediente" name="grexp" domain="[]" context="{'group_by':'expediente'}"/>
+                        <filter string="Origen" name="grexpo" domain="[]" context="{'group_by':'origen'}"/>
+                        <filter string="Trsnsportista" name="grexpt" domain="[]" context="{'group_by':'transportista'}"/>
+                        <filter string="Destino" name="grexpp" domain="[]" context="{'group_by':'partner'}"/>
+                        <filter string="Fecha Llegada" name="grexpfll" domain="[]" context="{'group_by':'llegada'}"/>
+                        <filter string="Fecha" name="grexpf" domain="[]" context="{'group_by':'date'}"/>
+                        <filter string="Viaje" name="grexpf" domain="[]" context="{'group_by':'viaje'}"/>
+                        <filter string="Método" name="metgrexpf" domain="[]" context="{'group_by':'metodo'}"/>
+
+                    </group>
+               </search>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_resumenviajes_view_tree">
+      <field name="name">JOVIMER - Resumen Viaje</field>
+      <field name="model">jovimer_viajeresumen</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree>
+			<field name="viaje"/>
+			<field name="name"/>
+			<field name="euro"/>
+			<field name="gran"/>
+			<field name="bultos"/>
+		</tree>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_resumenviajes_view_form">
+      <field name="name">JOVIMER - Resumen Viaje</field>
+      <field name="model">jovimer_viajeresumen</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<sheet><group><group>
+			<field name="viaje"/>
+			<field name="name"/>
+			</group><group>
+			<field name="euro"/>
+			<field name="gran"/>
+			<field name="bultos"/>
+			</group></group>
+			<field name="resumenlineas">
+			<tree editable="top">
+			<field name="expediente_serien"/>
+			<field name="expediente"/>
+			<field name="proveedor"/>
+			<field name="name"/>
+			<field name="confeccion"/>
+			<field name="envase"/>
+			<field name="euro"/>
+			<field name="gran"/>
+			<field name="bultos"/>
+			
+			</tree>
+			</field>
+			</sheet>
+		</form>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_linpedcomtr_view_tree">
+      <field name="name">JOVIMER - Generar Viajes desde Compras</field>
+      <field name="model">purchase.order.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree editable="top" default_order="id desc">
+
+            <button string="Crea CT" type="object" name="action_creact"/>
+			<field name="expediente_serien" string="Exp." readonly="1"/>
+			<field name="expediente" string="Num." readonly="1"/>
+			<field name="partner_id" readonly="1"/>
+			<field name="viajedirecto" readonly="1"/>
+			<field name="name" readonly="1"/>
+			<field name="cantidadpedido" readonly="1"/>
+			<field name="unidadpedido"  options="{'no_create': True, 'no_create_edit':True}" readonly="1"/>
+			<field name="bultos" readonly="1"/>
+			<field name="envase" readonly="1"/>
+			<field name="marca" readonly="1"/>
+			<field name="confeccion" readonly="1"/>
+			<field name="variedad" readonly="1"/>
+
+
+			<field name="price_unit" readonly="1"/>
+			<field name="product_uom" readonly="1"/>
+			<field name="order_id" string="Pedido COmpleto" readonly="1"/>
+
+		</tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_ordencargacabprint_view_form">
+      <field name="name">JOVIMER - Ordernes de Carga</field>
+      <field name="model">jovimer_ordencargacabprint</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<header></header>
+		<sheet>
+           <group>
+		   <group>
+		   <field name="name"/>
+		   <field name="viajerel" options="{'no_create': True}"/>
+		   <field name="partner" options="{'no_create': True}"/>
+		   <field name="fechadescarga" attrs="{'invisible': [('name', '=', 'CARGA')]}"/>
+		   <field name="fechacarga" attrs="{'invisible': [('name', '=', 'DESCARGA')]}"/>
+           </group>
+		   <group>
+			<field name="totaleuro"/>
+			<field name="totalgran"/>
+			<field name="totalbultos"/>
+		   </group>
+           </group>
+			<field name="lineasorden">
+			 <tree editable="top">
+			 <field name="id"/>
+			 <field name="partner"/>
+			 <field name="producto"/>
+			 <field name="remontado"/>
+			 <field name="totaleuro"/>
+			 <field name="totalgrande"/>
+			 <field name="bultos" invisible="1"/>
+			 <field name="totalbultos"/>
+			 <field name="expediente"/>
+			  <field name="paletsenref"/>
+			 </tree>
+			</field>
+		</sheet>
+		</form>
+      </field>
+    </record>
+
+
+
+
+<record model="ir.ui.view" id="jovimer_regpedvia_view_tree">
+      <field name="name">JOVIMER - Generar Viajes desde Compras</field>
+      <field name="model">purchase.order</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+			  <tree duplicate="false" string="Purchase Orders" default_order="id desc">
+<button name="action_creaviajes" confirm="Esto reescribirá las CTN / CTI ¿Estas Seguro?" type="object" states="purchase,done" string="Genera los Viajes" class="oe_highlight"/>
+                    <field name="expediente_serien" string="Exp."/>
+                    <field name="expediente" string="Num."/>
+                    <field name="expediente_num" string="Exp." invisible="1"/>
+                    <field name="name" string="Referencia / Numero"/>
+                    <field name="partner_id"/>
+                    <field name="state" />
+                    <field name="estadodesc" />
+		</tree>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_cmr_view_tree">
+      <field name="name">JOVIMER - CMR</field>
+      <field name="model">jovimer_cmr</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+
+
+			<field name="expediente_serien" string="Exp."/>
+			<field name="expediente" string="Num."/>
+			<field name="name"/>
+			<field name="transportista"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="cliente"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="codigo"/>
+			<field name="origen"/>
+			<field name="destino"/>
+			<field name="viaje" widget="many2many_tags"/>
+		</tree>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_orcar_view_tree">
+      <field name="name">JOVIMER - Orden de Carga</field>
+      <field name="model">jovimer_ordencarga</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+            
+			<field name="name"/>
+			<field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="matricula"/>
+			<field name="fechacarga"/>
+			<field name="producto"/>
+			<field name="remontado"/>
+			<field name="totaleuro"/>
+			<field name="totalgrande"/>
+			<field name="ordencargacabe"/>
+			<!-- field name="expedientes" widget="many2many_tags"/ -->
+			
+			
+			<field name="viaje"/>
+			<field name="estado"/>
+		</tree>
+      </field>
+    </record>
+
+<record model="ir.ui.view" id="jovimer_orcar_view_search">
+      <field name="name">JOVIMER - Orden de Carga Search</field>
+      <field name="model">jovimer_ordencarga</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+	  <search string="Search Sales Order">
+
+                    <field name="expediente" string="Expediente" context="{'active_test': False}" filter_domain="[('expediente','=',self)]"/>
+                    <field name="name"/>
+                    <field name="producto"/>
+               </search>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_orcar_view_form">
+      <field name="name">JOVIMER - Orden de Carga</field>
+      <field name="model">jovimer_ordencarga</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<sheet>
+		<group><group>
+			<field name="name"/>
+			<field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="fechacarga"/>
+			<field name="viaje"/>
+			<field name="estado" invisible="1"/>
+		</group></group>
+		</sheet>
+		</form>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_cmr_view_form">
+      <field name="name">JOVIMER - CMR</field>
+      <field name="model">jovimer_cmr</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+<form string="CMR">
+
+<sheet>
+	<group string="Cabecera">
+		<group>
+
+			<field name="expediente_serien" string="Exp." readonly="1"/>
+			<field name="expediente" string="Num."/>
+			<div>
+			<field name="viaje" string="Viajes"/>
+			</div>
+		</group>
+		<group>
+			<field name="name" string="Número CMR."/>
+			<field name="write_date" string="Fecha de Guardado."/>
+			<field name="origen"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="cliente"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="transportista"  options="{'no_create': True, 'no_create_edit':True}"/>
+		</group>
+	</group>
+
+
+	<group string="CMR">
+		<group>
+			<field name="txt01"/>
+			<field name="txt02"/>
+			<field name="txt03"/>
+			<field name="txt04"/>
+			<field name="txt05"/>
+		</group>
+		<group>
+			<field name="txt16"/>
+			<field name="txt17"/>
+			<field name="txt18"/>
+		</group>
+	</group>
+
+		<group string="Lineas">
+		<group col="8">
+		  <group string="Marca"><field name="txt06" nolabel="1"/></group>
+			<group string="Bultos"><field name="txt07" nolabel="1"/></group>
+			<group string="Envase"><field name="txt08" nolabel="1"/></group>
+			<group string="Producto"><field name="txt09" nolabel="1"/></group>
+
+		  <group string="Peso"><field name="txt11" nolabel="1"/></group>
+		  <group string="Palets"><field name="txt12" nolabel="1"/></group>
+		  			<group string="N Estad"><field name="txt10" nolabel="1"/></group>
+		</group>
+	</group>
+	<group>
+		<group>
+			<field name="txt13"/>
+			<field name="txt21"/>
+			<field name="txt21b"/>
+		</group>
+		<group>
+			<field name="txt19"/>
+			<field name="txt15"/>
+		</group>
+	</group>
+	<group>
+		<group>
+			<field name="txt22" class="oe_inline"/>
+			<field name="txt23" class="oe_inline"/>
+			<field name="txt241" class="oe_inline"/>
+			<field name="txt242" class="oe_inline"/>
+		</group>
+	</group>
+</sheet>
+</form>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_ctn_view_tree">
+      <field name="name">JOVIMER - Control Transporte Nacional</field>
+      <field name="model">jovimer_ctn</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree editable="top" decoration-danger="estado_compra == 'cancel'" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO'" default_order='id desc' >
+			<button string="Directo" confirm="Quieres pasar esta linea a Control Internacional?" type="object" name="action_pasadirecto" attrs="{'invisible': [('orcarga', '!=', False )]}"/>
+			<field name="id" invisible="1"/>
+			<field name="expediente_serien"   options="{'no_create': True, 'no_create_edit':True}" string="S/"/>
+			<field name="expediente"   options="{'no_create': True, 'no_create_edit':True}" string="Num"/>
+
+			<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp." invisible="1"/>
+			<field name="datecompra" required="1"/>
+			<field name="date" required="1" string="Fecha Confirmada"/>
+			<field name="fechallegada" invisible="1"/>
+
+			<field name="name" options="{'no_create': True, 'no_create_edit':True}"/>
+			
+			<field name="transportista" options="{'no_create': True, 'no_create_edit':True}"/>                        
+			<field name="proveedor" required="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="remontado"/>
+			<field name="paleteur"/>
+			<field name="paletgr"/> 
+			<field name="bultos"/> 
+			<field name="desproducto"/>
+			<field name="variedad"/>
+			<field name="confeccion"/>
+			<field name="envase"/>
+			<field name="marca" invisible="1"/>
+			<field name="almacencarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="destinointerior" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="coste"/>
+			<field name="partner_ref"/>
+			<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="estado_compra"/>
+			<field name="orcarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+		</tree>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_recepcionmerc_view_search">
+      <field name="name">JOVIMER - BUscador Recepciones </field>
+      <field name="model">account.invoice.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+      <search string="Search Invoice">
+          <field name="expediente" string="Expediente" context="{'active_test': False}" filter_domain="['|',('expediente','=',self),('expediente_origen','=',self)]"/>
+          <field name="partner_id" operator="child_of" string="Proveedor"/>
+          <field name="fechallegadanac"/>
+		  <field name="variedad"/>
+		  <field name="confeccion"/>
+		 
+		  <filter name="pendientes1" string="Sin Viaje" domain="[('viajerel','=', False)]"/>
+		  <filter name="pendientes2" string="Pendientes de Cargar" domain="[('cargado','!=', True),('fechafact', '&gt;=', '2021-05-01')]"/>
+		  <filter name="pendientes3" string="Llegadas HOY" domain="[('fechallegadanac', '=', context_today().strftime('%Y-%m-%d')),('fechafact', '&gt;=', '2021-05-01')]"/>
+          <separator/>
+		  <filter name="pendientes" string="Pendientes de Cargar HOY" domain="[('cargado','!=', True),('fechafact', '&gt;=', '2021-05-01'),('fechallegadanac', '=', context_today().strftime('%Y-%m-%d'))]"/>
+		  <separator/> 
+		  <field name="fechafact"  operator="child_of"/>
+		  <field name="expediente" string="Expediente Destino Contiene ..."/>
+          <group expand="0" string="Group By">
+              <filter name="group_by_partner_id" string="Proveedor" context="{'group_by':'partner_id'}"/>
+			  <filter name="group_by_fechallegadanac" string="Fecha LLegada" context="{'group_by':'fechallegadanac'}"/>
+              <filter string="Expediente" name="expegr" context="{'group_by':'expediente'}"/>
+          </group>
+       </search>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_ctn2_view_tree">
+      <field name="name">JOVIMER - Centro de Carga</field>
+      <field name="model">account.invoice.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+        <tree editable="top" default_order="id desc">
+			        <field name="expediente_serien"/>
+					<field name="expediente_origen" string="Origen" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="expediente" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="fechafact"/>
+					<field name="fechallegadanac" readonly="1"/>
+					<field name="partner_id"/>
+					<button string="[ DESCARGAR ]" class="oe_read_only" name="action_cargarlinea" type="object" attrs="{'invisible': [('cargado','!=', True)]}"/>
+					<field name="product_id" invisible="1" readonly="1" context="{'partner_id': parent.partner_id}" domain="[('purchase_ok','=',True)]"/>
+					<field name="name" invisible="1"/>
+					<field name="variedad" readonly="1"/>
+					<field name="confeccion" readonly="1"/>
+					<field name="marca" readonly="1"/>
+					<field name="envase" readonly="1"/>
+					<field name="categoria" readonly="1"/>
+					<field name="company_id" invisible="1"/>
+					<field name="cantidadpedido" widget="integer" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="unidadpedido" options="{'no_create': True}" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="bultos" widget="integer" string="BxP" readonly="1"/>
+					<field name="totalbultos" widget="integer" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="totalbultosprev" readonly="1" widget="integer" options="{'bg_color': 'yellow:previstoserror== True'}"/>
+					<field name="quantity" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="unidabulto" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="viajerel" readonly="1"/>
+					
+					<button string=" [ CARGAR ] " name="action_cargarlinea" class="oe_read_only" type="object" attrs="{'invisible': ['|',('nocargar','=', True),('cargado','=', True)]}"/> 
+					<!-- <button string=" [ CARGAR ] " name="action_cargarlinea2" class="oe_read_only" type="object" attrs="{'invisible': [('cargado','=', True)]}"/> -->
+					<field name="cargado" readonly="1"/>
+					<field name="cargado_por" string="" readonly="1"/>
+					<field name="cargado_cuandot" readonly="1" string=""/>
+					<field name="nocargar" attrs="{'readonly': [('cargado','=', True)]}"/>
+					<field name="kgnetbulto" invisible="1"/>
+					<field name="unidadesporbulto" invisible="1"/>
+					<field name="uom_id" invisible="1"/>
+					<field name="uom_id" invisible="1"/>
+					<field name="invoice_id" invisible="1"/>
+					<field name="previstoserror" invisible="1"/>
+					<field name="price_unit" invisible="1"/>
+					<field name="discount" invisible="1"/>
+					<field invisible="1" name="invoice_line_tax_ids" widget="many2many_tags" options="{'no_create': True}" context="{'type':parent.type}" domain="[('type_tax_use','=','purchase'),('company_id', '=', parent.company_id)]"/>
+					<field name="price_subtotal"  invisible="1"/>
+					<field name="currency_id" invisible="1"/>
+					<button string=" XCARGARX " name="action_cargarlineaform" class="oe_read_only" type="object" attrs="{'invisible': ['|',('nocargar','=', True),('cargado','=', True)]}"/> 
+					
+		</tree>
+      </field>
+    </record>
+
+
+<!-- 
+<record model="ir.ui.view" id="jovimer_ctn2_view_tree">
+      <field name="name">JOVIMER - Centro de Carga</field>
+      <field name="model">jovimer_ctn</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree editable="top" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO'" default_order='id desc'  class="pyme_jovimer_css">
+			<field name="id" invisible="1"/>
+			<field name="expediente_serien"   options="{'no_create': True, 'no_create_edit':True}" string="S/"/>
+			<field name="expediente"  readonly="1"  options="{'no_create': True, 'no_create_edit':True}" string="Num"/>
+			<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp." invisible="1"/>
+			<field name="date" invisible="1" required="1" string="Fecha Salida"/>
+			<field name="fechallegada" readonly="1"/>
+			<field name="name" options="{'no_create': True, 'no_create_edit':True}" readonly="1"/>
+			<field name="transportista" options="{'no_create': True, 'no_create_edit':True}" readonly="1"/>                        
+			<field name="proveedor" required="1"  options="{'no_create': True, 'no_create_edit':True}" readonly="1"/>
+			<button string=" D E S C A R G A R " name="action_descargalinea" type="object" attrs="{'invisible': [('cargado','!=', True)]}"/>
+			<field name="remontado" invisible="1"/>
+			<field name="paleteur" invisible="1"/>
+			<field name="paletgr" invisible="1"/> 
+			<field name="bultos" invisible="1"/> 
+			<field name="desproducto" invisible="1" />
+			<field name="variedad" readonly="1" invisible="1"/>
+			<field name="confeccion" readonly="1"/>
+			<field name="envase" readonly="1"/>
+			<field name="marca" invisible="1"/>
+			<field name="almacencarga"  options="{'no_create': True, 'no_create_edit':True}" invisible="1"/>
+			<field name="destinointerior" options="{'no_create': True, 'no_create_edit':True}" invisible="1"/>
+			<field name="coste" invisible="1" />
+			<button string=" E D I T A R " name="action_editar" type="object" attrs="{'invisible': [('cargado','=', True)]}"/>
+			<field name="purchaseorderline"  readonly="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="orcarga"  invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="cantidadpedido"/> 
+			<field name="unidadpedido"/> 
+			<field name="bultospedido"/> 
+			<field name="cargado"/> 
+			<button string=" [ C A R G A R  ] " name="action_cargarlinea" type="object" attrs="{'invisible': [('cargado','=', True)]}"/>
+			<field name="fechacarga" attrs="{'invisible': [('cargado','!=', True)]}"/> 
+			<field name="modocarga" attrs="{'invisible': [('cargado','!=', True)]}"/>
+		</tree>
+      </field>
+    </record>
+
+     -->
+
+<record model="ir.ui.view" id="jovimer_ctn_view_form">
+      <field name="name">JOVIMER - Control Transporte Nacional</field>
+      <field name="model">jovimer_ctn</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<header>
+		<button string="Directo" confirm="Quieres pasar esta linea a Control Internacional?" type="object" name="action_pasadirecto" attrs="{'invisible': [('orcarga', '!=', False )]}"/>
+		</header>
+		<sheet>
+			<group><group>
+			<field name="id" invisible="1"/>
+			<field name="expediente_serien"   options="{'no_create': True, 'no_create_edit':True}" string="S/"/>
+			<field name="expediente"   options="{'no_create': True, 'no_create_edit':True}" string="Num"/>
+			<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp." invisible="1"/>
+			<field name="date" required="1"/>
+			<field name="fechallegada"/>
+			<field name="name" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="transportista" options="{'no_create': True, 'no_create_edit':True}"/>                        
+			<field name="proveedor" required="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="orcarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<group></group>
+			<field name="remontado"/>
+			<field name="paleteur"/>
+			<field name="paletgr"/> 
+			<field name="bultos" widget="integer"/> 
+			<field name="totalbultos" widget="integer"/>
+			<field name="desproducto"/>
+			<field name="variedad"/>
+			<field name="confeccion"/>
+			<field name="envase"/>
+			<field name="marca"/>
+			<field name="almacencarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="destinointerior" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="coste"/>
+			<field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+			</group></group>
+			</sheet>
+		</form>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_cti_view_tree">
+      <field name="name">JOVIMER - Control Transporte Internacional</field>
+      <field name="model">jovimer_cti</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree string="Control Transporte Internacional" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO'" default_order='id desc'>
+			<field name="id" invisible="1"/>
+			<field name="expediente_serien" options="{'no_create': True, 'no_create_edit':True}" string="Num."/>
+			<field name="expediente_num" options="{'no_create': True, 'no_create_edit':True}" string="Exp." invisible="1"/>
+			<field name="expediente" options="{'no_create': True, 'no_create_edit':True}" string="Exp."/>
+            <field name="metodo"/>
+            <field name="date"/>
+			<field name="origen"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="proveedor" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="name"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="llegada"/>
+            <field name="descripcion"/>
+			 <field name="productomaestro"/>
+			<field name="variedad"/>
+			<field name="confeccion"/>
+			<field name="remontado"/>
+            <field name="paleteur"/>
+            <field name="paletgr"/>
+            <field name="bultos" widget="integer"/>
+			<field name="totalbultos" widget="integer"/>
+			<field name="kgnetbulto"/>
+
+            <field name="transportista"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="matricula"/>
+            <field name="descripcion" invisible="1"/>
+			<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="envase"/>
+            <field name="marca" invisible="1"/>
+            <field name="previaje" invisible="1"/>
+            <field name="viaje"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="coste"/>
+            <field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+		</tree>
+
+      </field>
+    </record>
+
+<record model="ir.ui.view" id="jovimer_cti_view_form">
+      <field name="name">JOVIMER - Control Transporte Internacional</field>
+      <field name="model">jovimer_cti</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<header>
+		
+		</header>
+		<sheet>
+			<group><group>
+			<field name="id" />
+			<field name="expediente_serien"   options="{'no_create': True, 'no_create_edit':True}" string="Num."/>
+			<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp." invisible="1"/>
+			<field name="expediente"  options="{'no_create': True, 'no_create_edit':True}" string="Exp."/>
+            <field name="metodo"/>
+            <field name="date"/>
+			<field name="origen"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="name"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="llegada"/>
+            <field name="descripcion"/>
+			<field name="remontado"/>
+            <field name="paleteur"/>
+            <field name="paletgr"/>
+            <field name="bultos"/>
+			<field name="kgnetbulto"/>
+						</group><group>
+            <field name="transportista"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="matricula"/>
+            <field name="descripcion"/>
+			 <field name="productomaestro"/>
+			<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="confeccion"  options="{'no_create': True, 'no_create_edit':True}"/>
+            <field name="envase"/>
+            <field name="marca"/>
+            <field name="previaje" invisible="1"/>
+            <field name="viaje"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="coste"/>
+            <field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+					</group></group>
+			</sheet>
+		</form>
+      </field>
+    </record>
+	
+	
+	
+<record model="ir.ui.view" id="jovimer_viajes_view_tree">
+      <field name="name">JOVIMER - Viajes</field>
+      <field name="model">jovimer_viajes</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree colors="grey:state == 'done';" string="Viajes" default_order="id desc">
+			<field name="id" invisible="1"/>
+			<field name="expedientesseriechar"/>
+			<field name="expedientes" widget="many2many_tags" invisible="1"/>
+			<field name="name"/>
+			<field name="tipoviaje"/>
+			<field name="fechaformalizado"/>
+			<field name="importe" sum="importe"/>
+			<field name="paleteur"/>
+			<field name="paletgr"/>
+			<field name="transportista"/>
+			<field name="matricula"/>
+			<field name="productos"/>
+			<field name="facturado"/>
+			<field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_orcargcab_view_form">
+      <field name="name">JOVIMER - Orden de Carga Cabecera</field>
+      <field name="model">jovimer_ordencargacab</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+
+			<form>
+			<sheet>
+			<group><group>
+				<field name="fecha"/>
+				 <field name="name" string="Transportista" options="{'no_create': True, 'no_create_edit':True}"/>
+				</group>
+				<group>
+				 <field name="totaleuro"/>
+				 <field name="totalgran" />
+				 <field name="totaleuro"/>
+				 <field name="totalbultos"/>					 
+			    </group></group>
+			    <group>
+				
+				 <field name="lineasorden">
+				  <tree editable="top" >
+			<field name="sequence" widget="handle"/>			
+			<field name="name"/>
+			<field name="fechacarga"/>
+			<field name="fechadescarga"/>
+			<field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="producto"/>
+			<field name="totaleuro"/>
+			<field name="totalgrande"/>
+			<field name="bultos"/>	
+			<field name="totalbultos"/>			
+			<!-- field name="expedientes" widget="many2many_tags"/ -->
+			<field name="viaje"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="expediente"  options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="paletsenref"  readonly="1"/>
+			
+			</tree>
+				 </field>
+				</group>
+			
+			
+			</sheet>
+			</form>
+
+      </field>
+    </record>
+
+
+<record model="ir.ui.view" id="jovimer_viajes_view_form">
+      <field name="name">JOVIMER - Viajes</field>
+      <field name="model">jovimer_viajes</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+	  <form string="Jovimer Viajes">
+          <header>
+			
+			<!-- El primero no vale porque no tiene en cuenta la caberera -->
+			<button invisible="1" string="Genera Orden de Carga Iternacional" confirm="Esta accion creará la orden de carga para el Viaje. Si ya hay una generada sustituirá las lineas. ¿Estás Seguro?" type="object" name="action_creaorni" attrs="{'invisible': ['|',('state', '!=', 'draft'),('tipoviaje', '=', 'NACIONAL')]}"/>
+			
+			<button string="Genera Orden de Carga Iternacional" confirm="Esta accion creará la orden de carga para el Viaje. Si ya hay una generada sustituirá las lineas. ¿Estás Seguro?" type="object" name="action_creaorni2" attrs="{'invisible': ['|',('state', '!=', 'draft'),('tipoviaje', '=', 'NACIONAL')]}"/>
+			<button string="Genera CMR" confirm="Vas a Generar los CMR del viaje actual. Si ya hay generados, este Eliminará los Existentes. ¿Estas Seguro?" type="object" name="action_creacmr"/>
+
+			<button string="Genera Orden de Carga Nacional" confirm="Esta accion creará la orden de carga para el Viaje. Si ya hay una generada sustituirá las lineas. ¿Estás Seguro?" type="object" name="action_creaorna" attrs="{'invisible': ['|',('state', '!=', 'draft'),('tipoviaje', '=', 'INTERNACIONAL')]}"/>
+			
+			<button string="Genera Orden de Carga Nacional PRUEBA" confirm="Esta accion creará la orden de carga para el Viaje. Si ya hay una generada sustituirá las lineas. ¿Estás Seguro?" type="object" name="action_creaorna2" attrs="{'invisible': [('tipoviaje', 'in', ('INTERNACIONAL','INTERNACIONALD'))]}"/>
+			
+			
+			<button string="Confirma Viaje y Genera Lineas de Internacional" confirm="Esta accion confirmará el viaje Nacional y Bloqueará las ordenes de carga Nacionales incluidas en este viaje. ¿Estás Seguro?" type="object" name="action_confirm" attrs="{'invisible': ['|',('state', '!=', 'draft'),('tipoviaje', 'in', ('INTERNACIONAL','INTERNACIONALD'))]}"/>
+
+			<button string="Confirma Viaje" confirm="Esta accion confirmará el viaje Internacional y Bloqueará las ordenes de carga Nacionales incluidas en este viaje. ¿Estás Seguro?" type="object" name="action_confirm" attrs="{'invisible': ['|',('state', '!=', 'draft'),('tipoviaje', '=', 'NACIONAL')]}"/>
+
+			<button invisible="1" string="Finaliza Viaje" confirm="Esta accion Cerrará EL viaje dado por completado. ¿Estás Seguro?" type="object" name="action_cierra" attrs="{'invisible': [('state', '!=', 'online')]}"/>
+			<button string="Cancelar Viaje" confirm="Esta accion Cancelará el actual Viaje. ¿Estás Seguro?" type="object" name="action_cancel"/>
+			<button string="Volver a Borrador" confirm="Esta accion Volverá a activar el Viaje. ¿Estás Seguro?" type="object" name="action_draft" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+
+			<button string="Imprimir Resumen Viaje" type="action" name="830" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}"/>
+
+
+			
+            <field name="state" select="1" readonly="1" widget="statusbar" statusbar_visible="draft,online,done,cancel"/>
+          </header>
+          <sheet string="Viaje">
+            <div class="oe_title">
+              <h1>
+                <label for="name"/>
+				
+                
+              </h1>
+            </div>
+            <group>
+              <group>
+				
+                <label for="transportista" />
+                <div>
+                  <field name="transportista" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}" />
+                </div>
+				<field name="contactochofer"/>
+                <label for="matricula"/>
+                <div>
+                  <field name="matricula" class="oe_inline"/>
+                </div>
+				<label for="temperatura"/>
+                <div>
+                  <field name="temperatura" class="oe_inline"/> 
+                  <field name="tempfijoauto" class="oe_inline"/>
+                  <field name="tempdoblesimple" class="oe_inline"/>
+                </div>
+				<label for="paleteur" string="Palets EURO/GRANDE"/>
+				<div>
+					<field name="paleteur" class="oe_inline"/> /
+					<field name="paletgr" class="oe_inline"/>
+				</div>
+				<label for="apilables" string="Apilable / Combinación"/>
+                <div>
+					<field name="apilables" class="oe_inline"/> /
+					<field name="combina" class="oe_inline"/>
+				</div>
+				<!-- <label for="almacenorigen" string="Almacen"/>
+				<div>
+				<field class="oe_inline" name="almacenorigen" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+                </div>
+				-->
+				<label for="Destino" string="Destino"/>
+				<div>
+				<field class="oe_inline" name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+                <button name="cambiadestinos" string="Cambiar Lineas" type="object" class="oe_inline"/>
+				</div>
+			  </group>
+			  <group>
+				<field name="id"/>
+				<field name="name"/>
+				<field name="tipoviaje" widget="selection" required="1"/>
+				<field name="expedientesseriechar"/>
+				<field name="expedientes" widget="many2many_tags"/>
+				<field name="referenciatxt"/>
+			    <field name="destinointerior" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
+			    <field name="fechallegadanacional" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>				
+			    <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
+				<label for="fechaformalizado"/>
+				<div>
+					<field name="fechaformalizado"/>
+				</div>
+				
+				<label for="importe"/>
+                <div>
+                  <field name="importe" class="oe_inline"/>
+                </div>
+			  
+			  </group>
+			</group>
+			<group>
+			<field name="observaciones" placeholder="Observaciones del Viaje...."/>
+			</group>
+			<notebook>
+
+			<page string="Ordenes Carga" invisible="1">
+			<group>
+			</group>
+			<field name="orcargacab">
+			<tree>
+				<button name="762" type="action" string="Imprimir"/>
+				<field name="fecha"/>
+				<field name="name" string="Trsnsportista" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="totaleuro"/>
+				<field name="totalgran" />
+				<field name="totaleuro"/>
+				<field name="totalbultos"/>			
+
+			</tree>
+
+			
+			</field>
+			</page>
+
+			
+
+			<page string="Ordenes Nacionales" attrs="{'invisible': [('tipoviaje', '=', 'INTERNACIONAL')]}">
+			<button name="jovimer_view_ctn" string="Abrir Ventana de Transporte Nacional" type="object" class="oe_highlight" context="{'expediente': id}"/>
+			<field name="ctno2m">
+			<tree editable="top" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+				<field name="sequence" widget="handle"/>
+				<field name="id" invisible="1"/>
+				<field name="expediente_serien" string="Num."/>
+				<field name="expediente"   options="{'no_create': True, 'no_create_edit':True}" string="Expediente"/>
+			    <field name="date" required="1"/>
+			    <field name="fechallegada"/>
+				<field name="name" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="transportista" options="{'no_create': True, 'no_create_edit':True}"/>                        
+				<field name="proveedor" options="{'no_create': True, 'no_create_edit':True}"/>
+			    <field name="remontado"/>
+				<field name="paleteur"/>
+				<field name="paletgr"/> 
+				<field name="bultos"/> 
+				<field name="envase"/>
+				<field name="marca"/>				
+				<field name="producto" string="Producto" invisible="1"/>
+				<field name="variedad"/>
+				<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>		
+				<field name="estado_compra"/>				
+				<field name="almacencarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="destinointerior" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="coste"/>
+				<field name="orcarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="estado"  invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			</tree>
+			</field>
+			</page>
+			
+			<page string="Ordenes Nacionales NUEVA" attrs="{'invisible': [('tipoviaje', '=', 'INTERNACIONAL')]}">
+			<field name="ctn">
+			<tree editable="top" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+				<field name="sequence" widget="handle"/>
+				<field name="id"/>
+				<field name="expediente_serien"  string="Num."/>
+				<field name="expediente"   options="{'no_create': True, 'no_create_edit':True}" string="Expediente"/>
+			    <field name="date" required="1"/>
+			    <field name="fechallegada"/>
+				<field name="name" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="transportista" options="{'no_create': True, 'no_create_edit':True}"/>                        
+				<field name="proveedor" options="{'no_create': True, 'no_create_edit':True}"/>
+			    <field name="remontado"/>
+				<field name="paleteur"/>
+				<field name="paletgr"/> 
+				<field name="bultos"/> 
+				<field name="envase"/>
+				<field name="marca"/>				
+				<field name="producto" string="Producto" invisible="1"/>
+				<field name="variedad"/>
+				<field name="purchaseorderline"  options="{'no_create': True, 'no_create_edit':True}"/>	
+				<field name="estado_compra"/>					
+				<field name="almacencarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="destinointerior" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="coste"/>
+				<field name="orcarga"  options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="estado"  invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			</tree>
+			</field>
+			</page>
+
+			<page string="Lineas Albaran Compra">
+			<button name="jovimer_creaviajedesdealb" string="Crear Viaje desde Albarán Compra" type="object" class="oe_highlight"/>
+            <group>
+			<field name="nunlinlinealbcompra"/>
+			</group>
+
+			<field name="linealbcompra" context="{'search_default_pendientes1': 1}">
+			<tree editable="top" default_order='partner_id'>
+			    <field name="asignarprimera" invisible="1"/>
+				<field name="albvtadestino" invisible="1"/>
+				<field name="expediente_serien" readonly="1" string="Serie"/>
+				<field name="expediente_origen" readonly="1" string="Origen"/>
+				<field name="expediente" string="Destino" options="{'no_create': True}" attrs="{'readonly': [('asignaroriginal','!=',True)]}"/>
+				<field name="clientefinal" readonly="1"  options="{'bg_color': 'pink:asignaroriginal== True'}"/>
+
+				<field name="plataformadestino" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="fechallegada" readonly="1" string="Fecha Llegada"/>
+				<field name="plataformaorigen" options="{'no_create': True, 'no_create_edit':True}"/>
+				<field name="partner_id" string="Proveedor" readonly="1"/>
+				<field name="asignaroriginal" invisible="1"/>
+				<field name="asignarcantidadviaje" options="{'bg_color': 'pink:asignaroriginal== True'}"/>
+				<field name="asignarrestodviaje" options="{'bg_color': 'pink:asignaroriginal== True'}"/>
+				<button type="object" string="Asigna"  attrs="{'invisible': [('asignaroriginal', '=', True)]}" name="action_asignadesdeviaje"/>
+
+				<field name="variedad" readonly="1"/>
+				<field name="confeccion" readonly="1"/>
+				<field name="marca" readonly="1"/>
+				<field name="envase" readonly="1"/>
+				<field name="categoria" invisible="1"/>
+				<field name="cantidadpedido" readonly="1"/>
+				<field name="unidadpedido" readonly="1"/>
+				<field name="bultos" string="BxP" readonly="1" invisible="1"/>
+				<field name="totalbultos"/>
+				<button name="action_quitarasignacion" string="Elimina" type="object" attrs="{'invisible': [('asignaroriginal', '!=', True)]}"/>
+				<field name="nocargar" invisible="1"/>
+				<field name="nocargarasig" string="Madre" options="{'bg_color': 'red:nocargarasig== True'}"/>
+				<field name="viajerel" options="{'bg_color': 'red:nocargarasig== True'}"/>
+				<field name="invoice_id" readonly="1" options="{'bg_color': 'red:nocargarasig== True'}"/>
+			</tree>
+			</field>
+</page>
+
+		
+<page string="Seleccionar Lineas Para Viaje Internacional" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}">
+
+<button name="jovimer_view_cti" string="Abrir Ventana de Transporte Iternacional" type="object" class="oe_highlight" context="{'expediente': id}"/>
+<field name="cti">
+<tree string="Control Transporte Internacional" editable="top" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+			<field name="sequence" widget="handle"/>	
+					<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp."/>
+
+					<field name="date"/>
+					<field name="metodo"/>
+					<field name="origen"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="proveedor"  options="{'no_create': True, 'no_create_edit':True}"/>	
+					<field name="destino"  options="{'no_create': True, 'no_create_edit':True}"/>					
+					<field name="name"/>
+					<field name="llegada"/>
+					<field name="descripcion"/>
+			        <field name="remontado"/>
+					<field name="paleteur"/>
+					<field name="paletgr"/>
+					<field name="bultos"/>
+					<field name="transportista" invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="matricula" invisible="1"/>
+					<field name="descripcion"/>
+					<field name="previaje" invisible="1"/>
+					<field name="viaje"  invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="coste"  invisible="1"/>
+					<field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+		</tree>
+		</field>
+
+</page>
+		
+
+		
+		<!--
+			<page invisible="1" string="Ordenes Internacionales" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}">
+			<button name="jovimer_view_cti" string="Abrir Ventana de Transporte Iternacional" type="object" class="oe_highlight" context="{'expediente': id}"/>
+			<field name="ctio2m">
+				<tree string="Control Transporte Internacional" editable="top" colors="red:estado==False;green:estado=='CERRADA';blue:estado=='EN CURSO' ">
+			<field name="sequence" widget="handle"/>	
+					<field name="expediente_num"   options="{'no_create': True, 'no_create_edit':True}" string="Exp."/>
+
+					<field name="date"/>
+					<field name="origen"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="partner"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="name"/>
+					<field name="llegada"/>
+					<field name="descripcion"/>
+			        <field name="remontado"/>
+					<field name="paleteur"/>
+					<field name="paletgr"/>
+					<field name="bultos"/>
+					<field name="transportista"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="matricula"/>
+					<field name="descripcion"/>
+					<field name="previaje"/>
+					<field name="viaje"  options="{'no_create': True, 'no_create_edit':True}"/>
+					<field name="coste"/>
+					<field name="estado"  invisible="1"  options="{'no_create': True, 'no_create_edit':True}"/>
+		</tree>
+			</field>
+			</page>
+			
+			-->
+			<page string="CMR">
+			<button name="genera_cmr_alb" type="object" string="Genera CMR desde Albarán" class="oe_highlight"/>
+			<button string="Genera CMR desde el Viaje" confirm="Este Boton NO esta dicponible. SOlo puedes Generar el CMR desde ALB" invisible="1"/>
+			<field name="cmr">
+			<tree>
+				<button name="746" type="action" string="CMR"/>
+				<field name="expediente_serien" string="Exp."/>
+				<field name="expediente" string="Num."/>
+				<field name="name"/>
+				<field name="transportista"/>
+				<field name="cliente"/>
+				<field name="codigo"/>
+				<field name="origen"/>
+				<field name="destino"/>
+				<field name="viaje" widget="many2many_tags"/>
+				<button name="creaalbsalida" type="object" string="CREA ALBARAN"/>
+			</tree>
+			</field>
+			</page>
+			<page string="Ordenes de Carga">
+			<group>
+			</group>
+			<button name="GeneraAlbaranSalida" string="Genera Albaranes de Salida" type="object" confirm="Este Botón Esta en prueba. Solo el Usuario Administrador puede usarlo"/>
+			<field name="orcargacabprint">
+			<tree>
+			  <button string="ORDEN" type="action" name="807" attrs="{'invisible': [('name', '=', 'DESCARGA')]}"/>
+			  <field name="sequence" widget="handle"/>
+			  <field name="name"/>
+			  <field name="fechacarga"/>
+			  <field name="fechadescarga"/>
+			  <field name="partner"/>
+			  <field name="destino" invisible="1"/>
+			  <field name="totaleuro"/>
+			  <field name="totalgran"/>
+			  <field name="totalbultos"/>
+			  <field name="lineasorden" widget="many2many_tags"/>
+			  
+			</tree>
+			</field>
+			
+			<field name="ordencarga">
+			<tree editable="top" >
+			<field name="sequence" widget="handle" readonly="1"/>			
+			<field name="name" readonly="1"/>
+			<field name="fechacarga" readonly="1"/>
+			<field name="fechadescarga" readonly="1"/>
+			<field name="partner"  options="{'no_create': True, 'no_create_edit':True}" readonly="1"/>
+			<field name="producto"/>
+			<field name="remontado" readonly="1"/>
+			<field name="totaleuro" />
+			<field name="totalgrande" />
+			<field name="bultos"/>	
+			<field name="totalbultos" />
+            <field name="tipoviaje" invisible="1" />			
+			<!-- field name="expedientes" widget="many2many_tags"/ -->
+			<field name="viaje"  readonly="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="expediente_origen"  string="Origen" readonly="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="expediente"  string="Destino" readonly="1" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="ctilin"  invisible="1" readonly="1" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="albclin"  readonly="1" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+			<field name="polin"  readonly="1" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+		
+			</tree>
+			</field>
+			</page>
+
+			<page string="Resumen Viaje">
+				<group>
+					<field name="resumencabe"/>
+				</group>
+				<group>
+					<field name="resumenlin">
+						<tree editable="top">
+						 <field name="expediente_serien" string="Serie"/>
+						 <field name="expediente" string="Num" readonly="1"/>
+						 <field name="proveedor" readonly="1"/>
+						 <field name="name" readonly="1"/>
+						 <field name="confeccion" readonly="1"/>
+						 <field name="envase" readonly="1"/>
+						 <field name="euro" readonly="1"/>
+						 <field name="gran" readonly="1"/>
+						 <field name="bultosxp" readonly="1"/>
+						 <field name="bultos" readonly="1"/>
+						 <field name="lineacompra" string="Linea Compra" readonly="1"/>
+						</tree>
+					</field>
+				</group>
+			</page>
+
+		<page string="Almacen XERESA">
+		<button name="jovimer_creaviajedesdealbdef" string="Crear Viaje Definitivo" type="object" class="oe_highlight"/>
+        <group>
+		<field name="nunlinlinealbcompra"/>
+	    </group>
+
+		<field name="almacenxeresa" domain="[('plataformaorigen','=',5981)]">
+		<tree>
+			    <field name="asignarprimera" invisible="1"/>
+				<field name="albvtadestino" invisible="1"/>
+				<field name="expediente_serien" readonly="1" string="Serie" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="expediente_origen" readonly="1" string="Origen" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="expediente" string="Destino" options="{'no_create': True}"  attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="clientefinal" readonly="1"  options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="plataformadestino" options="{'no_create': True, 'no_create_edit':True}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="fechallegada" readonly="1" string="Fecha Llegada" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="plataformaorigen" options="{'no_create': True, 'no_create_edit':True}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="partner_id" string="Proveedor" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="asignaroriginal" invisible="1"/>
+				<field name="asignarcantidadviaje" options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="asignarrestodviaje" options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<!-- <button type="object" string="Asigna"  attrs="{'invisible': [('asignaroriginal', '=', True)]}" name="action_asignadesdeviaje"/> -->
+
+				<field name="variedad" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="confeccion" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="marca" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="envase" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="categoria" invisible="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="cantidadpedido" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="unidadpedido" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="bultos" string="BxP" readonly="1" invisible="1"/>
+				<field name="totalbultos" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<button name="action_quitarasignacion" string="Elimina" type="object" attrs="{'invisible': ['|',('asignaroriginal', '!=', True),('plataformaorigen', '!=', 5981)]}"/>
+				<field name="nocargar" invisible="1"/>
+				<field name="nocargarasig" string="Madre" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="viajerel" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="invoice_id" readonly="1" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+		
+		</tree>
+		</field>
+		</page>
+
+
+		<page string="EXTERNOS / DIRECTOS">
+		<!-- <button name="jovimer_creaviajedesdealbdef" string="Crear Viaje Definitivo" type="object" class="oe_highlight"/> -->
+        <!-- <group>
+		<field name="nunlinlinealbcompra"/>
+	    </group> -->
+
+		<field name="almacenxeresa" domain="[('plataformaorigen','!=',5981)]">
+		<tree>
+			    <field name="asignarprimera" invisible="1"/>
+				<field name="albvtadestino" invisible="1"/>
+				<field name="expediente_serien" readonly="1" string="Serie" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="expediente_origen" readonly="1" string="Origen" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="expediente" string="Destino" options="{'no_create': True}"  attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="clientefinal" readonly="1"  options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="plataformadestino" options="{'no_create': True, 'no_create_edit':True}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="fechallegada" readonly="1" string="Fecha Llegada" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="plataformaorigen" options="{'no_create': True, 'no_create_edit':True}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="partner_id" string="Proveedor" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="asignaroriginal" invisible="1"/>
+				<field name="asignarcantidadviaje" options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="asignarrestodviaje" options="{'bg_color': 'pink:asignaroriginal== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<!-- <button type="object" string="Asigna"  attrs="{'invisible': [('asignaroriginal', '=', True)]}" name="action_asignadesdeviaje"/> -->
+
+				<field name="variedad" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="confeccion" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="marca" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="envase" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="categoria" invisible="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="cantidadpedido" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="unidadpedido" readonly="1" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="bultos" string="BxP" readonly="1" invisible="1"/>
+				<field name="totalbultos" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<button name="action_quitarasignacion" string="Elimina" type="object" attrs="{'invisible': ['|',('asignaroriginal', '!=', True),('plataformaorigen', '!=', 5981)]}"/>
+				<field name="nocargar" invisible="1"/>
+				<field name="nocargarasig" string="Madre" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="viajerel" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+				<field name="invoice_id" readonly="1" options="{'bg_color': 'red:nocargarasig== True'}" attrs="{'invisible': [('plataformaorigen', '!=', 5981)]}"/>
+		
+		</tree>
+		</field>
+		</page>
+
+
+			<page string="Facturas">
+			<group>
+			<field name="facturado"/>
+			<field name="facturarel" string="Factura Relacionada"/>
+			</group>
+			</page>
+
+
+			</notebook>
+			</sheet>
+			</form>
+      </field>
+    </record>
+
+
+
+<record model="ir.ui.view" id="jovimer_facturas_trans_view2_search">
+      <field name="name">JOVIMER - BUscador Facturas Transporte</field>
+      <field name="model">account.invoice</field>
+      <field name="priority">2</field>
+      <field name="arch" type="xml">
+<search string="Search Invoice">
+
+                    <field name="number" string="Invoice" context="{'active_test': False}" filter_domain="['|','|','|', ('number','ilike',self), ('origin','ilike',self), ('reference', 'ilike', self), ('partner_id', 'child_of', self)]"/>
+					<field name="invoice_line_ids" string="Viaje Relacionado" filter_domain="[('invoice_line_ids.viaje', 'ilike', self)]"/>
+					<field name="invoice_line_ids" string="Producto" filter_domain="[('invoice_line_ids.product_id', 'ilike', self)]"/>
+
+                    <separator/>
+                    <field name="partner_id" operator="child_of" string="Transportista"/>
+                    <field name="date_invoice" string="Fecha Contable"/>
+					<field name="dateinv_compra" string="Fecha Factura"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_partner_id" string="Partner" context="{'group_by':'commercial_partner_id'}"/>
+                        <filter string="Salesperson" name="salesperson" context="{'group_by':'user_id'}"/>
+                        <filter name="status" string="Status" context="{'group_by':'state'}"/>
+                        <separator/>
+                        <filter string="Invoice Date" name="invoicedate" context="{'group_by':'date_invoice'}"/>
+                        <filter string="Due Date" name="duedate" context="{'group_by':'date_due'}"/>
+                    </group>
+               </search>
+
+
+      </field>
+    </record>
+
+
+
+
+<record model="ir.ui.view" id="jovimer_linalbcti_view_tree">
+      <field name="name">JOVIMER - Importar Lineas Albaránes</field>
+      <field name="model">account.invoice.line</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree default_order="id desc" editable="top" duplicate="false" delete="false" create="false">
+					<field name="id" invisible="1"/>
+
+					<button name="action_pasaacti" string="Pasa CTI" type="object"/>
+					<field name="expediente" readonly="1"/>
+					<field name="fechafact" readonly="1"/>
+					<field name="totalbultos" widget="integer"  readonly="1"/>
+					<field name="product_id"  readonly="1" context="{'partner_id': parent.partner_id}" domain="[('purchase_ok','=',True)]"/>
+					<field name="name" invisible="1"/>
+					<field name="partner_id" readonly="1"/>
+					<field name="invoice_id" invisible="1"/>
+					<field name="refcliente" string="Referencia" invisible="1"/>
+					<field name="confeccion" readonly="1"/>
+					<field name="variedad" readonly="1"/>
+					<field name="marca" readonly="1"/>
+					<field name="envase" readonly="1"/>
+					<field name="categoria" readonly="1"/>
+					<field name="company_id" invisible="1"/>
+					<field name="cantidadpedido" widget="integer"  readonly="1"/>
+					<field name="unidadpedido" readonly="1"/>
+					<field name="bultos" widget="integer"  readonly="1"/>
+
+					<field name="quantity" invisible="1"/>
+					<field name="uom_id" invisible="1"/>
+					<field name="unidabulto"/>
+					<field name="price_unit" invisible="1"/>
+					<field name="discount"  invisible="1" />
+					<field invisible="1" name="invoice_line_tax_ids" widget="many2many_tags" options="{'no_create': True}" context="{'type':parent.type}" domain="[('type_tax_use','=','purchase'),('company_id', '=', parent.company_id)]"/>
+					<field name="price_subtotal" invisible="1"/>
+					<field name="currency_id" invisible="1"/>
+          </tree>
+      </field>
+    </record>
+
+
+
+      <!-- Grupajes -->
+      <record model="ir.ui.view" id="jovimer_grupajeviajes_view_tree">
+      <field name="name">JOVIMER - Grupajes</field>
+      <field name="model">jovimer_grupajeviajes</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<tree default_order="id desc">
+					<field name="id" invisible="1"/>
+					<field name="name"/>
+					<field name="viajes" />
+					<field name="obs" />
+          </tree>
+      </field>
+    </record>
+
+
+      <record model="ir.ui.view" id="jovimer_grupajeviajes_view_form">
+      <field name="name">JOVIMER - Grupajes</field>
+      <field name="model">jovimer_grupajeviajes</field>
+      <field name="priority">0</field>
+      <field name="arch" type="xml">
+		<form>
+		<group>
+					<field name="id" invisible="1"/>
+					<field name="name"/>
+					<field name="viajes"/>
+					<field name="obs"/>
+          </group>
+		  </form>
+      </field>
+    </record>
+
+
+  <!-- Action Transporte -->
+
+  
+   <record model="ir.actions.act_window" id="action_jovimer_ctn">
+      <field name="name">Control de Transporte Nacional</field>
+      <field name="res_model">jovimer_ctn</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Control de Transporte Nacional</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_ctn_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_ctn_view_form')})]"/>
+    </record>
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_cti">
+      <field name="name">Control de Transporte Internacional</field>
+      <field name="res_model">jovimer_cti</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Control de Transporte Internacional</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_cti_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_cti_view_form')})]"/>
+    </record>
+
+
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_grupajesv">
+      <field name="name">Grupajes</field>
+      <field name="res_model">jovimer_grupajeviajes</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Grupajes para Viajes</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+    </record>
+
+   <record model="ir.actions.act_window" id="action_jovimer_cmr">
+      <field name="name">CMR</field>
+      <field name="res_model">jovimer_cmr</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">CMR</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_cmr_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_cmr_view_form')})]"/>
+    </record>
+ 
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_linpedcomtr">
+      <field name="name">Lineas de Compra</field>
+      <field name="res_model">purchase.order.line</field>
+      <field name="view_mode">tree</field>
+      <field name="help">Lineas de Compra</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_linpedcomtr_view_tree')})]"/>
+    </record>	
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_linalbcti">
+      <field name="name">Albaranes Salida</field>
+      <field name="res_model">account.invoice.line</field>
+      <field name="view_mode">tree</field>
+      <field name="help">Lineas de Albaranes de Salida</field>
+	  <field name="context"></field>
+      <field name="domain">[('invoice_id.type','=','out_invoice'),('invoice_id.journal_id','=', 10)]</field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_linalbcti_view_tree')})]"/>
+    </record>	
+
+
+
+
+   <record model="ir.actions.act_window" id="action_jovimer_regpedvia">
+      <field name="name">Regenerar Viajes de Compra</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree</field>
+      <field name="help">Viajes de Comp</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_regpedvia_view_tree')})]"/>
+    </record>
+
+   <record model="ir.actions.act_window" id="action_jovimer_viajes">
+      <field name="name">Viajes</field>
+      <field name="res_model">jovimer_viajes</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Viajes</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_viajes_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_viajes_view_form')})]"/>
+    </record>	
+	
+
+   <record model="ir.actions.act_window" id="action_jovimer_orcar">
+      <field name="name">Ordenes de Carga</field>
+      <field name="res_model">jovimer_ordencarga</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Ordenes de Carga</field>
+	  <field name="context"></field>
+      <field name="domain"></field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_orcar_view_tree')}),
+							(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_orcar_view_form')})]"/>
+    </record>	
+	
+
+
+
+        <record id="action_jovimer_transporte_resumen" model="ir.actions.act_window">
+            <field name="name">Jovimer - Resumen Viajes</field>
+            <field name="res_model">jovimer_viajeresumen</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Resumen Viajes
+              </p>
+            </field>
+        </record>
+
+        <record id="action_jovimer_transporte_fact" model="ir.actions.act_window">
+            <field name="name">Jovimer - Facturas Transporte</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('journal_id','=',18)]</field>
+            <field name="context">{'default_type': 'in_invoice','default_journal_id': 18, 'type': 'in_invoice', 'journal_type': 'purchase'}</field>
+            <field name="search_view_id" ref="jovimer_facturaspymec_view_search"/>
+						<field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_facturas_trans_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_facturas_trans_view_form')})]"/>
+            <field name="search_view_id" ref="jovimer_facturas_trans_view2_search"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Facturas de Transporte
+              </p>
+            </field>
+        </record>
+
+
+<!-- 
+        <record id="action_jovimer_albrecep" model="ir.actions.act_window">
+            <field name="name">Jovimer - Recepciones</field>
+            <field name="res_model">jovimer_ctn</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('destinointerior','=','Plataforma XERESA')]</field>
+            <field name="context">{}</field>
+						<field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_ctn2_view_tree')})]"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Recepciones de Mercancia
+              </p>
+            </field>
+        </record>
+-->
+
+        <record id="action_jovimer_albrecep" model="ir.actions.act_window">
+            <field name="name">Jovimer - Recepciones</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field eval="False" name="view_id"/>
+			<field name="search_view_id" ref="jovimer_recepcionmerc_view_search"/>
+            <field name="domain">[('invoice_id.journal_id','=', 9),('asignaroriginal','!=', True)]</field>
+            <field name="context">{"search_default_pendientes":1}</field>
+						<field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_ctn2_view_tree')})]"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Recepciones de Mercancia
+              </p>
+            </field>
+        </record>
+
+
+
+
+   <record model="ir.ui.view" id="view_preparaalbsalida_form">
+        <field name="name">Preparar Albaranes salida</field>
+        <field name="model">jovimer_preparaalbaranessalida</field>
+        <field name="arch" type="xml">
+            <form string="Preparar Albaranes de Salida">
+			<sheet>
+			<h1>Preparar Albaranes de Salida</h1>
+            <field name="name" invisible="1"/>
+
+			<group>
+			<field name="expediente"/>
+			<field name="name"/>
+			<field name="viaje"/>
+			</group>
+			</sheet>
+			<footer>
+			  <button string="Eliminar" name="wizard_method" type="object"/>
+			  <button name="cancel" string="Cancelar" special="cancel"/>
+			</footer>
+            </form>
+        </field>
+    </record>
+	
+
+
+         
+          <menuitem id="menu_jovimertrans" 
+              name="Transporte" 
+              web_icon="pyme_jovimer,static/menu/trans.png"
+              sequence="10"/>
+
+		 <menuitem name="Viajes"
+              id="menu_jovimer_viajes"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_viajes"/> 
+
+		 <menuitem name="Ordenes de Carga"
+              id="menu_jovimer_orcarga"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_orcar"/> 
+
+
+		 <menuitem name="Control Trans NACIONAL"
+              id="menu_jovimer_ctn"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_ctn"/> 
+
+
+		 <menuitem name="Control Trans INTERNACIONAL"
+              id="menu_jovimer_cti"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_cti"/> 
+
+		 <menuitem name="Grupajes"
+              id="menu_jovimer_grupajes"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_grupajesv"/> 
+
+		 <menuitem name="CMR"
+              id="menu_jovimer_cmr"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_cmr"/> 
+
+		 <menuitem name="Resumen Viajes"
+              id="menu_jovimer_resviajes"
+              parent="menu_jovimertrans"
+			  sequence="9"
+			  action="action_jovimer_transporte_resumen"/> 
+
+		 <menuitem name="Facturas Transporte"
+              id="menu_jovimer_facttrans"
+              parent="menu_jovimertrans"
+			  sequence="10"
+			  action="action_jovimer_transporte_fact"/> 
+  		 
+		 <menuitem name="Recepcion Mercancia"
+              id="menu_jovimer_albrecep"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_albrecep"/> 
+
+		 <menuitem name="Regenera Viajes"
+              id="menu_jovimer_regpedvia"
+              parent="menu_jovimertrans"
+			  sequence="10"
+			  action="action_jovimer_regpedvia"/> 
+
+		 <menuitem name="Lineas Compra"
+              id="menu_jovimer_linpedcomtr"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_linpedcomtr"/> 
+
+		 <menuitem name="Albaranes Salida"
+              id="menu_jovimer_linalbcti"
+              parent="menu_jovimertrans"
+			  sequence="1"
+			  action="action_jovimer_linalbcti"/> 
+
+
+
+  
+            <menuitem id="menu_jovimeralmacen" 
+              name="Almacén" 
+              web_icon="pyme_jovimer,static/menu/trans.png"
+              sequence="500"/>
+
+		 <menuitem name="XERESA"
+              id="menu_jovimer_albrecepalm"
+              parent="menu_jovimeralmacen"
+			  sequence="1"
+			  action="action_jovimer_albrecep"/> 
+
+  
+  
+  </data>
+</odoo>	
