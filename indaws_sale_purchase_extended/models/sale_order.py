@@ -35,9 +35,9 @@ class SaleOrder(models.Model):
                 if count==1:
                     if '96AORDERSP' in linea:
                         _logger.info('Fichero EDI Valido para su procesamiento')
-                    else:
-                        _logger.info('Fichero EDI Valido para su procesamiento')
                         id_edi_jovimer = linea[3:16]
+                    else:
+                        _logger.info('Fichero EDI NO Valido para su procesamiento')
                         break
                 elif count==2:
                     id_edi_cliente = linea[26:39]

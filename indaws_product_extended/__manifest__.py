@@ -4,7 +4,7 @@
     "name" : "Ajustes de Productos",
     "author" : "Indaws",
     "version":"14.0.1",
-    "depends" : ['sale', "base", "product"],
+    "depends" : ['sale', "base", "product","stock"],
     "data": [
         "security/security.xml",
         'views/product_template.xml',
