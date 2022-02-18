@@ -27,10 +27,10 @@
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="id" readonly="1"/>
-                <label for="edi_file"/>
+                <label for="edi_file_binary"/>
 				<div class="o_row">
 				    <div style="padding-left:0mm;" class="col-6">
-                        <field name="edi_file" class="oe_inline" domain="[('res_id','=', id)]" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}" options="{'no_quick_create': True}"/>
+                        <field name="edi_file_binary" class="oe_inline" domain="[('res_id','=', id)]" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}" options="{'no_quick_create': True}"/>
                     </div>
                     <div class="col-6" style="padding-left:0mm;">
                         <button name="update_edi_file" string="Leer Fichero" type="object" class="oe_inline" attrs="{'invisible': [('edi_file', '=', False)]}"/>
