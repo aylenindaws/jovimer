@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <menuitem id="jovimer_menu_root_config_submenu" name="Configuraciones Jovimer" parent="stock.menu_stock_root">
+            <menuitem id="jovimer_calibre_config_submenu" name="Calibres" parent="stock.menu_stock_root" action="jovimer_calibre_list_action"/>
+        </menuitem>
+    </data>
+</odoo>

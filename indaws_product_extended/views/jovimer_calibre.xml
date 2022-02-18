@@ -45,16 +45,5 @@
                 </p>
             </field>
         </record>
-        <!-- end:actions -->
-
-        <!-- start:menus -->
-
-        <menuitem id="jovimer_calibre_config_submenu"
-			name="Calibres"
-            parent="stock.menu_stock_root"
-			action="jovimer_calibre_list_action"
-            groups=""
-        />
-        <!-- end:menus -->
     </data>
 </odoo>
