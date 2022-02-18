@@ -1,0 +1,637 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="pyme_comprasline_view_form">
+      <field name="name">Pyme - Detalle Lineas Compra</field>
+      <field name="model">purchase.order.line</field>
+	  <field name="priority">10</field>
+      <field name="arch" type="xml">
+
+<form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+											 <field name="order_id" readonly="1" string="Documento"/>
+                                                <field name="product_id" />
+												<field string="Precio" name="price_unit"/>
+                                                <label for="product_qty" string="Cantidad Pedida"/>
+                                                <div>
+                                                    <field name="product_qty" class="oe_inline"/>
+                                                    <span class="oe_inline"> </span>
+                                                    <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                </div>
+                                                
+                                            </group>
+                                            <group>
+											<field name="discount"/>
+											<field name="price_subtotal"/>
+                                                <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}"/>
+                                                <field name="date_planned" string="Llegada Prevista" widget="date"/>
+                                                 <field name="qty_received" invisible="not context.get('show_purchase', True)"/>
+                                    <field name="qty_invoiced" invisible="not context.get('show_purchase', True)"/>
+												<field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting" invisible="1"/>
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" invisible="1"/>
+                                            
+											
+									
+                                   
+                                    
+											
+											
+											</group>
+                                        </group>
+                                        <notebook>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page><page string="Invoices and Incoming Shipments" invisible="1">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+
+      </field>
+    </record>
+
+
+
+  
+     <record model="ir.ui.view" id="pyme2_compras_view_tree">
+      <field name="name">Pyme - Compras</field>
+      <field name="model">purchase.order</field>
+      <field name="arch" type="xml">
+  
+  <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="message_unread" invisible="1"/>
+
+                     <!-- <field name="type_id" string="Serie" invisible="1"/> -->
+                    <field name="name" string="Referencia / Numero"/>
+                    <field name="date_order" string="Fecha"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" invisible="1"/>
+                    <field name="date_planned" invisible="1"/>
+                    <field name="origin"  invisible="1"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <!--<field name="invoice_status" invisible="not context.get('show_purchase', True)"/>-->
+                    
+                    <field name="type_doc" invisible="1"/>
+                    
+                    
+                    
+                    
+                </tree>
+  
+  
+  
+      </field>
+    </record>
+  
+  
+   
+     <record model="ir.ui.view" id="pyme2_compras_view_form">
+      <field name="name">Pyme - Compras Detalle</field>
+      <field name="model">purchase.order</field>
+      <field name="arch" type="xml">
+  
+  
+  <form string="Purchase Order">
+                <header>
+                   <!-- <button name="action_rfq_send" states="draft" string="Send RFQ by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
+                    --><button name="action_rfq_send" states="sent" string="Re-Send RFQ by Email" type="object" context="{'send_rfq':True}"/>
+                    <button name="button_pedido" states="draft,to approve,sent" string="Pasar a pedido" class="oe_highlight" type="object" invisible="1"/>
+                    <button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
+                    <button name="print_quotation" string="Print RFQ" type="object" states="sent" groups="base.group_user"/>
+                    <button name="button_confirm" type="object" states="draft" string="Orden confirm" id="draft_confirm" invisible="1"/>
+                    <button name="button_confirm" type="object" states="draft" invisible="1" string="Facturar" id="bid_confirm"/>
+                    <button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" groups="purchase.group_purchase_manager"/>
+                    <!--<button name="action_rfq_send" states="purchase" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>
+                    --><button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
+                    
+                    
+                  
+                   <button name="action_pedidocu" string="Pasar a Pedido" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['cancel','apedido']),('type_doc', 'not in', ['Presupuesto'])]}" confirm="Vas a pasar a Pedido de Compra este Documento. ¿Estas Seguro?"/>
+                   <button name="action_albaranc" string="Pasar a Albarán" type="object" class="btn-primary" attrs="{'invisible': ['|',('state','in',['cancel','aalbaran']),('type_doc', 'not in', ['Pedido'])]}" confirm="Vas a pasar a Albarán de Compra este Documento. ¿Estas Seguro?"/>
+                   <button type="object" name="action_facturarc" string="Crear Factura" attrs="{'invisible': ['|',('type_doc','!=','Albaran'),('state','=','purchase')]}" confirm="Vas a pasar a Factura de Compra este Documento. ¿Estas Seguro?"/>
+
+
+                  <button name="action_pedidoc" states="draft,sent,sale,apedido,aalbaran" string="Copiar Documento" type="object" confirm="¿Desea Copiar este documento?"/>
+                  <button name="button_cancel" states="draft,sent,sale,apedido,aalbaran" type="object" string="Cancelar Documento" confirm="Esta accion Cancelará el Documento. ¿Estas Seguro?"/>
+                  <button name="button_draft" states="cancel" type="object" string="Volver a Activo" confirm="Esta accion volverá a Activar el Documento. ¿Estas Seguro?"/>
+
+
+
+                    
+                    
+                    
+                    <button invisible="1" name="button_draft" states="cancel" string="Set to Draft" type="object"/>
+                    <button invisible="1" name="button_cancel" states="draft,to approve,sent,purchase,done,pedido" string="Cancel" type="object"/>
+                    <button invisible="1" name="button_done" type="object" string="Lock" states="purchase"/>
+                    
+                    <button invisible="1" name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pedido,purchase" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button invisible="1" type="object" name="action_view_picking" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('picking_ids','=',[])]}">
+                            <field name="picking_count" widget="statinfo" string="Shipment" help="Incoming Shipments"/>
+                            <field name="picking_ids" invisible="1"/>
+                        </button>
+                        <!-- button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('invoice_ids','=',[])]}" -->
+                          <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o"  attrs="{'invisible': ['|',('type_doc','!=','Albaran'),('state','!=','purchase')]}">
+                            <field name="invoice_count" widget="statinfo" string="Facturas"/>
+                            <field name="invoice_ids" invisible="1"/>
+                        </button> 
+                    </div>
+                   <group>
+                        <group>
+                    <label for="name" string="Serie/Numero"/>
+                    <div>
+                <!-- field name="type_id" class="oe_inline" required="1" attrs="{'readonly': [ ('name', '!=', 'New')]}"/> <label for="type_id" string=" / " class="oe_inline" / --> 
+                            
+                           
+                            <field name="name" class="oe_inline" readonly="1"/>
+                            
+                     
+                    </div>
+                    
+                     </group>
+                     <group>
+                       <div>
+                         <h2> <field name="type_doc" string="" readonly="1"/></h2>
+                         
+                       </div>
+                       
+                     </group>
+                        </group>
+                    
+                    <group>
+                        <group>
+                            <field name="partner_id" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True)]"/>
+                            <field name="partner_ref"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="is_shipped" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_order"/>
+                            <field name="origin" attrs="{'invisible': [('origin','=',False)]}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
+                                 <tree string="Purchase Order Lines" editable="bottom">
+								  <button name="purchase_abre_form" type="object" string="Detalle" attrs="{'invisible': [('id', '=', False)]}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
+                                    <field name="name"/>
+                                    <field name="date_planned" invisible="1"/>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting" invisible="1"/>
+                                    <field name="analytic_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" invisible="1"/>
+                                    <field name="product_qty"/>
+                                    <field name="qty_received" invisible="1"/>
+                                    <field name="qty_invoiced" invisible="1"/>
+                                    <field name="product_uom"/>
+                                    <field name="price_unit" string="Precio"/>
+									                                    <field name="discount"/>
+                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" options="{'no_create': True}"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                </tree>
+                                <form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="product_id" context="{'partner_id': parent.partner_id}"/>
+                                                <label for="product_qty"/>
+                                                <div>
+                                                    <field name="product_qty" class="oe_inline"/>
+                                                    <span class="oe_inline"> </span>
+                                                    <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                </div>
+                                                <field name="price_unit"/>
+                                            </group>
+                                            <group>
+                                                <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}"/>
+                                                <field name="date_planned" widget="date"/>
+                                                <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/>
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page><page string="Invoices and Incoming Shipments" invisible="1">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+							 
+                            
+                           
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="notes" class="oe_inline" placeholder="Define your terms and conditions ..."/>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Deliveries &amp; Invoices">
+                            <group>
+                                <group>
+                                    <label for="date_planned"/>
+                                    <div>
+                                        <field name="date_planned" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}" invisible="1"/>
+                                        <button name="action_set_date_planned" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only"/>
+                                    </div>
+                                    <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                                    <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
+                                    <field name="default_location_dest_id_usage" invisible="1"/>
+                                    <field name="incoterm_id"/>
+                                </group>
+                                <group>
+                                    <field name="invoice_status"/>
+                                    <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                                    <field name="fiscal_position_id" options="{'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                                    <field name="date_approve" groups="base.group_no_one"/>
+                                </group>
+                            </group>
+                        </page>
+                         <page string="Relación">
+                           
+<group string="Correos">
+                                <div>
+                                  <field name="relacionmailpr" attrs="{'invisible': [('type_doc','!=','Presupuesto')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                  
+                                  
+                                  <field name="relacionmailpv" attrs="{'invisible': [('type_doc','!=','Pedido')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                  
+                                  <field name="relacionmailab" attrs="{'invisible': [('type_doc','!=','Albaran')]}">
+
+
+ <tree>
+                                          <field name="date"/>
+                                          <field name="subject"/>
+                                          <field name="author_id"/>
+                                          <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                      </tree>
+									  
+									  
+                                  </field>
+                                  
+                                </div>
+                            </group>
+       
+                  
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" invisible="1"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            
+  
+  
+  
+        </field>
+    </record>
+  
+  
+  
+  
+
+
+    <record model="ir.ui.view" id="pyme_facturas_proveedor_view_tree">
+      <field name="name">Pyme - Facturas Compra</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+<tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Invoice">
+                    <field name="number"/>
+                    <field name="dateinv_compra"/>
+
+                    <field name="partner_id" groups="base.group_user" string="Customer"/>
+					
+                    <field name="name" invisible="1"/>
+                    <field name="journal_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="date_due"/>
+                    <field name="origin" invisible="1"/>
+					<field name="amount_untaxed" string="Base Imponible"/>
+					
+                    <field name="amount_total_signed" string="Total" sum="Total"/>
+                    <field name="residual_signed" string="Pendiente Cobro" sum="Amount Due"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="type" invisible="1"/>
+                </tree>
+       </field>
+    </record>           
+
+  
+  
+    <record model="ir.ui.view" id="pyme_facturas_proveedor_view_form">
+      <field name="name">Pyme - Facturas Compra</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+  
+  <form string="Vendor Bill">
+                <header>
+                        <button name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight" groups="account.group_account_invoice"/>
+                        <button name="150" type="action" states="open" string="Registrar Pago" groups="account.group_account_invoice" class="oe_highlight"/>
+                        <button name="213" type="action" string="Realizar Factura Rectificativa" groups="account.group_account_invoice" attrs="{'invisible': ['|',('type', 'in', ['in_refund','out_refund']),('state','not in',('open','paid'))]}"/>
+                        <button name="action_invoice_draft" states="cancel" string="Volver a Activo" type="object" groups="account.group_account_invoice"/>
+						<button name="action_invoice_cancel_pyme" type="object" states="draft,open,paid" string="Cancelar Documento" groups="account.group_account_invoice"/>
+						<button name="clean_internal_number" string="Limpiar Número de Factura" attrs="{'invisible':['|',('state','!=','cancel'),('move_name','=',False)]}" type="object" help="Limpiar Numero Interno Permite eliminar la Factura, pero eso puede provocar un salto en la numeración. Deberás ir a series de Documentos de Facturas para ver el siguiente número que otorgará"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,paid"/>
+                </header>
+                <div groups="account.group_account_invoice" class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('has_outstanding','=',False)]}">
+                    You have <bold><a class="alert-link" href="#outstanding" role="button">outstanding debits</a></bold> for this supplier. You can allocate them to mark this bill as paid.
+                </div>
+                <field name="has_outstanding" invisible="1"/>
+                <sheet string="Vendor Bill">
+                    <div>
+                        <label for="type_id" string="Draft Bill" attrs="{'invisible': ['|',('state','!=','draft'), ('type','!=','in_invoice')]}"/>
+                        <label for="type_id" string="- First Number:" attrs="{'invisible': [('sequence_number_next_prefix','=',False)]}"/>
+                        <label for="type_id" string="Draft Credit Note" attrs="{'invisible': ['|',('state','!=','draft'), ('type','!=','in_refund')]}"/>
+                        <label for="type_id" string="Bill " attrs="{'invisible': ['|',('state', '=', 'draft'), ('type','!=','in_invoice')]}"/>
+                        <label for="type_id" string="Credit Note " attrs="{'invisible': ['|',('state', '=', 'draft'), ('type','!=','in_refund')]}"/>
+                        <h1 class="mt0">
+                            <field name="number" class="oe_inline" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                            <div attrs="{'invisible': [('sequence_number_next_prefix','=',False)]}">
+                                <field name="sequence_number_next_prefix" class="oe_inline"/>
+                                <field name="sequence_number_next" class="oe_inline"/>
+                            </div>
+                        </h1>
+                    </div>
+                    <field name="type" invisible="1"/>
+                    <group>
+                        <group>
+                            <field string="Vendor" name="partner_id" context="{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'default_company_type': 'company'}" domain="[('supplier', '=', True)]"/>
+                            <field name="reference" string="Vendor Reference"/>
+                        </group>
+                        <group>
+                            <field name="origin" attrs="{'invisible': [('origin', '=', False)]}"/>
+							<field name="dateinv_compra"/>
+                            <field name="date_invoice" string="Fecha Contable"/>
+                            <field name="date_due" string="Vencimiento" attrs="{'readonly': [('payment_term_id','!=',False)]}"/>
+                            <field name="move_name" invisible="1"/>
+                            <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bill">
+                            <field context="{'type': type, 'journal_id': journal_id}" name="invoice_line_ids">
+                                <tree string="Bill lines" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" context="{'partner_id': parent.partner_id}" domain="[('purchase_ok','=',True)]"/>
+                                    <field name="name"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="account_id" groups="account.group_account_user" domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other'), ('deprecated', '=', False)]"/>
+                                    <field name="account_analytic_id" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id" groups="product.group_uom"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount" groups="base.group_no_one"/>
+                                    <field name="invoice_line_tax_ids" widget="many2many_tags" options="{'no_create': True}" context="{'type':parent.type}" domain="[('type_tax_use','=','purchase'),('company_id', '=', parent.company_id)]"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group>
+                                
+								
+								
+                                
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_untaxed"/>
+									
+                                    <field name="amount_tax"/>
+                                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                                    <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
+                                    <field name="residual" class="oe_subtotal_footer_separator" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                                    <field name="reconciled" invisible="1"/>
+                                    <field name="outstanding_credits_debits_widget" colspan="2" nolabel="1" widget="payment" attrs="{'invisible': [('state', 'not in', 'open')]}"/>
+                                </group>
+                            </group>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..."/>
+                            </div>
+                        </page>
+                        <page string="Más Informacion" name="other_info">
+                            
+							
+													<group string="Descripcion de Impuestos">
+							
+                                        <field name="tax_line_ids">
+                                            <tree editable="bottom" string="Taxes">
+                                                <field name="name"/>
+                                                <!--Need invisible fields for on_change to create all necessary info -->
+                                                <field name="tax_id" invisible="1"/>
+                                                <field name="sequence" invisible="1"/>
+                                                <field name="manual" invisible="1"/>
+                                                <field name="account_id" groups="account.group_account_user"/>
+                                                <field name="account_analytic_id" domain="[('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting"/>
+                                                <field name="amount"/>
+                                                <field name="amount_rounding" invisible="1"/>
+                                                <field name="amount_total" invisible="1"/>
+                                                <field name="currency_id" invisible="1"/>
+                                            </tree>
+                                        </field>
+                                   
+									</group>	
+							
+							
+				
+							
+							
+							
+							
+							
+							
+							
+							<group>
+
+							
+							
+							
+                                <group>
+                                    <field name="journal_id" groups="account.group_account_user" options="{'no_create': True}" attrs="{'readonly':[('move_name','!=',False)]}"/>
+                                    <field domain="[('partner_id', '=', partner_id)]" name="partner_bank_id" invisible="1"/>
+                                    <field name="user_id" string="Responsible"/>
+                                    <field domain="[('company_id', '=', company_id), ('internal_type', '=', 'payable'), ('deprecated', '=', False)]" name="account_id" groups="account.group_account_user"/>
+                                    <field name="payment_term_id" options="{'no_create': True}"/>
+                                    <field name="name"/>
+                                </group>
+                                <group>
+                                    <field name="fiscal_position_id" options="{'no_create': True}" placeholder="Auto-detect"/>
+                                    <field name="move_id" groups="account.group_account_user" attrs="{'invisible': [('move_id', '=', False)]}"/>
+                                    <field name="date" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]" groups="account.group_account_user"/>
+                                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                </group>
+                            </group>
+                        
+						
+						</page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+  
+  
+         </field>
+    </record>  
+  
+  
+  
+<!-- **************************************** ACCIONES **************************************** -->
+    <record model="ir.actions.act_window" id="pyme_action_compras_presupuestos">
+      <field name="name">Presupuestos Compra</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Presupuestos de Compra</field>
+      	  <field name="context">{'type_doc': 'Presupuesto'}</field>
+      <field name="domain">[('type_doc', '=', 'Presupuesto')]</field>
+	  <field name="view_ids" eval="[(5, 0, 0), 
+	  						(0, 0, {'view_mode': 'tree', 'view_id': ref('pyme2_compras_view_tree')}), 
+							(0, 0, {'view_mode': 'form', 'view_id': ref('pyme2_compras_view_form')})]"/>
+
+    </record>
+
+    <record model="ir.actions.act_window" id="pyme_action_compras_pedidos">
+      <field name="name">Pedidos Compra</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Pedidos de Compra</field>
+	  <field name="context">{'type_doc': 'Pedido'}</field>
+      <field name="domain">[('type_doc', '=', 'Pedido')]</field>
+	  	        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('pyme2_compras_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('pyme2_compras_view_form')})]"/>
+
+    </record>
+
+    <record model="ir.actions.act_window" id="pyme_action_compras_albaranes">
+      <field name="name">Albaranes Compra</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help">Albaranes de Compra</field>
+	  <field name="context">{'type_doc': 'Albaran'}</field>
+      <field name="domain">[('type_doc', '=', 'Albaran')]</field>
+	  	  	        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('pyme2_compras_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('pyme2_compras_view_form')})]"/>
+    </record>
+	
+		   <record model="ir.actions.act_window" id="pyme_action_compras_facturas">
+      <field name="name">Facturas Compra</field>
+      <field name="res_model">account.invoice</field>
+      <field name="view_mode">tree,form</field>
+         <field name="help">Facturas de Compra</field>
+	  <field name="context">{'type':'in_invoice', 'journal_type': 'purchase'}</field>
+      <field name="domain">[('type','=','in_invoice')]</field>
+	  <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('pyme_facturas_proveedor_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('pyme_facturas_proveedor_view_form')})]"/>
+    
+
+    </record>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<!-- **************************************** MENUS **************************************** -->
+
+
+    <menuitem id="menu_compras" 
+              name="Compras" 
+			  parent="menu_original_odoo_admin"
+              web_icon="pyme_menus,static/menu/compras.png"
+              sequence="120"/>
+
+   <menuitem name="Presupuestos"
+              id="maction_compras_presupuestos"
+              parent="menu_compras"
+			  action="pyme_action_compras_presupuestos"/>
+
+   <menuitem name="Pedidos"
+              id="maction_compras_pedidos"
+              parent="menu_compras"
+			  action="pyme_action_compras_pedidos"/>
+ 
+   <menuitem name="Albaranes"
+              id="maction_compras_albaranes"
+              parent="menu_compras"
+			  action="pyme_action_compras_albaranes"/>
+
+       <menuitem name="Facturas"
+              id="item_action_menu_compras_facturas_pyme"
+              parent="menu_compras"
+			  action="pyme_action_compras_facturas"/>
+	
+  
+  </data>
+</odoo>

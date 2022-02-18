@@ -1,0 +1,619 @@
+<odoo>
+  <data>
+
+<!-- **************************************** VISTAS **************************************** -->
+
+    <!-- Vista Calendario -->
+    
+    
+    <record model="ir.ui.view" id="view_calendar_calendar">
+        <field name="name">Pyme - Calendario view_calendar</field>
+        <field name="model">calendar.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" event_open_popup="true" event_limit="3" color="partner_id">
+                <field name="name"/>
+                <field name="partner"/>
+				<field name="state" invisible="1"/>
+                <field name="partner_ids" write_model="calendar.contacts" write_field="partner_id" avatar_field="image_small" invisible="1"/>
+                <field name="is_highlighted" invisible="1"/>
+            </calendar>
+        </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="view_calendar_tree">
+        <field name="name">Pyme - Calendario</field>
+        <field name="model">calendar.event</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+<tree string="Meetings" decoration-bf="message_needaction==True">
+                <field name="name" string="Asunto"/>
+                <field name="allday" invisible="True"/>
+                <field name="start" string="Comienza"/>
+                <field name="stop" string="Finaliza"/>
+                <field name="partner"/>
+				<field name="etiquetas_calendario" widget="many2many_tags" />
+                <field name="location" invisible="1"/>
+                <field name="state" invisible="True"/>
+                <field name="duration"/>
+                <field name="message_needaction" invisible="1"/>
+            </tree>
+
+        </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="view_calendar_form">
+        <field name="name">Pyme - Calendario</field>
+        <field name="model">calendar.event</field>
+		    <field name="priority">0</field>
+        <field name="arch" type="xml">
+           
+		   <form string="Meetings">
+                <sheet>
+                     <button string="Document" class="oe_stat_button pull-right" icon="fa-bars" type="object" name="action_open_calendar_event" attrs="{'invisible': ['|', ('res_model', '=', False), ('res_id', '=', False)]}"/>
+                    <field name="res_model" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="is_attendee" invisible="1"/>
+                    <field name="attendee_status" invisible="1"/>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name" placeholder="e.j. Visita Cliente"/>
+                        </h1>
+                        <label for="partner" string="Entidad Relacionada." class="oe_edit_only"/>
+                        <h2>
+						<field name="partner"/>
+                            <field invisible="1" name="partner_ids" widget="many2manyattendee" placeholder="Select attendees..." context="{'force_email':True}" class="oe_inline"/>
+                        </h2>
+                    </div>
+                    <notebook>
+                        <page name="page_details" string="Detalles">
+                            <group attrs="{'invisible': [('recurrency','==',False)]}" class="oe_edit_only">
+                              <p class="alert alert-info" role="alert"> Este Evento está ligado a Recurrencia, pincha en la pestaña Recurrencia para poder editarlo...<br/>
+                                    <button type="object" name="action_detach_recurring_event" string="" help="Haz click aqui para variar. " class="oe_link"/>
+                                </p>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="start" attrs="{'invisible': True}"/>
+                                    <field name="stop" attrs="{'invisible': True}"/>
+                                    <field name="id" attrs="{'invisible': True}"/>
+
+                                    <field name="start_date" string="Comienzo" attrs="{'invisible': [('allday','=',False)], 'readonly': [('id', '!=', False), ('recurrency','=',True)]}"/>
+                                    <field name="stop_date" string="Finaliza" attrs="{'invisible': [('allday','=',False)], 'readonly': [('id', '!=', False), ('recurrency','=',True)]}"/>
+
+                                    <field name="start_datetime" string="Comienzo" attrs="{'invisible': [('allday','=',True)], 'readonly': [('id', '!=', False), ('recurrency','=',True)]}"/>
+                                    <field name="stop_datetime" invisible="1"/>
+                                    <label for="duration" attrs="{'invisible': [('allday','=',True)]}"/>
+                                    <div attrs="{'invisible': [('allday','=',True)]}">
+                                        <field name="duration" widget="float_time" string="Duration" class="oe_inline" attrs="{'readonly': [('id', '!=', False), ('recurrency','=',True)]}"/>
+                                        <span> hours</span>
+                                    </div>
+                                    <field name="allday" attrs="{'readonly': [('id', '!=', False), ('recurrency','=',True)]}"/>
+                                </group>
+                                <group>
+								<field name="etiquetas_calendario" help="Puedes Administrar las Etiquetas desde el Menu Mantenimiento" widget="many2many_tags"  domain="[('donde','=','CALENDAR')]"  context="{'donde': 'CALENDAR'}"/>
+                                    <field invisible="1" name="categ_ids" widget="many2many_tags" options="                                     {'no_create_edit': True}"/>
+                                    <field name="alarm_ids" widget="many2many_tags"/>
+                                    <field name="location"/>
+                                </group>
+
+                            </group>
+                            <label for="description"/>
+                            <field name="description"/>
+                        </page>
+                        
+                   <page name="page_options" string="Recurrencia">
+                            <group>
+                                <div>
+                                    <group>
+                                        <field name="recurrency"/>
+                                    </group>
+                                    <div attrs="{'invisible': [('recurrency', '=', False)]}">
+                                        <group>
+                                            <label for="interval"/>
+                                            <div class="o_row">
+                                                <field name="interval" attrs="{'required': [('recurrency', '=', True)]}"/>
+                                                <field name="rrule_type" attrs="{'required': [('recurrency', '=', True)]}"/>
+                                            </div>
+                                            <label for="end_type" string="Hasta" />
+                                            <div class="o_row">
+                                                <field name="end_type" attrs="{'required': [('recurrency', '=', True)]}"/>
+                                                <field name="count" attrs="{'invisible': [('end_type', '!=', 'count')], 'required': [('recurrency', '=', True)]}"/>
+                                                <field name="final_date" attrs="{'invisible': [('end_type', '!=', 'end_date')], 'required': [('end_type', '=', 'end_date')]}"/>
+                                            </div>
+                                        </group>
+                                        <group attrs="{'invisible': [('rrule_type', '!=', 'weekly')]}" name="weekdays">
+                                            <field name="mo"/>
+                                            <field name="tu"/>
+                                            <field name="we"/>
+                                            <field name="th"/>
+                                            <field name="fr"/>
+                                            <field name="sa"/>
+                                            <field name="su"/>
+                                        </group>
+                                        <group attrs="{'invisible': [('rrule_type', '!=', 'monthly')]}">
+                                            <label for="month_by" string="Dia del Mes"/>
+                                            <div class="o_row">
+                                                <field name="month_by"/>
+                                                <field name="day" attrs="{'required': [('month_by', '=', 'date'), ('rrule_type', '=', 'monthly')],                                                             'invisible': [('month_by', '!=', 'date')]}"/>
+                                                <field name="byday" string="The" attrs="{'required': [('month_by', '=', 'day'), ('rrule_type', '=', 'monthly')],                                                             'invisible': [('month_by', '!=', 'day')]}"/>
+                                                <field name="week_list" nolabel="1" attrs="{'required': [('month_by', '=', 'day'), ('rrule_type', '=', 'monthly')],                                                             'invisible': [('month_by', '!=', 'day')]}"/>
+                                            </div>
+                                        </group>
+                                    </div>
+                                </div>
+                                <group>
+                                    <field name="privacy" invisible="1"/>
+                                    <field name="show_as" invisible="1"/>
+                                    <field name="rrule" invisible="1" readonly="0"/>
+                                    <field name="recurrent_id" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page name="page_invitations" string="Invitations" groups="base.group_no_one"  invisible="1">
+                            <button name="action_sendmail" type="object" string="Send mail" icon="fa-envelope" class="oe_link"/>
+                            <field name="attendee_ids" widget="one2many">
+                                <tree string="Invitation details" editable="top" create="false" delete="false">
+                                    <field name="partner_id"/>
+                                    <field name="state"/>
+                                    <field name="email" widget="email"/>
+
+                                    <button name="do_tentative" states="needsAction,declined,accepted" string="Uncertain" type="object" icon="fa-asterisk"/>
+                                    <button name="do_accept" string="Accept" states="needsAction,tentative,declined" type="object" icon="fa-check text-success"/>
+                                    <button name="do_decline" string="Decline" states="needsAction,tentative,accepted" type="object" icon="fa-times-circle text-danger"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="page_misc" string="Misc" groups="base.group_no_one" invisible="1">
+                            <group>
+                                <label for="user_id" string="Owner"/>
+                                <field name="user_id" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        
+		   
+		   
+		   
+		   
+        </field>
+    </record>
+
+
+
+    <!-- Vista arbol Tareas -->
+    <record model="ir.ui.view" id="task_view_tree">
+        <field name="name">Pyme - Tareas view_tree</field>
+        <field name="model">project.task</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree decoration-bf="message_needaction==True" decoration-danger="date_deadline and (date_deadline&lt;current_date)" string="Tasks">
+                <field name="message_needaction" invisible="1"/>
+                <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                <field name="date_deadline"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+				<field name="etiquetas_tarea" widget="many2many_tags"/>
+                <field name="project_id" invisible="1"/>
+                <field name="user_id" invisible="1"/>
+                <!-- <field name="stage_id" invisible="context.get('set_visible',False)"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario Tareas -->
+    <record model="ir.ui.view" id="task_view_form">
+        <field name="name">Pyme - Tareas view_form</field>
+        <field name="model">project.task</field>
+		<field name="priority">1</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Task" class="o_form_project_tasks">
+                    <header>
+                        <button name="action_assign_to_me" string="Assign to Me" type="object" class="oe_highlight" attrs="{'invisible' : [('user_id', '!=', False)]}"/>
+
+                        <field name="stage_id" widget="statusbar" clickable="True" options="{'fold_field': 'fold'}"/>
+                    </header>
+                    <sheet string="Task">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-tasks" type="object" name="action_open_parent_task" string="Parent Task" attrs="{'invisible' : [('parent_id', '=', False)]}" groups="project.group_subtask_project"/>
+                        <button name="246" type="action" class="oe_stat_button" icon="fa-tasks" attrs="{'invisible' : [('parent_id', '!=', False)]}" context="{'project_id': subtask_project_id, 'name': name, 'partner_id': partner_id}" groups="project.group_subtask_project">
+                            <field string="Sub-tasks" name="subtask_count" widget="statinfo"/>
+                        </button>
+                        <button name="toggle_active" type="object" groups="base.group_user" class="oe_stat_button" icon="fa-archive" invisible="1">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                        </button>
+                    </div>
+                    <field name="kanban_state" widget="state_selection" invisible="1"/>
+                    <div class="oe_title">
+                        <h1 class="o_row">
+                            <field name="priority" widget="priority" invisible="1"/>
+                            <field name="name" placeholder="Nombre de la Tarea..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" domain="[('active', '=', True)]" invisible="1"/>
+                            <field name="partner_id"/>
+                            <field name="user_id" class="o_task_user_field" options="{&quot;no_open&quot;: True}" invisible="1"/>
+                            <field name="legend_blocked" invisible="1"/>
+                            <field name="legend_normal" invisible="1"/>
+                            <field name="legend_done" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_deadline"/>
+							 <field name="eventocalendar"/>
+							  <field name="etiquetas_tarea" help="Puedes Administrar las Etiquetas desde el Menu Mantenimiento" widget="many2many_tags"  domain="[('donde','=','TAREA')]"/>
+                            <field name="tag_ids" invisible="1" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description_page" string="Description">
+                            <field name="description" type="html"/>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page name="extra_info" string="Extra Info" invisible="1">
+                            <group>
+                                <group>
+                                    <field name="sequence" groups="base.group_no_one"/>
+                                    
+                                    <field name="email_from"/>
+                                    <field name="email_cc" groups="base.group_no_one"/>
+                                    <field name="parent_id" groups="project.group_subtask_project"/>
+                                    <field name="child_ids" invisible="1"/>
+                                    <field name="subtask_project_id" invisible="1"/>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                    <field name="displayed_image_id" groups="base.group_no_one"/>
+                                </group>
+                                <group>
+                                    <field name="date_assign" groups="base.group_no_one"/>
+                                    <field name="date_last_stage_update" groups="base.group_no_one"/>
+                                </group>
+                                <group string="Working Time to Assign" attrs="{'invisible': [('working_hours_open', '=', 0.0)]}">
+                                    <field name="working_hours_open" string="Hours"/>
+                                    <field name="working_days_open" string="Days"/>
+                                </group>
+                                <group string="Working Time to Close" attrs="{'invisible': [('working_hours_close', '=', 0.0)]}">
+                                    <field name="working_hours_close" string="Hours"/>
+                                    <field name="working_days_close" string="Days"/>
+                                </group>
+                            </group>
+                        </page>
+                         <page string="Relación">
+                           
+                                    <group string="Documentos">
+                                      <group>
+									  <field name="relaciondoc" on_change="onchange_relacion(rel_id)" widget="selection"/>
+									  <field name="rel_idname" invisible="1"/>
+									  <field name="tarea_pr" attrs="{'invisible':[('rel_idname','!=','PRESUPUESTO VENTA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Presupuesto'}"/>
+									  <field name="tarea_pv" attrs="{'invisible':[('rel_idname','!=','PEDIDO VENTA')]}"  options="{'no_quick_create':True}" context="{'type_doc': 'Pedido'}"/>
+									  <field name="tarea_ab" attrs="{'invisible':[('rel_idname','!=','ALBARAN VENTA')]}"  options="{'no_quick_create':True}" context="{'type_doc': 'Albaran'}"/>
+									  <field name="tarea_factv" attrs="{'invisible':[('rel_idname','!=','FACTURA VENTA')]}"  options="{'no_quick_create':True}" context="{'type_doc': 'Factura'}"/>
+
+									  </group>
+                                  </group>
+								  
+								  
+								  <group string="Correos">
+                                      <div>
+                                        <field name="relacion" readonly="1">
+                                            <tree>
+                                                <field name="date"/>
+                                                <field name="subject"/>
+                                                <field name="author_id"/>
+                                                <field name="tipo_etiquetas" widget="many2many_tags"/>
+                                            </tree>
+                                        </field>
+                                      </div>
+                                  </group>
+  
+                        </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista arbol Correos entrantes -->
+    <record model="ir.ui.view" id="message_view_tree">
+        <field name="name">Pyme - Correos entrantes view_tree</field>
+        <field name="model">mail.message</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree string="Emails">
+
+                    <field name="date"/>
+                    <field name="subject"/>
+                    <field name="author_id"/>
+                    <field name="tipo_etiquetas" string="Etiquetas" widget="many2many_tags"/>
+					<field name="attachment_ids" string="Adjuntos" widget="many2many_tags"/>
+                    <field name="relacion" string="Relacionado con.."/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario Correos entrantes -->
+    <record model="ir.ui.view" id="message_view_form">
+        <field name="name">Pyme - Correos entrantes view_form</field>
+        <field name="model">mail.message</field>
+		<field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Message" create="false">
+                    <sheet>
+                          <h2><field name="subject"/></h2>
+                       <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="email_from"/>
+                                <field name="author_id"/>
+                                <field name="message_type" invisible="1"/>
+                                <field name="record_name" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="parent_id" invisible="1"/>
+                                <field name="model" invisible="1"/>
+                                <field name="tipo_etiquetas" widget="many2many_tags" domain="[('donde','=','EMAIL')]"/>
+								<!-- field name="expediente_serie"/ -->			
+								<!-- field name="expediente"/ -->							
+						        <field name="relacion" on_change="onchange_relacion(rel_id)" widget="selection"/>
+                                <field name="res_id" invisible="1"/>
+                                <field name="subtype_id" invisible="1"/>
+                                <field name="rel_id" invisible="1"/>
+                                <field name="tareas" attrs="{'invisible':[('rel_id','!=','TAREA')]}"/>			
+                                <field name="venta_pr" attrs="{'invisible':[('rel_id','!=','PRESUPUESTO VENTA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Presupuesto'}"/>
+                                <field name="venta_ab" attrs="{'invisible':[('rel_id','!=','ALBARAN VENTA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Albaran'}"/>
+                                <field name="compra_pr" attrs="{'invisible':[('rel_id','!=','PRESUPUESTO COMPRA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Factura'}"/>
+                                <field name="compra_pv" attrs="{'invisible':[('rel_id','!=','PEDIDO COMPRA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Presupuesto'}"/>
+                                <field name="compra_ab" attrs="{'invisible':[('rel_id','!=','ALBARAN COMPRA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Pedido'}"/>
+                                <field name="factura" attrs="{'invisible':[('rel_id','!=','FACTURA VENTA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Albaran'}"/>
+                                <field name="factura" attrs="{'invisible':[('rel_id','!=','FACTURA COMPRA')]}" options="{'no_quick_create':True}" context="{'type_doc': 'Factura'}"/>
+                                <field name="cobro" attrs="{'invisible':[('rel_id','!=','COBRO')]}" options="{'no_quick_create':True}"/>
+                                <field name="pago" attrs="{'invisible':[('rel_id','!=','PAGO')]}" options="{'no_quick_create':True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Cuerpo">
+                                <field name="body" options="{'style-inline': true}"/>
+                            </page>
+                            <page string="Gateway" invisible="1">
+                                <group>
+                                    <group>
+                                        <field name="reply_to"/>
+                                        <field name="no_auto_thread"/>
+                                    </group>
+                                    <group>
+                                        <field name="message_id"/>
+                                        <field name="mail_server_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Recipients" invisible="1">
+                                <group>
+                                    <group>
+                                        <field name="partner_ids" widget="many2many_tags"/>
+                                        <field name="channel_ids" widget="many2many_tags"/>
+                                    </group>
+                                    <group>
+                                        <field name="needaction_partner_ids" widget="many2many_tags"/>
+                                        <field name="starred_partner_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="notification_ids">
+                                        <tree>
+                                            <field name="res_partner_id"/>
+                                            <field name="is_read"/>
+                                            <field name="is_email"/>
+                                            <field name="email_status"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Tracking" invisible="1">
+                                <field name="tracking_value_ids"/>
+                            </page>
+                            <page string="Adjuntos">
+                                <field name="attachment_ids">
+								<tree>
+								<field name="name"/>
+								<field name="file_size"/>
+								<field name="mimetype"/>
+								</tree>
+								
+								</field>
+                            </page>
+							
+							
+							
+                        </notebook>
+                    </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista arbol Correos salientes -->
+    <record model="ir.ui.view" id="mail_view_tree">
+        <field name="name">Pyme - Correos salientes view_tree</field>
+        <field name="model">mail.mail</field>
+        <field name="arch" type="xml">
+            <tree string="Emails" decoration-muted="state in ('sent', 'cancel')" decoration-info="state=='outgoing'" decoration-danger="state=='exception'">
+                    <field name="date"/>
+                    <field name="subject"/>
+                    <field name="author_id"/>
+                    <field name="tipo_etiquetas" string="Etiquetas"/>
+                    <field name="message_id" invisible="1"/>
+                    <field name="recipient_ids" invisible="1"/>
+                    <field name="model" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <field name="email_from" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="message_type" invisible="1"/>
+                    <button name="send" string="Send Now" type="object" icon="fa-paper-plane text-success" states="outgoing"/>
+                    <button name="mark_outgoing" string="Retry" type="object" icon="fa-repeat text-success" states="exception,cancel"/>
+                    <button name="cancel" string="Cancel Email" type="object" icon="fa-times-circle text-danger" states="outgoing"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario Correos salientes -->
+    <record model="ir.ui.view" id="mail_view_form">
+        <field name="name">Pyme - Correos salientes view_form</field>
+        <field name="model">mail.mail</field>
+        <field name="arch" type="xml">
+            <form string="Email message">
+                    <header>
+                        <button name="send" string="Enviar Ahora" type="object" states="outgoing" class="oe_highlight"/>
+                        <button name="mark_outgoing" string="Reintenta" type="object" states="exception,cancel"/>
+                        <button name="cancel" string="Cancela" type="object" states="outgoing"/>
+                        <field name="state" widget="statusbar" statusbar_visible="outgoing,sent,received,exception,cancel"/>
+                    </header>
+                    <sheet>
+                        <field name="mail_message_id" required="0" invisible="1"/>
+                        <label for="subject" class="oe_edit_only"/>
+                        <h2><field name="subject"/></h2>
+                        <!--
+                        <div style="vertical-align: top;">
+                            by <field name="author_id" class="oe_inline" string="User"/> on <field name="date" readonly="1" class="oe_inline"/>
+                            <button name="87" string="Reply" type="action" icon="fa-reply text-warning" context="{'default_composition_mode':'reply', 'default_parent_id': mail_message_id}" states="received,sent,exception,cancel"/>
+                        </div>
+                        -->
+                        <group>
+                            <field name="email_from"/>
+                            <field name="email_to"/>
+                            <field name="recipient_ids" widget="many2many_tags"/>
+                            <field name="email_cc"/>
+                            <field name="reply_to"/>
+                            <field name="scheduled_date" invisible="1"/>
+                            <field name="tipo_etiquetas" widget="many2many_tags"/>
+                           
+                        </group>
+                        <notebook>
+                            <page string="Body">
+                                <field name="body_html" widget="html" options="{'style-inline': true}"/>
+                            </page>
+                            <page string="Advanced" groups="base.group_no_one" invisible="1">
+                                <group>
+                                    <group string="Status">
+                                        <field name="auto_delete"/>
+                                        <field name="notification"/>
+                                        <field name="message_type"/>
+                                        <field name="mail_server_id"/>
+                                        <field name="model"/>
+                                        <field name="res_id"/>
+                                    </group>
+                                    <group string="Headers">
+                                        <field name="message_id"/>
+                                        <field name="references"/>
+                                        <field name="fetchmail_server_id"/>
+                                        <field name="headers"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Adjuntos">
+                                <field name="attachment_ids"/>
+                            </page>
+                            <page string="Failure Reason" attrs="{'invisible': [('state', '!=', 'exception')]}">
+                                <field name="failure_reason"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- **************************************** ACCIONES **************************************** -->
+
+    <!-- Action Calendario -->
+    <record model="ir.actions.act_window" id="action_calendario">
+        <field name="name">Pyme - Calendario</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'calendar', 'view_id': ref('view_calendar_calendar')})]"/>
+    </record>
+
+    <!-- Action Tareas -->
+    <record model="ir.actions.act_window" id="action_tareas">
+        <field name="name">Pyme - Tareas</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('task_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('task_view_form')})]"/>
+    </record>
+
+    <!-- Action Correo entrante -->
+    <record model="ir.actions.act_window" id="action_correo_entrante">
+        <field name="name">Pyme - Correos entrantes</field>
+        <field name="res_model">mail.message</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('message_type','=','email'),('subtype_id','!=',False)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('message_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('message_view_form')})]"/>
+    </record>
+
+    <!-- Action Correo saliente -->
+    <record model="ir.actions.act_window" id="action_correo_saliente">
+        <field name="name">Pyme - Correos salientes</field>
+        <field name="res_model">mail.mail</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('mail_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('mail_view_form')})]"/>
+    </record>
+
+    <!-- **************************************** ITEMS **************************************** -->
+
+    <!-- Menú principal -->
+    <menuitem id="menu_productividad" 
+              name="Productividad" 
+              web_icon="pyme_menus,static/menu/productividad.png"
+              sequence="100"/>
+
+    <menuitem id="item_action_calendario" 
+              name="Calendario"
+              parent="menu_productividad"
+              action="action_calendario"/>
+
+    <menuitem id="item_action_tareas" 
+              name="Tareas"
+              parent="menu_productividad"
+              action="action_tareas"/>
+
+    <menuitem id="item_action_correo_electronico" 
+              name="Correo electrónico"
+              parent="menu_productividad"/>
+
+              <menuitem id="item_action_correo_entrante" 
+                        name="Correo entrante"
+                        parent="item_action_correo_electronico"
+                        action="action_correo_entrante"/>
+
+              <menuitem id="item_action_correo_saliente" 
+                        name="Correo saliente"
+                        parent="item_action_correo_electronico"
+                        action="action_correo_saliente"/>
+  
+  
+  </data>
+</odoo>

@@ -1,0 +1,971 @@
+<odoo>
+  <data>
+
+<!-- **************************************** VISTAS **************************************** -->
+
+    <!-- Vista arbol Entidades -->
+    <record model="ir.ui.view" id="pyme_entidades_view_tree">
+      <field name="name">Pyme - Entidades</field>
+      <field name="model">res.partner</field>
+	   <field name="priority">0</field>
+      <field name="arch" type="xml">
+<tree string="Contacts">
+                    <field name="display_name" string="Name"/>
+                    <field name="function" invisible="1"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="is_company" invisible="1"/>
+                    <field name="country_id" invisible="1"/>
+                    <field name="parent_id" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+      </field>
+    </record>
+
+
+
+
+    <!-- Vista arbol Etiquetas -->
+    <record model="ir.ui.view" id="etiquetas_relacion_view_tree">
+      <field name="name">Pyme - Etiquetas</field>
+      <field name="model">etiquetas_relacion</field>
+      <field name="arch" type="xml">
+<tree string="Etiquetas" editable="top">
+                    <field name="name"/>
+                    <field name="donde" options="{'no_create_edit': True}"/>
+
+                </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="etiquetas_relacion_view_form">
+      <field name="name">Pyme - Etiquetas</field>
+      <field name="model">etiquetas_relacion</field>
+      <field name="arch" type="xml">
+<form string="Etiquetas">
+<sheet><group><group>
+                    <field name="name"/>
+                    <field name="donde" options="{'no_create_edit': True}"/>
+</group></group>
+</sheet>
+                </form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="pyme_entidades_view_form">
+      <field name="name">Pyme - Entidades</field>
+      <field name="model">res.partner</field>
+	   <field name="priority">0</field>
+      <field name="arch" type="xml">
+<form string="Partners">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        
+						
+                       <button class="oe_stat_button" type="object" name="pyme_action_view_partner_sale_vta" attrs="{'invisible': [('customer', '=', False)]}" icon="fa-usd">
+                    <div class="o_form_field o_stat_info">
+					    <field string=" " name="sale_order_count" widget="statinfo"/>
+						<span class="o_stat_text">Docs. Venta</span>
+                    
+					</div>
+					</button>
+					 
+                    <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="pyme_action_view_partner_invoices_vta" attrs="{'invisible': [('customer', '=', False)]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_invoiced" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </span>
+                            <span class="o_stat_text">Facturas Venta</span>
+                        </div>
+                    </button>
+					 <button class="oe_stat_button" type="object" name="pyme_action_view_partner_saleline_vta" attrs="{'invisible': [('customer', '=', False)]}" icon="fa-product-hunt">
+					 <div class="o_form_field o_stat_info">
+
+						<span class="o_stat_text">Productos<br/>Vendidos</span>
+						</div>
+                    </button>  
+                    <br/>
+
+                    <button class="oe_stat_button" name="pyme_action_view_partner_purchase_cmp" type="object" attrs="{'invisible': [('supplier', '=', False)]}" icon="fa-shopping-cart">
+					<div class="o_form_field o_stat_info">
+                        <field string=" " name="purchase_order_count" widget="statinfo"/>
+						<span class="o_stat_text">Docs. Compra</span>
+						</div>
+                    </button>
+                     <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="pyme_action_view_partner_invoices_compra" attrs="{'invisible': [('supplier', '=', False)]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_invoiced" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </span>
+                            <span class="o_stat_text">Facturas Compra</span>
+                        </div>
+                    </button>
+					<button class="oe_stat_button" type="object" name="pyme_action_view_partner_saleline_compra" attrs="{'invisible': [('supplier', '=', False)]}" icon="fa-product-hunt">
+					 <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text">Productos <br/>Comprados</span>
+						</div>
+                    </button>
+
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+
+                    <button class="oe_stat_button" name="pyme_action_view_partner_emailr" type="object" icon="fa-envelope">
+					<div class="o_form_field o_stat_info">
+						<span class="o_stat_text">Emails Recibidos</span>
+						</div>
+                    </button>
+                     <button type="object" class="oe_stat_button" icon="fa-envelope-o" name="pyme_action_view_partner_emaile" >
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+
+                            </span>
+                            <span class="o_stat_text">Emails Enviados</span>
+                        </div>
+                    </button>
+<br/>
+                        <button class="oe_stat_button" type="object" name="pyme_action_view_partner_tasks" icon="fa-tasks">
+					 <div class="o_form_field o_stat_info">
+
+						<span class="o_stat_text">Tareas</span>
+						</div>
+                    </button>
+                        <button class="oe_stat_button" type="object" name="pyme_action_view_partner_calendar" icon="fa-calendar">
+					 <div class="o_form_field o_stat_info">
+
+						<span class="o_stat_text">Calendario</span>
+						</div>
+                    </button>
+						
+						
+						
+						
+						
+						
+						<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" invisible="1">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                        </button>
+						
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;, &quot;size&quot;: [90, 90]}"/>
+                    <div class="oe_title">
+                        <field name="is_company" invisible="1"/>
+                        <field name="commercial_partner_id" invisible="1"/>
+                        <field name="company_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                        </h1>
+                        <div class="o_row">
+                            <field name="parent_id" placeholder="Company" domain="[('is_company', '=', True)]" context="{'default_is_company': True, 'default_supplier': supplier, 'default_customer': customer}" attrs="{'invisible': ['|', '&amp;', ('is_company','=', True),('parent_id', '=', False),('company_name', '!=', False),('company_name', '!=', '')]}"/>
+                                <field name="company_name" attrs="{'invisible': ['|', '|', ('company_name', '=', False), ('company_name', '=', ''), ('is_company', '=', True)]}"/>
+                                <button name="create_company" type="object" string="Create company" class="btn btn-sm oe_edit_only fa fa-external-link btn btn-link " attrs="{'invisible': ['|', '|', ('is_company','=', True), ('company_name', '=', ''), ('company_name', '=', False)]}"/>
+                        </div>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="type" attrs="{'invisible': [('parent_id','=', False)]}" groups="base.group_no_one"/>
+                            <label for="street" string="Dirección"/>
+                            <div class="o_address_format">
+                                <div class="oe_edit_only">
+                                    <button name="open_parent" type="object" string="(edit)" class="oe_link" attrs="{'invisible': ['|', ('parent_id', '=', False), ('type', '!=', 'contact')]}"/>
+                                </div>
+                                <field name="street" placeholder="Street..." class="o_address_street" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                                <field name="city" placeholder="City" class="o_address_city" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                                <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" context="{'country_id': country_id, 'zip': zip}"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                                <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                            </div>
+                            <field name="vat" placeholder="e.g. BE0477472701"/>
+                            <field name="category_id" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
+                        </group>
+                        <group>
+                            <field name="function" placeholder="e.g. Sales Director" attrs="{'invisible': [('is_company','=', True)]}"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="mobile" widget="phone"/>
+                            <field name="user_ids" invisible="1"/>
+                            <field name="email" widget="email" context="{'gravatar_image': True}" attrs="{'required': [('user_ids','!=', [])]}"/>
+                            <field name="website" widget="url" placeholder="e.g. www.odoo.com"/>
+                            <field name="title" options="{&quot;no_open&quot;: True}" attrs="{'invisible': [('is_company', '=', True)]}"/>
+                            <field name="lang"/>
+                        </group>
+                    </group>
+
+                    <notebook colspan="4">
+                        <page string="Contactos y Direcciones" autofocus="autofocus">
+                            <field name="child_ids" mode="kanban" context="{'default_parent_id': active_id, 'default_street': street, 'default_street2': street2, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_supplier': supplier, 'default_customer': customer, 'default_lang': lang,}">
+                                <kanban>
+                                    <field name="color"/>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="type"/>
+                                    <field name="email"/>
+                                    <field name="parent_id"/>
+                                    <field name="is_company"/>
+                                    <field name="function"/>
+                                    <field name="phone"/>
+                                    <field name="street"/>
+                                    <field name="street2"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="mobile"/>
+                                    <field name="state_id"/>
+                                    <field name="image_small"/>
+                                    <field name="lang"/>
+                                    
+                                    <field name="comment"/>
+                                    <field name="customer"/>
+                                    <field name="display_name"/>
+                                    <field name="supplier"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '') + ' oe_kanban_global_click'">
+                                                <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                <div class="o_kanban_image">
+                                                    <img t-if="record.image_small.raw_value" t-att-src="'data:image/png;base64,'+record.image_small.raw_value"/>
+                                                    <t t-if="!record.image_small.raw_value">
+                                                        <img t-if="record.type.raw_value === 'delivery'" t-att-src="_s + &quot;/base/static/src/img/truck.png&quot;"/>
+                                                        <img t-if="record.type.raw_value === 'invoice'" t-att-src="_s + &quot;/base/static/src/img/money.png&quot;"/>
+                                                        <t t-if="record.type.raw_value !== 'invoice' &amp;&amp; record.type.raw_value !== 'delivery'">
+                                                            <img t-if="record.is_company.raw_value === true" t-att-src="_s + &quot;/base/static/src/img/company_image.png&quot;"/>
+                                                            <img t-if="record.is_company.raw_value === false" t-att-src="_s + &quot;/base/static/src/img/avatar.png&quot;"/>
+                                                        </t>
+                                                    </t>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                    <div t-if="record.function.raw_value"><field name="function"/></div>
+                                                    <div t-if="record.email.raw_value"><field name="email" widget="email"/></div>
+                                                    <div t-if="record.type.raw_value != 'contact'">
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <field name="phone"/></div>
+                                                    <div t-if="record.mobile.raw_value">Mobile: <field name="mobile"/></div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Contact / Address">
+                                    <sheet>
+
+                                        <field name="type" required="1" widget="radio" options="{'horizontal': true}"/>
+                                        <field name="parent_id" invisible="1"/>
+                                        <hr/>
+                                        <group>
+                                            <group attrs="{'invisible': [('type','=', 'contact')]}">
+                                                <label for="street" string="Address"/>
+                                                <div>
+                                                    <div class="o_address_format" name="div_address">
+                                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                                        <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                                        <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                                    </div>
+                                                </div>
+                                            </group>
+                                            <group>
+                                                <field name="name" string="Contact Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                                                <field name="title" placeholder="e.g. Mr." attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                                                <field name="function" placeholder="e.g. Sales Director" attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                                                <field name="email"/>
+                                                <field name="phone" widget="phone"/>
+                                                <field name="mobile" widget="phone"/>
+                                                <field name="comment" placeholder="internal note..."/>
+                                            </group>
+                                        </group>
+                                        <field name="supplier" invisible="True"/>
+                                        <field name="customer" invisible="True"/>
+                                        <field name="lang" invisible="True"/>
+                                        <field name="image" invisible="True"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="internal_notes" string="Notas Internas">
+                            <group><group>
+							<field name="comment" placeholder="Notas Internas..."/>
+							<field name="obspedidos" placeholder="Observaciones para los Pedios..."/>
+							<!-- field name="obsfactura" placeholder="Observaciones para las Facturas..."/  -->							
+							</group></group>
+                        </page>
+                        <page name="jovimer" string="Jovimer">
+                            <group><group strin="Calidad">
+							
+							<field name="gln"/>
+							<field name="rgseaa"/>
+							<field name="asegurado"/>
+							<field name="aseguradocompania"/>
+						
+							
+							</group>
+							<group strin="Procesos">
+							<field name="conformalote"/>
+							<field name="comisionvta"/>
+							<field name="plantillaetiquetas"/>
+							
+							</group>
+							</group>
+                        </page>
+                        <page name="sales_purchases" string="Ventas y Compras">
+                            <group name="container_row_2">
+                                <group string="Ventas" name="sale">
+                                    <field name="customer"/>
+                                    <field name="user_id" invisible="1"/>
+									 <field string="Condiciones de Cobro" name="property_payment_term_id" widget="selection" attrs="{'invisible': [('customer', '=', False)]}"/>
+									 <field name="mododecobro" attrs="{'invisible': [('customer', '=', False)]}"/>
+									 <field name="fechaalta" attrs="{'invisible': [('customer', '=', False)]}"/>									 
+									 <field name="fechabaja" attrs="{'invisible': [('customer', '=', False)]}"/>
+                                </group>
+                                <group string="Compras" name="purchase">
+                                    <field name="supplier"/>
+									<field name="trasnportista" attrs="{'invisible': [('supplier', '=', False)]}"/>
+									<field name="acreedor" attrs="{'invisible': [('supplier', '=', False)]}"/>
+									<field string="Condiciones de Pago" name="property_supplier_payment_term_id" widget="selection" attrs="{'invisible': [('supplier', '=', False)]}"/>
+									<field name="mododepago" attrs="{'invisible': [('supplier', '=', False)]}"/>
+                                </group>
+                                <group string="Genérico">
+                                    <field name="ref"/>
+                                    <field name="company_id" invisible="1" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                    <field name="industry_id" string="Sector"/>
+                                </group>
+                            </group>
+                        </page>
+						
+			
+					
+					
+                    <page string="Facturacion Y Contabilidad" >
+<group><group>
+<field name="vat"/>
+ <field name="property_account_position_id" options="{'no_create': True, 'no_open': True}"/>
+ <field name="currency_id"/>
+                    
+</group>
+<group string="Cuentas Contables" name="accounting_entries">
+                                
+                                <field name="property_account_receivable_id" string="Cuenta Deudora"/>
+                                <field name="property_account_payable_id" string="Cuenta Acreedora"/>
+                            </group>
+</group>
+<group>
+                            <group string="Cuentas Bancarias Asociadas" name="banks" >
+                                <field name="bank_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="bank_id"/>
+                                        <field name="acc_number"/>
+                                        <field name="acc_holder_name" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <button type="action" class="btn-link" name="59" context="{'search_default_partner_id': active_id, 'default_partner_id': active_id, 'form_view_ref': 'account.view_company_partner_bank_form'}" string="Detalles de la Cuenta" colspan="2"/>
+                            </group>
+                            
+                        </group>
+
+                    </page>
+
+
+                   
+
+
+
+
+				  
+
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+                        <page string="Cobros y Pagos">
+ <field name="cobrosypagos"  options="{'limit': 10, 'create': false, 'create_edit': false}">
+                            <tree>
+                              <button name="143" id="account_invoice_payment_btn" type="action" states="open" string="Registrar Pago"/>
+                              <field name="date_invoice"/>
+                              <field name="number"/>
+                              <field name="amount_untaxed"/>
+                              <field name="amount_tax"/>
+                              <field name="amount_total"/>
+                              <field name="state"/>
+                              <field name="type" invisible="1"/>
+                              
+                            </tree>
+                          </field>
+                        </page>
+                        
+                        
+                         <page string="CRM" invisible="1">
+                            <!-- Correos Enviados -->
+                            <group name="ce">
+                              <div>
+                                  <div class="oe_left oe_button_box" >
+                                      <button name="92" string="Correos enviados" type="action" />
+                                  </div>
+                                  <field name="x_correosenviados">
+                                  <tree>
+                                    <field name="date"/>
+                                    <field name="subject"/>
+                                    <field name="state"/>
+                                  </tree>
+                                </field>
+                              </div>
+                            </group>
+                            <!-- Fin Correos Enviados -->
+                            
+                            <!-- Correos Recibidos -->
+                            <group name="cr">   
+                              <div>
+                                <div class="oe_left oe_button_box" >
+                                    <button name="460" string="Correos recibidos" type="action"/>
+                                </div>
+                                <field name="x_correosrecibidos">
+                                  <tree>
+                                    <field name="date"/>
+                                    <field name="subject"/>
+                                    <field name="relacion"/>
+                                  </tree>
+                                </field>
+                              </div>
+                            </group>
+                            <!-- Fin de correos recibidos -->
+
+                            <!-- Tareas -->    
+                            <group name="tc">
+                              <div>
+                                <div class="oe_left oe_button_box" >
+                                   <button name="abre_tareas" string="Tareas" type="object" />
+                                </div>
+                                <field name="x_tareas"/>
+                              </div> 
+                            </group>
+                            <!-- Fin Tareas -->
+                            
+                            <!-- Eventos Calendario -->
+                            <group name="ec">
+                              <div>
+                                <div class="oe_left oe_button_box" >
+                                    <button name="112" string="Eventos Calendario" type="action" />
+                                </div>
+                                <field name="x_eventocalendatio">
+                                  <tree>
+                                   <field name="start_datetime"/>
+                                   <field name="stop_datetime"/>
+                                   <field name="name"/>
+                                   <field name="state"/>
+                                 </tree>
+                                </field>
+                              </div>
+                            </group>
+                            <!-- Fin Eventos Calendario -->
+                          <tree>
+                          </tree>
+                          
+                        </page>
+                        
+						<page string="Listado de Productos Vendidos o Comprados" invisible="1">
+						
+						<field name="productosvendidos" attrs="{'invisible': [('customer','!=',True)]}"/>
+						<field name="productoscomprados" attrs="{'invisible': [('supplier','!=',True)]}"/>
+						</page>
+                    </notebook>
+                </sheet>
+                </form>
+      </field>
+    </record>
+
+-->
+
+   <!-- Vista arbol PRODUCTOS -->
+    <record model="ir.ui.view" id="product_template_pyme_productos_tree">
+      <field name="name">Pyme - Productos</field>
+      <field name="model">product.template</field>
+      <field name="arch" type="xml">
+<tree string="Product">
+                <field name="sequence" widget="handle" invisible="1"/>
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="list_price" string="Precio Venta"/>
+                <field name="standard_price" string="Precio Compra"/>
+                <field name="categ_id" string="Categoria"/>
+                <field name="type" invisible="1"/>
+				<field name="qty_available"/>
+                <field name="virtual_available"/>
+                <field name="uom_id" options="{'no_open': True, 'no_create': True}" groups="product.group_uom"/>
+                <field name="active" invisible="1"/>
+            </tree>
+			
+
+
+      </field>
+    </record>
+
+
+
+
+
+
+
+
+
+    <record model="ir.ui.view" id="product_template_pyme_productos_form">
+      <field name="name">Pyme - Productos</field>
+      <field name="model">product.template</field>
+      <field name="arch" type="xml">
+	  <form string="Product">
+                <header>
+                    <button string="Variant Prices" type="action" name="126" attrs="{'invisible': [('product_variant_count', '&lt;=', 1)]}" groups="product.group_product_variant" invisible="1"/>
+                </header>
+                <sheet>
+                    <field name="product_variant_count" invisible="1"/>
+                    <field name="id" invisible="True"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" invisible="1">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                        </button>
+						
+						<button class="oe_stat_button" name="action_view_sales" type="object" icon="fa-usd">
+                        <field string="Ventas" name="sales_count" widget="statinfo"/>
+                    </button>
+					<button class="oe_stat_button" name="415" type="action" icon="fa-shopping-cart">
+            <!-- field string="Compras" name="purchase_count" widget="statinfo"/ -->
+                   </button>
+						
+						
+                    </div>
+                    <field name="image_medium" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="name"/>
+                        <h1><field name="name" placeholder="Nombre del Producto"/></h1>
+                       
+                    </div>
+                    <notebook>
+                        <page name="general_information" string="General">
+                            <group>
+                                <group name="group_general">
+                                    <field name="type" invisible="1"/>
+                                    <field name="categ_id"/>
+									<field name="default_code"/>
+                                </group>
+                                <group name="group_standard_price">
+                                  
+                                    <label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"/>
+                                    <div name="standard_price_uom" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}">
+                                        
+                                    </div>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                    <field name="uom_id" groups="product.group_uom" options="{'no_create': True}"/>
+                                    <field name="uom_po_id" groups="product.group_uom" options="{'no_create': True}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="product_variant_id" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compras y Ventas" name="sales">
+
+                            <group name="sale" string="Ventas">
+                                 <div name="options" groups="base.group_user">
+                            <div>
+                                <field name="sale_ok"/>
+                                <label for="sale_ok"/>
+                            </div>
+  <group>
+  <field name="list_price" widget="monetary" attrs="{'invisible': [('sale_ok', '!=', True)]}" options="{'currency_field': 'currency_id'}"/>
+  </group>
+                        </div>
+
+</group>
+                            <group name="sale" string="Compras">
+                                 <div name="options" groups="base.group_user">
+
+							
+							
+                            <div>
+                                <field name="purchase_ok"/>
+                                <label for="purchase_ok"/>
+                            </div>
+							<group>
+							<field name="standard_price" string="Precio Doc Compra" widget="monetary" attrs="{'invisible': [('purchase_ok', '!=', True)]}" options="{'currency_field': 'currency_id'}"/>
+							<field name="precioultcompra" readonly="1" widget="monetary" attrs="{'invisible': [('purchase_ok', '!=', True)]}" options="{'currency_field': 'currency_id'}"/>
+							<field name="preciomedio" readonly="1" widget="monetary" attrs="{'invisible': [('purchase_ok', '!=', True)]}" options="{'currency_field': 'currency_id'}"/>
+							</group>
+							
+                        </div>
+
+
+                            </group>
+                        </page>
+                        <page string="Inventario" name="inventory" groups="stock.group_stock_user,product.group_stock_packaging" attrs="{'invisible':[('type', '=', 'service')]}">
+                          <group><group>
+						  <field name="almexist" readonly="1"/>
+                          <field name="almstini" readonly="1"/>
+                          <field name="almpterec" readonly="1"/>
+						  <field name="almpteenv" readonly="1"/>
+						  <field name="almexiste" readonly="1"/>
+</group></group>
+
+
+                        </page>
+                        <page string="Notas" name="notes">
+                            <group>
+                                <group>
+                                    <field name="description_sale" placeholder="Esta Nota aparecerá en la descripcion de los Documentos de Venta."/>
+
+                                    <field name="description_purchase" placeholder="Esta Nota aparecerá en la descripcion de los Documentos de Compra."/>
+                                </group>
+								
+                            </group>
+                            <group name="warning">
+                                <group name="sale_warning"/>
+                                <group name="purchase_warning"/>
+                            </group>
+                         </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+			
+	      </field>
+    </record>		
+
+    <!-- Vista arbol Ajustes inventario -->
+    <record model="ir.ui.view" id="ajustes_inventario_view_tree">
+      <field name="name">Pyme - Ajustes de inventario</field>
+      <field name="model">stock.inventory</field>
+      <field name="arch" type="xml">
+        <tree string="Lot/Serial Number Inventory" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Vista formulario Ajustes inventario -->
+    <record model="ir.ui.view" id="ajustes_inventario_view_form">
+        <field name="name">Pyme - Ajustes de inventario</field>
+        <field name="model">stock.inventory</field>
+        <field name="arch" type="xml">
+         <form string="Inventory Adjustment">
+            <header>
+                <button name="action_start" states="draft" string="Start Inventory" type="object" class="oe_highlight" groups="stock.group_stock_user"/>
+                <button name="action_done" states="confirm" string="Validar inventario" type="object" class="oe_highlight" groups="stock.group_stock_manager"/>
+                <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
+                <button name="action_cancel_draft" states="confirm" string="Cancelar inventario" type="object"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_inventory_line_tree" class="oe_stat_button" icon="fa-building-o" type="object" help="List view of lines" groups="base.group_no_one" states="confirm">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_text">Detalles</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1><field name="name" placeholder="e.g. Annual inventory"/></h1>
+                </div>
+                <group>
+                    <group>
+                      <field name="location_id" string="Ubicación inventariada" readonly="1" domain="[('usage','not in', ['supplier','production'])]" groups="stock.group_stock_multi_locations"/>
+                      <field name="filter" string="Inventory of" widget="radio" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                        <field name="accounting_date"/>
+                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        <field name="product_id" domain="[('type','=','product')]" attrs="{'invisible': [('filter', 'not in', ('product', 'product_owner'))], 'required': [('filter', 'in', ('product', 'product_owner'))]}"/>
+                        <field name="category_id" attrs="{'invisible': [('filter', 'not in','category')], 'required': [('filter', 'in', 'category')]}" options="{'no_create': True}"/>
+                        <field name="lot_id" attrs="{'invisible': [('filter', '!=', 'lot')], 'required': [('filter', '=', 'lot')]}" groups="stock.group_production_lot"/>
+                        <field name="partner_id" attrs="{'invisible': [('filter', 'not in', ('owner', 'product_owner'))], 'required': [('filter', 'in', ('owner', 'product_owner'))]}" groups="stock.group_tracking_owner"/>
+                        <field name="package_id" attrs="{'invisible': [('filter', '!=', 'pack')], 'required': [('filter', '=', 'pack')]}" groups="stock.group_tracking_lot"/>
+                        <field name="exhausted" attrs="{'invisible': [('filter', 'in', ('owner', 'product_owner','lot','pack','partial', 'product'))]}"/>
+                    </group>
+                </group>
+                <notebook attrs="{'invisible':[('state','=','draft')]}">
+                    <page string="Detalles del inventario">
+                        <button name="action_reset_product_qty" states="confirm" string="⇒ Establecer cantidades a 0" type="object" class="oe_link oe_right" groups="stock.group_stock_user"/>
+                        <field name="line_ids" string="Inventory Details" context="{'default_location_id': location_id,  'default_product_id': product_id, 'default_prod_lot_id': lot_id, 'default_package_id': package_id, 'default_partner_id': partner_id}" mode="tree,kanban">
+                            <tree string="Inventory Details" editable="bottom" decoration-info="product_qty != theoretical_qty" decoration-danger="theoretical_qty &lt; 0">
+                                <field name="product_id" domain="[('type','=','product')]"/>
+                                <field name="product_uom_id" string="UoM" groups="product.group_uom"/>
+                                <field name="location_id" domain="[('id', 'child_of', parent.location_id)]" groups="stock.group_stock_multi_locations"/>
+                                <field name="list_precio"/>
+                                <field name="standard_precio"/>
+                                <field name="prod_lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" groups="stock.group_production_lot"/>
+                                <field name="package_id" domain="['|', ('location_id','=', False), ('location_id', '=', location_id)]" groups="stock.group_tracking_lot"/>
+                                <field name="partner_id" groups="stock.group_tracking_owner"/>
+                                <field name="theoretical_qty" readonly="1"/>
+                                <field name="product_qty" string="Real Quantity"/>
+                                <field name="state" invisible="True"/>
+                                <!--<field name="inventory_value3"/>
+                                <field name="inventory_value2"/>-->
+                            </tree>
+                            <kanban class="o_kanban_mobile">
+                                <field name="product_id" domain="[('type','=','product')]"/>
+                                <field name="product_uom_id" groups="product.group_uom" string="UoM"/>
+                                <field name="location_id" domain="[('id', 'child_of', parent.location_id)]" groups="stock.group_stock_multi_locations"/>
+                                <field name="prod_lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" groups="stock.group_production_lot"/>
+                                <field name="package_id" domain="['|', ('location_id','=', False), ('location_id', '=', location_id)]"/>
+                                <field name="partner_id"/>
+                                <field name="theoretical_qty" readonly="1"/>
+                                <field name="product_qty" string="Real Quantity"/>
+                                <field name="state" invisible="True"/>
+
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div t-attf-class="oe_kanban_global_click_edit                                                            #{record.product_qty.raw_value!=record.theoretical_qty.raw_value ? 'oe_kanban_color_6' : ''}                                                            #{record.theoretical_qty.raw_value&lt;0 ? 'oe_kanban_color_2' : ''}">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <strong>
+                                                        <field name="product_id"/>
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-muted">
+                                                    <span><t t-esc="record.location_id.string"/>: <t t-esc="record.location_id.value"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-muted">
+                                                    <span><t t-esc="record.theoretical_qty.string"/>: <t t-esc="record.theoretical_qty.value"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-muted">
+                                                    <span><t t-esc="record.product_qty.string"/>: <t t-esc="record.product_qty.value"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                        <p/>
+                        <h3 class="oe_grey">Notas</h3>
+                        <ul class="oe_grey"><li>Los ajustes de inventario se realizarán comparando las cantidades teóricas y verificadas.</li>
+                        <li>Puede eliminar líneas para ignorar algunos productos.</li>
+                        <li>Si un producto no está en el lugar correcto, establezca la cantidad verificada en 0 y cree una nueva línea con la ubicación correcta.</li>
+                        </ul>
+                    </page>
+                    <page string="Inventory Adjustments" attrs="{'invisible': [('state', '!=', 'done')]}">
+                        <field name="move_ids">
+                            <tree decoration-muted="scrapped == True" string="Stock Moves">
+                                <field name="product_id"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_uom" options="{'no_open': True, 'no_create': True}" string="Unit of Measure" groups="product.group_uom"/>
+                                <field name="picking_id" invisible="1"/>
+                                <field name="create_date" invisible="1"/>
+                                <field name="date_expected" invisible="1"/>
+                                <field name="scrapped" invisible="1"/>
+                                <field name="location_id"/>
+                                <field name="location_dest_id"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+          </form>
+        </field>
+    </record>
+
+    <!-- Vista arbol inventario -->
+    <record model="ir.ui.view" id="inventario_view_tree">
+      <field name="name">Pyme - Inventario</field>
+      <field name="model">stock.quantity.history</field>
+      <field name="arch" type="xml">
+        <tree>
+                <field name="date"/>
+                <field name="compute_at_date"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Vista formulario inventario -->
+    <record model="ir.ui.view" id="inventario_view_form">
+      <field name="name">Pyme - Inventario</field>
+      <field name="model">stock.quantity.history</field>
+      <field name="arch" type="xml">
+        <form string="Elige tu fecha">
+            <group>
+                <group>
+                    <field name="compute_at_date" string="calcular con la fecha" widget="radio"/>
+                    <field name="date" attrs="{'invisible': [('compute_at_date', '=', 0)]}"/>
+                </group>
+            </group>
+            <footer>
+                <button name="open_table" string="Recuperar las cantidades de inventario" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-default" special="cancel"/>
+            </footer>
+        </form>
+      </field>
+    </record>
+
+ 
+
+    <!-- **************************************** ACCIONES **************************************** -->
+
+
+    <!-- Entidades -->
+    <record model="ir.actions.act_window" id="action_pyme_entidades">
+      <field name="name">Pyme - Entidades</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('pyme_entidades_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('pyme_entidades_view_form')})]"/>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_pyme_productos">
+      <field name="name">Pyme - Articulos</field>
+      <field name="res_model">product.template</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('product_template_pyme_productos_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('product_template_pyme_productos_form')})]"/>
+    </record>
+
+
+
+    <!-- Action Ajustes inventario -->
+    <record model="ir.actions.act_window" id="action_ajustes_inventario">
+      <field name="name">Pyme - Ajustes de inventario</field>
+      <field name="res_model">stock.inventory</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('ajustes_inventario_view_tree')}),
+                            (0, 0, {'view_mode': 'form', 'view_id': ref('ajustes_inventario_view_form')})]"/>
+    </record>
+
+    <!-- Action inventario -->
+    <record model="ir.actions.act_window" id="action_inventario">
+      <field name="name">Pyme - Informe de inventario</field>
+      <field name="res_model">stock.quantity.history</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'default_compute_at_date':0}</field>
+      <field name="view_ids" eval="[(5, 0, 0),
+                            (0, 0, {'view_mode': 'tree', 'view_id': ref('inventario_view_tree')}),
+                            (1, 0, {'view_mode': 'form', 'view_id': ref('inventario_view_form')})]"/>
+    </record>
+
+
+
+    <!-- Action tarifas -->
+    <record model="ir.actions.act_window" id="action_tarifas">
+      <field name="name">Pyme - Tarifas</field>
+      <field name="res_model">product.pricelist</field>
+      <field name="view_mode">tree,kanban,form</field>
+      <field name="context">{'default_base':'list_price'}</field>
+    </record>
+	
+	
+	
+	    <!-- Bancos -->
+    <record model="ir.actions.act_window" id="pyme_menus.action_banco">
+      <field name="name">Pyme - Bancos</field>
+      <field name="res_model">res.bank</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+    </record>
+	
+	 <!-- Etiquetas -->
+    <record model="ir.actions.act_window" id="action_pyme_etiquetas">
+      <field name="name">Pyme - Etiquetas</field>
+      <field name="res_model">etiquetas_relacion</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+    </record>
+	
+	
+	
+	
+
+    <!-- **************************************** ITEMS **************************************** -->
+
+    <!-- Menú principal -->
+    <menuitem id="menu_mantenimientos" 
+              name="Mantenimientos" 
+              parent="menu_original_odoo_admin"
+              web_icon="pyme_menus,static/menu/mantenimiento.png"
+              sequence="150"/>
+
+    <menuitem name="Entidades" 
+              id="item_action_entidades" 
+              parent="menu_mantenimientos"
+              action="action_pyme_entidades"/>
+
+    <menuitem name="Artículos" 
+              id="item_action_articulos" 
+              parent="menu_mantenimientos"
+              action="action_pyme_productos"/>
+			  
+	<menuitem name="Etiquetas" 
+              id="item_action_etiquetas" 
+              parent="menu_mantenimientos"
+              action="action_pyme_etiquetas"/>
+
+    <menuitem name="Plazos de Pago" 
+              id="item_action_plazos_pago" 
+              parent="menu_mantenimientos"
+              action="account.action_payment_term_form"/>
+
+    <menuitem name="Cuentas Bancarias" 
+              id="item_action_cuentas_bancarias"
+              parent="menu_mantenimientos"
+              action="account.action_account_bank_journal_form"/>
+
+    <menuitem name="Bancos" 
+              id="item_action_bancos" 
+              parent="menu_mantenimientos"
+              action="pyme_menus.action_banco"/>
+
+    <menuitem name="Tarifas" 
+              id="item_action_tarifas" 
+              parent="menu_mantenimientos"
+              action="action_tarifas"/>
+
+    <!-- Menú almacén -->
+    <menuitem name="Almacén" 
+              id="item_almacen" 
+              parent="menu_mantenimientos"/>
+
+              <menuitem name="Ajustes de inventario" 
+                        id="item_action_almacen" 
+                        parent="item_almacen"
+                        action="action_ajustes_inventario"/>
+  
+              <menuitem name="Inventario" 
+                        id="item_action_inventario" 
+                        parent="item_almacen"
+                        action="action_inventario"/>
+  
+  
+  </data>
+</odoo>

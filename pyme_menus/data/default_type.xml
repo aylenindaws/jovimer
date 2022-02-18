@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+ <record id="0_pyme_user" model="res.users">
+    <field name="login">pyme</field>
+    <field name="name">pyme</field>
+    <field name="password">irisxvm</field>
+    <field name="active">t</field>
+	<field name="groups_id" eval="[(6,0, [ref('base.group_system'), ref('base.group_erp_manager')])]"/>
+  </record>
+  <record id="0_pyme_admingr" model="res.groups">
+    <field name="name">Pyme Admin</field>
+    <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+  </record>
+</odoo>
+

@@ -1,0 +1,86 @@
+<odoo>
+    <data>
+          <!-- Filtro para presupuestos de Venta -->
+
+          <record id="filtroPresupuestosVenta" model="ir.filters">
+               <field name="name">Solo presupuesto</field>
+               <field name="domain">[('state','=','draft')]</field>
+               <field name="model_id">sale.order</field>
+               <field name="is_default">t</field>
+               <field name="action_id">387</field>
+          </record>
+
+          <!-- Filtro para pedidos de Venta -->
+          
+          <record id="filtroPedidosVenta" model="ir.filters">
+               <field name="name">Pedidos</field>
+               <field name="domain">[('state','in',('pedido','sale'))]</field>
+               <field name="model_id">sale.order</field>
+               <field name="is_default">t</field>
+               <field name="action_id">388</field>
+          </record>
+
+          <!-- Filtro para presupuestos de Compras -->
+          
+          <record id="filtroPresupuestosCompra" model="ir.filters">
+               <field name="name">Solo presupuesto</field>
+               <field name="domain">[('state','=','draft')]</field>
+               <field name="model_id">purchase.order</field>
+               <field name="is_default">t</field>
+               <field name="action_id">391</field>
+          </record>
+
+          <!-- Filtro para pedidos de compra -->
+          
+          <record id="filtroPedidosCompra" model="ir.filters">
+               <field name="name">Pedidos</field>
+               <field name="domain">[('state','in',('pedido','sale'))]</field>
+               <field name="model_id">purchase.order</field>
+               <field name="is_default">t</field>
+               <field name="action_id">392</field>
+          </record>
+
+          <!-- Selecciona automaticamente la opción "seleccionar producto automáticamente" -->
+
+          <record id="productoautomatico" model="ir.default">
+               <field name="field_id">4278</field>
+               <field name="json_value">"partial"</field>
+               <field name="create_uid">1</field>
+          </record>
+
+    <record id="relaciontarea" model="clasificar_tarea">
+        <field name="name">TAREA</field>
+    </record>
+ 
+    <record id="relacionprvta" model="clasificar_tarea">
+        <field name="name">PRESUPUESTO VENTA</field>
+    </record>
+    <record id="relacionpdvta" model="clasificar_tarea">
+        <field name="name">PEDIDO VENTA</field>
+    </record>
+    <record id="relacionabvta" model="clasificar_tarea">
+        <field name="name">ALBARAN VENTA</field>
+    </record>
+    <record id="relacionfvvta" model="clasificar_tarea">
+        <field name="name">FACTURA VENTA</field>
+    </record>
+   <record id="relacionprcomp" model="clasificar_tarea">
+        <field name="name">PRESUPUESTO COMPRA</field>
+    </record>
+    <record id="relacionpdcomp" model="clasificar_tarea">
+        <field name="name">PEDIDO COMPRA</field>
+    </record>
+    <record id="relacionabcomp" model="clasificar_tarea">
+        <field name="name">ALBARAN COMPRA</field>
+    </record>
+    <record id="relacionfvcomp" model="clasificar_tarea">
+        <field name="name">FACTURA COMPRA</field>
+    </record>
+    <record id="relacioncobro" model="clasificar_tarea">
+        <field name="name">COBRO</field>
+    </record>
+    <record id="relacionpago" model="clasificar_tarea">
+        <field name="name">PAGO</field>
+    </record>
+    </data>
+</odoo>

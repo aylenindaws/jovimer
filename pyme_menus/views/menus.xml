@@ -1,0 +1,102 @@
+<openerp>
+    <data>
+
+      <menuitem id="menu_original_odoo_admin"
+              name="ODOO Menu"
+              web_icon="pyme_menus,static/menu/admin.png"
+              groups="pyme_menus.0_pyme_admingr"  
+              sequence="0"/>
+
+      <menuitem name="ODOO Ajustes"
+                 web_icon="pyme_menus,static/menu/adminconf.png"
+                 id="menu_original_odoo_ajustes"
+                groups="pyme_menus.0_pyme_admingr"
+                 sequence="0"/>
+
+
+
+      <menuitem name="Settings"
+         id="base.menu_administration"
+         web_icon="base,static/description/settings.png"
+         parent="menu_original_odoo_ajustes"
+         sequence="100"/>
+      
+      <menuitem id="base.menu_management" 
+                name="Apps" 
+                sequence="10" 
+                web_icon="base,static/description/modules.png" 
+                parent="menu_original_odoo_ajustes"/>
+      
+      <menuitem id="base.menu_board_root" 
+                name="Dashboards" 
+                sequence="200" 
+                web_icon="base,static/description/board.png" 
+                parent="menu_original_odoo_ajustes"/>
+
+     <menuitem name="Project"
+              id="project.menu_main_pm"
+              parent="menu_original_odoo_admin"
+              web_icon="project,static/description/icon.png"
+              sequence="50"/>
+
+      <menuitem id="sale.sale_menu_root"
+          name="Sales"
+          web_icon="sale,static/description/icon.png"
+          parent="menu_original_odoo_admin"
+          sequence="7"/>
+
+      <menuitem name="Contacts"
+           id="contacts.menu_contacts"
+           sequence="4"
+           web_icon="contacts,static/description/icon.png"
+           parent="menu_original_odoo_admin"/>
+
+      <!-- 
+      <menuitem
+          id="base.calendar"
+          name="Calendar"
+          sequence="2"
+          action="action_calendar_event"
+          web_icon="calendar,static/description/icon.png"
+          parent="menu_original_odoo_admin"/>
+
+      -->
+
+      <menuitem
+           id="crm.crm_menu_root"
+           name="CRM"
+           web_icon="crm,static/description/icon.png"
+           parent="menu_original_odoo_admin"
+           sequence="6"/>
+
+      <menuitem name="Purchase"
+           id="purchase.menu_purchase_root"
+           parent="menu_original_odoo_admin"
+           web_icon="purchase,static/description/icon.png"
+           sequence="25"/>
+
+      <menuitem name="Inventory" id="stock.menu_stock_root" sequence="30"
+          parent="menu_original_odoo_admin"
+          web_icon="stock,static/description/icon.png"/>
+                
+                
+ 
+       <menuitem name="Website"
+            id="website.menu_website_configuration"
+            sequence="9"
+            parent="menu_original_odoo_admin"
+            web_icon="website,static/description/icon.png"/>
+
+
+
+      <menuitem id="utm.menu_link_tracker_root" name="Link Tracker" parent="menu_original_odoo_admin" sequence="30" web_icon="utm,static/description/icon.png"/>
+
+
+      <menuitem name="Invoicing"
+      id="account.menu_finance"
+      parent="menu_original_odoo_admin"
+      web_icon="account,static/description/icon.png"
+      sequence="40"/>
+    </data>
+</openerp>
+                          
