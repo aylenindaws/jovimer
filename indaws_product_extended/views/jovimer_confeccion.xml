@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_confeccion_tree_view">
+            <field name="name">jovimer_confeccion_tree</field>
+            <field name="model">jovimer.confeccion</field>
+            <field name="arch" type="xml">
+                <tree string="Confecciones">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="abr" />
+                    <field name="print_name" />
+                    <field name="import_velneo" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_confeccion_form_view">
+            <field name="name">jovimer_confeccion_form</field>
+            <field name="model">jovimer.confeccion</field>
+            <field name="arch" type="xml">
+                <form string="Confecciones">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="abr" />
+                            <field name="print_name" />
+                            <field name="import_velneo" />
+                            <field name="bulge_euro_palet" />
+                            <field name="bulge_grand_palet" />
+                            <field name="kg_net_bulge" />
+                            <field name="uom_for_bulge" />
+                            <field name="print_name" />
+                            <field name="tara" />
+                            <field name="uom_bulto" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_confeccion_list_action">
+            <field name="name">jovimer_confeccion</field>
+            <field name="res_model">jovimer.confeccion</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer confeccion
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

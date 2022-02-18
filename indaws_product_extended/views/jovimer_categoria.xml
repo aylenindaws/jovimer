@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_categoria_tree_view">
+            <field name="name">jovimer_categoria_tree</field>
+            <field name="model">jovimer.categoria</field>
+            <field name="arch" type="xml">
+                <tree string="Categorias">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="abr" />
+                    <field name="print_name" />
+                    <field name="import_velneo" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_categoria_form_view">
+            <field name="name">jovimer_categoria_form</field>
+            <field name="model">jovimer.categoria</field>
+            <field name="arch" type="xml">
+                <form string="Categorias">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="abr" />
+                            <field name="print_name" />
+                            <field name="import_velneo" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_categoria_list_action">
+            <field name="name">jovimer_categoria</field>
+            <field name="res_model">jovimer.categoria</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer categoria
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

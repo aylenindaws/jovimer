@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_expedientes_series_tree_view">
+            <field name="name">jovimer_expedientes_series_tree</field>
+            <field name="model">jovimer.expedientes.series</field>
+            <field name="arch" type="xml">
+                <tree string="Expedientes Series">
+                    <field name="name" />
+                    <field name="partner_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_expedientes_series_form_view">
+            <field name="name">jovimer_expedientes_series_form</field>
+            <field name="model">jovimer.expedientes.series</field>
+            <field name="arch" type="xml">
+                <form string="Expedientes Series">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="partner_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_expedientes_series_list_action">
+            <field name="name">jovimer_expedientes_series</field>
+            <field name="res_model">jovimer.expedientes.series</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer expedientes
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

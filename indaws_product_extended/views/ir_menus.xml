@@ -2,6 +2,15 @@
     <data>
         <menuitem id="jovimer_menu_root_config_submenu" name="Configuraciones Jovimer" parent="stock.menu_stock_root">
             <menuitem id="jovimer_calibre_config_submenu" name="Calibres" action="jovimer_calibre_list_action"/>
+            <menuitem id="jovimer_categoria_config_submenu" name="Categorias" action="jovimer_categoria_list_action"/>
+            <menuitem id="jovimer_confeccion_config_submenu" name="Confecciones" action="jovimer_confeccion_list_action"/>
+            <menuitem id="jovimer_envase_config_submenu" name="Envases" action="jovimer_envase_list_action"/>
+            <menuitem id="jovimer_etiquetas_config_submenu" name="Etiquetas" action="jovimer_etiquetas_list_action"/>
+            <menuitem id="jovimer_etiquetas_plantilla_config_submenu" name="Plantillas de Etiquetas" action="jovimer_etiquetas_plantilla_list_action"/>
+            <menuitem id="jovimer_expedientes_config_submenu" name="Expedientes" action="jovimer_expedientes_list_action"/>
+            <menuitem id="jovimer_expedientes_series_config_submenu" name="Expedientes Series" action="jovimer_expedientes_series_list_action"/>
+            <menuitem id="jovimer_marca_config_submenu" name="Marcas" action="jovimer_marca_list_action"/>
+            <menuitem id="jovimer_variedad_config_submenu" name="Variedades" action="jovimer_variedad_list_action"/>
         </menuitem>
     </data>
 </odoo>

@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_envase_tree_view">
+            <field name="name">jovimer_envase_tree</field>
+            <field name="model">jovimer.envase</field>
+            <field name="arch" type="xml">
+                <tree string="envases">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="abr" />
+                    <field name="print_name" />
+                    <field name="import_velneo" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_envase_form_view">
+            <field name="name">jovimer_envase_form</field>
+            <field name="model">jovimer.envase</field>
+            <field name="arch" type="xml">
+                <form string="envases">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="abr" />
+                            <field name="print_name" />
+                            <field name="import_velneo" />
+                            <field name="gross_weight" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_envase_list_action">
+            <field name="name">jovimer_envase</field>
+            <field name="res_model">jovimer.envase</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer envase
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
