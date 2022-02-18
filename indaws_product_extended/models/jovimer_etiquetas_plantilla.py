@@ -19,4 +19,4 @@ class JovimerEtiquetasPlantilla(models.Model):
     lang = fields.Many2one('res.lang', string='Lenguaje', help='Lengua Nativa de la Etiqueta')
     content_html = fields.Html(string='Contenido Etiqueta Enriquecida')
     template_id = fields.One2many('product.template', 'label_templates', string='Plantilla Producto')
-    label_id = fields.One2many('jovimer.etiquetas', 'label_template_id', string='Plantilla Producto')
+    label_id = fields.One2many('jovimer_etiquetas', 'label_template_id', string='Etiquetas')

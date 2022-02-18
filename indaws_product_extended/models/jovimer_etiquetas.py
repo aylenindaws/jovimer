@@ -10,7 +10,7 @@ import sys
 _logger = logging.getLogger(__name__)
 
 class JovimerEtiquetas(models.Model):
-    _name = 'jovimer_etiquetas'
+    _name = 'jovimer.etiquetas'
     _description = 'jovimer etiquetas'
 
     name = fields.Char(string='Nombre de la Etiqueta')
