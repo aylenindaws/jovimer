@@ -26,16 +26,18 @@
                             <field name="content_uom" />
                             <field name="lang" />
                             <field name="content_html" />
-                            <page string="Productos" name="jovimer_product">
-                                <group name="product">
-                                    <field name="template_id" />
-                                </group>
-                            </page>
-                            <page string="Etiquetas" name="jovimer_label">
-                                <group name="etiquetas">
-                                    <field name="label_id" />
-                                </group>
-                            </page>
+                            <notebook>
+                                <page string="Productos" name="jovimer_product">
+                                    <group name="product">
+                                        <field name="template_id" />
+                                    </group>
+                                </page>
+                                <page string="Etiquetas" name="jovimer_label">
+                                    <group name="etiquetas">
+                                        <field name="label_id" />
+                                    </group>
+                                </page>
+                            </notebook>
                         </group>
                     </sheet>
                 </form>

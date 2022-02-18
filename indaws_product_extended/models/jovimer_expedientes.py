@@ -51,10 +51,10 @@ class JovimerExpedientes(models.Model):
     #label_id = fields.One2many('jovimer.etiquetas', 'dossier_id', string='Etiquetas')
     order_close = fields.Boolean(string='Pedido Cerrado')#, related='order_id.pedidocerrado')
 
-    @api.depends('serie', 'name')
+    @api.depends('series_id', 'name')
     def _compute_fields_combination(self):
         for test in self:
-            test.dossier_name = test.serie.name + '-' + str(test.name)
+            test.dossier_name = test.series_id.name + '-' + str(test.name)
 
     @api.model
     def create(self, vals):
