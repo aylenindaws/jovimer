@@ -16,6 +16,7 @@ class SaleOrder(models.Model):
     palets = fields.Float(string='C. Compra', store=True, copy=True)
     paletsv = fields.Float(string='C. Venta', store=True, copy=True)
     platform = fields.Char(string='Plataforma')
+    edi_file_binary = fields.Binary(attachment=True)
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
     date_end = fields.Date(string='Fecha de Salida')
     date_start = fields.Date(string='Fecha de Llegada')
@@ -70,3 +71,9 @@ class SaleOrder(models.Model):
                             }
                         )
         return
+
+    @api.onchange('edi_file_binary')
+    def _onchange_field_edi(self):
+        for record in self:
+            if record.edi_file_binary:
+                record.edi_file = self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', record.id)])
