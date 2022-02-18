@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
     def update_edi_file(self, default=None):
         for item in self:
             count = 0
-            aux_txt = base64.b64decode(item.edi_file.datas).decode('utf-8', 'ignore').split('\n')
+            aux_txt = base64.b64decode(item.edi_file.datas).decode('ascii', 'ignore').split('\n')
             item.order_line.unlink()
             for linea in aux_txt:
                 count+=1
@@ -77,9 +77,9 @@ class SaleOrder(models.Model):
         for record in self:
             if record.edi_file_binary:
                 record.edi_file = self.env['ir.attachment'].create({
-                    'name': ("EDI IMPORT", record.id),
+                    'name': ("EDI IMPORT "+ str(record.id)),
                     'type': 'binary',
-                    'datas': base64.encodebytes(record.edi_file_binary),
+                    'datas': record.edi_file_binary,
                     'res_model': record._name,
                     'res_id': record.id
                 })
