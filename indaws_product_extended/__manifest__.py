@@ -23,6 +23,7 @@
         'views/purchase_order.xml',
         'views/product_template.xml',
         'views/ir_menus.xml',
+        'views/prints.xml',
     ],
     "images": ["static/description/background.png",],              
     "application": True,
