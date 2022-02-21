@@ -7,7 +7,7 @@
     <field name="report_name">res.partner.summary</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/Plantilla1.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -22,7 +22,7 @@
     <field name="report_name">packing_list.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/packinglist.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -35,7 +35,7 @@
     <field name="report_name">sale.order.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/pedido_venta.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -48,7 +48,7 @@
     <field name="report_name">purchase.order.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/pedido_compra.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -62,7 +62,7 @@
     <field name="report_name">jovimer_viajes.recibo_pago</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/recibopagos.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -75,7 +75,7 @@
     <field name="report_name">jovimer_viajes.account.payment</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/pago_talon_santander2.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -89,7 +89,7 @@
     <field name="report_name">jovimer_viajes.account.paymentm</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/pago_talon_santander_multi.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -103,7 +103,7 @@
     <field name="report_name">jovimer_viajes.orcar.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/orcar.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -117,7 +117,7 @@
     <field name="report_name">jovimer_viajes.orcaragr.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/orcaragr.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -131,7 +131,7 @@
     <field name="report_name">jovimer_cmr.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/cmr.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -145,7 +145,7 @@
     <field name="report_name">jovimer_ctn.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/ctn.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -157,7 +157,7 @@
     <field name="report_name">jovimer_viaje_grupajes.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/grupajes.odt</field>
     <field name="binding_type">report</field>
 </record>
@@ -168,7 +168,7 @@
     <field name="report_name">jovimer_viaje_ctn.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/viaje_ctn.odt</field>
     <field name="binding_type">report</field>
 </record>
@@ -179,7 +179,7 @@
     <field name="report_name">jovimer_viaje_carga_ctn.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/viaje_carga_ctn.odt</field>
     <field name="binding_type">report</field>
 </record>
@@ -192,7 +192,7 @@
     <field name="report_name">jovimer_cti.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/cti.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -206,7 +206,7 @@
     <field name="report_name">jovimer_resumenviaje.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/resumen_viaje.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -220,7 +220,7 @@
     <field name="report_name">jovimer_ctn2.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/ctn_calidad.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -233,7 +233,7 @@
     <field name="report_name">jovimer_cti.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/cti.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -247,7 +247,7 @@
     <field name="report_name">jovimer_ordencargacab.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/orcarcab.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -262,7 +262,7 @@
     <field name="report_name">jovimer_listadofactalb.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/listadofactalb.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -275,7 +275,7 @@
     <field name="report_name">jovimer_albarancsv_esp.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/albarancsv_esp.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -287,7 +287,7 @@
     <field name="report_name">jovimer_albarancsv.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/albaransv.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -299,7 +299,7 @@
     <field name="report_name">jovimer_albaranvprovisional.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/albaranvprovisional.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -312,7 +312,7 @@
     <field name="report_name">jovimer_albaranvv.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/albaranvv.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -325,7 +325,7 @@
     <field name="report_name">jovimer_albarancsvedit.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/albaransv.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -339,7 +339,7 @@
     <field name="report_name">jovimer_factclieng.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclieng.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -351,7 +351,7 @@
     <field name="report_name">jovimer_factclicont.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclicont.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -364,7 +364,7 @@
     <field name="report_name">jovimer_factclicontsolodolar.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclicontsolodolar.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -376,7 +376,7 @@
     <field name="report_name">jovimer_factclicontsoloeuro.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliengrect_extra_eur.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -391,7 +391,7 @@
     <field name="report_name">jovimer_factclinac.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclinac.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -404,7 +404,7 @@
     <field name="report_name">jovimer_factclivarias.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclivarias.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -416,7 +416,7 @@
     <field name="report_name">jovimer_factclivariaseng.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factclivarias_eng.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -428,7 +428,7 @@
     <field name="report_name">jovimer_factcliengrec.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliengrect.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -442,7 +442,7 @@
     <field name="report_name">jovimer_factcliesprect.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliesprect.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -456,7 +456,7 @@
     <field name="report_name">jfactcliengrect_extra.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliengrect_extra.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -469,7 +469,7 @@
     <field name="report_name">factcliengrect_extraeurodollar.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliengrect_extraeurodollar.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -483,7 +483,7 @@
     <field name="report_name">factcliengrect_extra_solo_euro.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/factcliengrect_extra_solo_euro.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -499,7 +499,7 @@
     <field name="report_name">jovimer_liquidacion.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/liquidacion.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -513,7 +513,7 @@
     <field name="report_name">jovimer_reclamaciones.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/reclamaciones.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -528,7 +528,7 @@
     <field name="report_name">jovimer_reclamacionesdocc.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/reclamacionesdocc.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
@@ -542,7 +542,7 @@
     <field name="report_name">jovimer_ctavta.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>
-    <field name="module">pyme_jovimer</field>
+    <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/ctavta.odt</field>
     <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
