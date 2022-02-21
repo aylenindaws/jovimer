@@ -12,3 +12,4 @@ class PurchaseOrder(models.Model):
     dossier_id = fields.Many2one('jovimer.expedientes', string='expediente', store=True, copy=True, ondelete='set null')
     country_id = fields.Many2one(string="Pais Destino", comodel_name='res.country', default=lambda x: x.env.company.country_id.id, help="Country for which this report is available.")
     close_sale = fields.Boolean(string='Pedido Cerrado')
+    attention = fields.Char(string='Atención de: ')
