@@ -88,7 +88,6 @@ class ModelSaleOrderLine(models.Model):
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
 
-    @api.multi
     @api.onchange('plantilla')
     def on_change_plantilla(self):
         expediente = self.order_id.expediente.id
@@ -115,7 +114,6 @@ class ModelSaleOrderLine(models.Model):
         self.expediente = expediente
         return {}
 
-    @api.multi
     def action_crearreclamacioncr(self, default=None):
         ## self.write({'statusrecla': 'RECLAMADA'})
         id = str(self.id)
@@ -123,7 +121,6 @@ class ModelSaleOrderLine(models.Model):
         subprocess.call(args)
         return {}
 
-    @api.multi
     def cargar_tablet(self, default=None):
         idmensaje = self.id
         viewname = "Cargar Linea"
@@ -143,7 +140,6 @@ class ModelSaleOrderLine(models.Model):
             'res_id': idmensaje}
         return view
 
-    @api.multi
     def action_cerrarreclamacion(self, default=None):
         self.write({'statusrecla': 'OK'})
         return {}
@@ -160,6 +156,5 @@ class ModelSaleOrderLine(models.Model):
         self.env['sale.order.line'].create(vals)
         ## return {'type': 'ir.actions.client', 'tag': 'reload',}
 
-    @api.multi
     def action_creact(self, default=None):
         return {}
