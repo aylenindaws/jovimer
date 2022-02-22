@@ -23,7 +23,7 @@
                 </group>
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="platform"/>
+                <field name="plataforma"/>
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="id" readonly="1"/>
@@ -39,12 +39,12 @@
                 </div>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
-                <field name="date_end"/>
-                <field name="date_start"/>
-                <field name="time_start"/>
-                <field name="conforms_lot"/>
-                <field name="lote_char"/>
-                <field name="close_sale"/>
+                <field name="fechasalida"/>
+                <field name="fechallegada"/>
+                <field name="horallegada"/>
+                <field name="conformalote"/>
+                <field name="reslote"/>
+                <field name="pedidocerrado"/>
             </xpath>
         </field>
     </record>

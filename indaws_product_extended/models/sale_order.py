@@ -14,44 +14,6 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    def _compute_palets(self):
-        try:
-            palets = 0
-            paletsv = 0
-            order = self.id
-            self.env.cr.execute(""" select sum(numpalets) from jovimer_lineascompra where order_id='%s'""" % (order))
-            result = self.env.cr.fetchone()
-            palets = result[0]
-            self.palets = palets
-            self.env.cr.execute(""" select sum(cantidadpedido) from sale_order_line where order_id='%s'""" % (order))
-            resultv = self.env.cr.fetchone()
-            paletsv = resultv[0]
-            self.paletsv = paletsv
-            try:
-                self.faltanpalets = abs(paletsv - palets) or 0
-            except:
-                self.faltanpalets = paletsv
-            if palets != paletsv:
-                self.estadopalets == True
-                self.env.cr.execute(""" update sale_order set estadopalets='t' where id='%s'""" % (order))
-            else:
-                self.env.cr.execute(""" update sale_order set estadopalets='f' where id='%s'""" % (order))
-                ## raise UserError("Estoy Aki MAL")
-            for lines in self.order_line:
-                numpalets = 0.0
-                try:
-                    lines.paletsc = 0.0
-                    for line in lines.multicomp:
-                        numpalets += line.numpalets or 0.0
-                        lines.paletsc = numpalets
-                except:
-                    lines.paletsc = 0
-        except:
-            palets = 0
-            paletsv = 0
-
-        return {}
-
     def _compute_total_coste(self):
         for rec in self:
             coste = 0
@@ -78,11 +40,11 @@ class SaleOrder(models.Model):
     reslote = fields.Char(string='Lote')
     obspedido = fields.Text(string='Observaciones PEdido')
     description = fields.Char(string='Desc.')
-    palets = fields.Float(string='C. Compra', compute='_compute_palets')
+    palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')
     refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
     plataforma = fields.Char(string='Plataforma', help='Plataforma Destino')
-    etiquetas = fields.One2many('jovimer.etiquetas', 'saleorder', string='Etiquetas del Pedido')
+    etiquetas = fields.One2many('jovimer.etiquetas', 'order_id', string='Etiquetas del Pedido')
     estadopalets = fields.Boolean(string='Estado Palets')
     faltanpalets = fields.Float(string='Faltan')
     pedcompra = fields.Many2many('purchase.order', string='Pedidos de Compra')
@@ -92,7 +54,7 @@ class SaleOrder(models.Model):
     coste = fields.Float(string='Compra', compute='_compute_total_coste')
     resultado = fields.Float(string='Resultado')
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
-    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente", default=12)
+    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")#, default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
     dossier_id = fields.Many2one('jovimer.expedientes', string='expediente', store=True, copy=True, ondelete='set null')
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
