@@ -48,7 +48,7 @@
                                     <field name="no_bio" />
                                     <field name="observations" />
                                     <field name="num_prev" />
-                                    <field name="series_id" />
+                                    <field name="serie" />
                                     <field name="series_name" />
                                     <field name="dossier_name" />
                                     <field name="campanya" />

@@ -16,7 +16,7 @@ class PurchaseOrder(models.Model):
     expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
     pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
     expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya')
-    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.series_id')
+    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
     expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name')
     mododecobro = fields.Many2one('payment.acquirer', string='Modo de Cobros')
     conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE')

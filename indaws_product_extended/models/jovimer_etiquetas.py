@@ -23,7 +23,7 @@ class JovimerEtiquetas(models.Model):
     purchase_id = fields.Many2one('purchase.order', string='Pedido de Compra', related='purchase_line_id.order_id', store=True)
     dossier_id = fields.Many2one('jovimer.expedientes', string='Expediente')
     dossier_campaign = fields.Selection(related='dossier_id.campanya')
-    dossier_series_id = fields.Many2one('jovimer.expedientes.series', related='dossier_id.series_id')
+    dossier_series_id = fields.Many2one('jovimer.expedientes.series', related='dossier_id.serie')
     dossier_num = fields.Integer('Numero de Serie', related='dossier_id.name')
     label_template_id = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla')
     partner_id = fields.Many2one('res.partner', string='Proveedor')

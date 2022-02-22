@@ -35,7 +35,7 @@ class JovimerExpedientes(models.Model):
     no_bio = fields.Boolean(string='NO BIO')
     observations = fields.Text(string='Observaciones')
     num_prev = fields.Integer(string='Número Anterior', help='Número Expediente')
-    series_id = fields.Many2one('jovimer.expedientes.series', string='Serie')
+    serie = fields.Many2one('jovimer.expedientes.series', string='Serie')
     series_name = fields.Char('Serie Char')
     dossier_name = fields.Char('Expediente', compute='_compute_fields_combination')
     campanya = fields.Selection([('J22', 'J22'),('J20', 'J20'),('PR20', 'PR20'),('CO20', 'CO20'),('J21', 'J21'),('PR21', 'PR21'),('CO21', 'CO21')], string='Campaña', default='J22')
@@ -51,11 +51,11 @@ class JovimerExpedientes(models.Model):
     label_id = fields.One2many('jovimer.etiquetas', 'dossier_id', string='Etiquetas')
     order_close = fields.Boolean(string='Pedido Cerrado')#, related='order_id.pedidocerrado')
 
-    @api.depends('series_id', 'name')
+    @api.depends('serie', 'name')
     def _compute_fields_combination(self):
         for test in self:
-            if test.series_id:
-                test.dossier_name = test.series_id.name + '-' + str(test.name)
+            if test.serie:
+                test.dossier_name = test.serie.name + '-' + str(test.name)
             else:
                 test.dossier_name = str(test.name)
 
