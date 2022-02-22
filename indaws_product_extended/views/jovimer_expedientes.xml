@@ -51,7 +51,7 @@
                                     <field name="series_id" />
                                     <field name="series_name" />
                                     <field name="dossier_name" />
-                                    <field name="campaign" />
+                                    <field name="campanya" />
                                     <field name="import_true" />
                                     <field name="order_close" />
                                 </group>
