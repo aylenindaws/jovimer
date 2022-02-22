@@ -24,6 +24,7 @@ class SaleOrder(models.Model):
     conforms_lot = fields.Many2one('jovimer.conflote', string="Conforma LOTE", store=True, copy=True, ondelete='set null')
     lote_char = fields.Char(string='Lote', store=True, copy=True)
     close_sale = fields.Boolean(string='Pedido Cerrado')
+    reslote = fields.Char(string='Lote')
 
     def update_edi_file(self, default=None):
         for item in self:
