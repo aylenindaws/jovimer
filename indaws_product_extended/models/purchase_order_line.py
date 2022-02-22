@@ -34,7 +34,7 @@ class ModelSaleOrderLine(models.Model):
     pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
     asignado = fields.Boolean(string='Asignado')
     # idasignacion = fields.Many2one('jovimer.asignaciones', string='ID Asignación')
-    # asignacionj = fields.Many2one('sale.order.line', string='Asignación', related='idasignacion.saleorderlinedestino', store=True)
+    asignacionj = fields.Many2one('sale.order.line', string='Asignación')#, related='idasignacion.saleorderlinedestino', store=True)
     libreasignada = fields.Float(string='Libres')
     comision = fields.Float(string='Comision')
     bultos = fields.Float(string='Bultos')
