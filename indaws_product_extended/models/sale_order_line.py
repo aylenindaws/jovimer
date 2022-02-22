@@ -11,8 +11,8 @@ import datetime
 
 _logger = logging.getLogger(__name__)
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+class ModelSaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
 
     def _calc_palets(self):
         numpalets = 0.0
@@ -53,7 +53,7 @@ class SaleOrder(models.Model):
     expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
     bultos = fields.Float(string='Bultos x Palet')
     totalbultos = fields.Float(string='Total Bultos', compute='_compute_totalbultos', store=True)
-    partner_id = fields.Many2one(string='Partner', related='order_id.partner_id', store=True)
+    partner_id = fields.Many2one('res.partner', string='Partner', related='order_id.partner_id', store=True)
     kgnetbulto = fields.Float(string='Kg/Net Bulto')
     unidadesporbulto = fields.Float(string='Unidades por Bulto')
     unidabulto = fields.Many2one('uom.uom', string='Ud Vta', domain=[('invisibleudvta', '=', 'SI')])
