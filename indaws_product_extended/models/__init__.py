@@ -13,4 +13,5 @@ from . import jovimer_variedad
 from . import product_template
 from . import sale_order
 from . import purchase_order
+from . import purchase_order_line
 from . import jovimer_conflote

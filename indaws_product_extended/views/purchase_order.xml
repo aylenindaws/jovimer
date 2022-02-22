@@ -11,7 +11,7 @@
                     <span class="o_form_label" attrs="{'invisible': [('state','in',('draft','sent'))]}">Pedido de compra </span>
                     <group name="title">
                         <group name="oe_title">
-                            <field name="dossier_id" readonly="1"/>
+                            <field name="expediente" readonly="1"/>
                             <field name="name" string="Numero" readonly="1"/>
                         </group>
                     </group>
@@ -21,11 +21,18 @@
                 <field name="priority" string="Prioridad" widget="priority" class="mr-3"/>
             </xpath>
             <xpath expr="//field[@name='partner_ref']" position="after">
-                <field name="country_id"/>
+                <field name="paisdestino"/>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="before">
                 <field name="id" readonly="1"/>
-                <field name="close_sale"/>
+                <field name="fechasalida"/>
+                <field name="fechallegada"/>
+                <field name="campanya"/>
+                <field name="pedidocerrado"/>
+            </xpath>
+            <xpath expr="//field[@name='incoterm_id']" position="before">
+                <field name="consignatario"/>
+                <field name="expediente"/>
             </xpath>
         </field>
     </record>

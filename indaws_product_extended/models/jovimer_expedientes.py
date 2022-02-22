@@ -41,25 +41,25 @@ class JovimerExpedientes(models.Model):
     campaign = fields.Selection([('J22', 'J22'),('J20', 'J20'),('PR20', 'PR20'),('CO20', 'CO20'),('J21', 'J21'),('PR21', 'PR21'),('CO21', 'CO21')], string='Campaña', default='J22')
     import_true = fields.Boolean(string='Importado')
     order_id = fields.One2many('sale.order', 'dossier_id', string='Pedidos venta')
-    purchase_id = fields.One2many('purchase.order', 'dossier_id', string='Pedidos compra')
+    purchase_id = fields.One2many('purchase.order', 'expediente', string='Pedidos compra')
     #invoice_id = fields.One2many('account.move', 'dossier_id', string='Facturas Venta')
     #invoice_line_id = fields.One2many('account.move.line', 'dossier_id', string='Facturas Compra', domain=[('typefact', '=', 'in_invoice')])
     #travel_id = fields.One2many('jovimer.viajes', 'dossier_id', string='Viajes')
     #ctn = fields.One2many('jovimer.ctn', 'dossier_id', string='Control Trans Nacional')
     #cti = fields.One2many('jovimer.cti', 'dossier_id', string='Control Trans Internacional')
     #claims = fields.One2many('jovimer.reclamaciones', 'dossier_id', string='Etiquetas')
-    #label_id = fields.One2many('jovimer.etiquetas', 'dossier_id', string='Etiquetas')
+    label_id = fields.One2many('jovimer.etiquetas', 'dossier_id', string='Etiquetas')
     order_close = fields.Boolean(string='Pedido Cerrado')#, related='order_id.pedidocerrado')
 
     @api.depends('series_id', 'name')
     def _compute_fields_combination(self):
         for test in self:
-            test.dossier_name = test.series_id.name + '-' + str(test.name)
+            if test.series_id:
+                test.dossier_name = test.series_id.name + '-' + str(test.name)
+            else:
+                test.dossier_name = str(test.name)
 
     @api.model
     def create(self, vals):
-        serie = self.campaign
-        numero = self.name
-        vals['cliente'] = 3495
         result = super(JovimerExpedientes, self).create(vals)
         return result

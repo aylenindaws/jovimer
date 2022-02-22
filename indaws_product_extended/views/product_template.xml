@@ -29,7 +29,7 @@
                             <field name="container"/>
                             <field name="label_templates"/>
                         </group>
-                        <notebook>
+                        <!--<notebook>
                             <page string="Precios" name="jovimer_price">
                                 <group name="template_right">
                                     <field name="week"/>
@@ -37,7 +37,7 @@
                                     <field name="pvp_type"/>
                                 </group>
                             </page>
-                        </notebook>
+                        </notebook>-->
                     </group>
                 </page>
             </xpath>

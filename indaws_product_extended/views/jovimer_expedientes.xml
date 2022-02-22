@@ -24,37 +24,45 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="name" />
-                                <field name="partner_id" />
-                                <field name="download_partner_id" />
-                                <field name="date_end" />
-                                <field name="date_start" />
-                                <field name="time_arrive" />
-                                <field name="registration" />
-                                <field name="transport_int_partner_id" />
-                                <field name="transport_nat_partner_id" />
-                                <field name="international_transport_price" />
-                                <field name="national_transport_price" />
-                            </group>
-                            <group>
-                                <field name="payment" />
-                                <field name="order" />
-                                <field name="logistic" />
-                                <field name="invoice" />
-                                <field name="liquidation" />
-                                <field name="sale_account" />
-                                <field name="output" />
-                                <field name="no_bio" />
-                                <field name="observations" />
-                                <field name="num_prev" />
-                                <field name="series_id" />
-                                <field name="series_name" />
-                                <field name="dossier_name" />
-                                <field name="campaign" />
-                                <field name="import_true" />
-                                <field name="order_id" />
-                                <field name="purchase_id" />
-                                <field name="order_close" />
+                                <group>
+                                    <field name="name" />
+                                    <field name="partner_id" />
+                                    <field name="download_partner_id" />
+                                    <field name="date_end" />
+                                    <field name="date_start" />
+                                    <field name="time_arrive" />
+                                    <field name="registration" />
+                                    <field name="transport_int_partner_id" />
+                                    <field name="transport_nat_partner_id" />
+                                    <field name="international_transport_price" />
+                                    <field name="national_transport_price" />
+                                </group>
+                                <group>
+                                    <field name="payment" />
+                                    <field name="order" />
+                                    <field name="logistic" />
+                                    <field name="invoice" />
+                                    <field name="liquidation" />
+                                    <field name="sale_account" />
+                                    <field name="output" />
+                                    <field name="no_bio" />
+                                    <field name="observations" />
+                                    <field name="num_prev" />
+                                    <field name="series_id" />
+                                    <field name="series_name" />
+                                    <field name="dossier_name" />
+                                    <field name="campaign" />
+                                    <field name="import_true" />
+                                    <field name="order_close" />
+                                </group>
+                                <notebook>
+                                    <page>
+                                        <field name="order_id" />
+                                    </page>
+                                    <page>
+                                        <field name="purchase_id" />
+                                    </page>
+                                </notebook>
                             </group>
                         </group>
                     </sheet>
