@@ -15,7 +15,7 @@ class JovimerConfeccion(models.Model):
 
     name = fields.Char('Nombre')
     code = fields.Char(string='Código')
-    abr = fields.Char(string='abrev')
+    abrev = fields.Char(string='abrev')
     import_name = fields.Char(string='Nombre Importado')
     import_velneo = fields.Boolean(string='Importado Velneo')
     bulge_euro_palet = fields.Float(string='Bultos Euro Palet')

@@ -8,7 +8,7 @@
                 <tree string="Calibres">
                     <field name="name" />
                     <field name="code" />
-                    <field name="abr" />
+                    <field name="abrev" />
                     <field name="print_name" />
                     <field name="import_velneo" />
                 </tree>
@@ -24,7 +24,7 @@
                         <group>
                             <field name="name" />
                             <field name="code" />
-                            <field name="abr" />
+                            <field name="abrev" />
                             <field name="print_name" />
                             <field name="import_velneo" />
                         </group>

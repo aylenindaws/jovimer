@@ -16,6 +16,6 @@ class JovimerVariedad(models.Model):
     name = fields.Char('Nombre')
     product_id = fields.Many2one('product.product', string='Producto')
     code = fields.Char(string='Código')
-    abr = fields.Char(string='Trad Ingles')
+    abrev = fields.Char(string='Trad Ingles')
     print_name = fields.Char(string='Impresión')
     import_velneo = fields.Boolean(string='Importado Velneo')
