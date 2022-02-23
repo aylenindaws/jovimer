@@ -43,7 +43,15 @@
                 <field name="fechallegada"/>
                 <field name="horallegada"/>
                 <field name="conformalote"/>
-                <field name="reslote"/>
+                <label for="reslote"/>
+				<div class="o_row">
+				    <div style="padding-left:0mm;" class="col-6">
+                        <field name="reslote"/>
+                    </div>
+                    <div class="col-6" style="padding-left:0mm;">
+                        <button name="onchange_conformalote" string="Calc" type="object"/>
+                    </div>
+                </div>
                 <field name="pedidocerrado"/>
             </xpath>
         </field>

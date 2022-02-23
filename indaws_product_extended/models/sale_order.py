@@ -159,7 +159,7 @@ class SaleOrder(models.Model):
             return {}
 
     @api.onchange('conformalote', 'fechallegada', 'fechasalida')
-    def on_change_conformalote(self):
+    def onchange_conformalote(self):
         confid = str(self.conformalote.id)
         fechallegada = str(self.fechallegada)
         fechasalida = str(self.fechasalida)
@@ -183,7 +183,6 @@ class SaleOrder(models.Model):
                 self.reslote = str(wk) + '/' + str(weekday.zfill(2))
             except:
                 self.reslote = 'Faltan datos'
-
         if confid == "2":
             try:
                 weekday = self.fechasalida.strftime("%w")
