@@ -7,12 +7,12 @@ class sale_order(models.Model):
     _inherit = 'sale.order'
 
     purchase_related_ids = fields.One2many('purchase.order', 'sale_related_id', string="Related purchase orders", readonly=True)
-    check_purchase = fields.Boolean(string='Orden Creada', compute="_compute_check_purchase", store=True)
+    check_purchase = fields.Boolean(string='Orden Creada', compute='_compute_check_p')
     
     @api.depends('purchase_related_ids')
-    def _compute_check_purchase(self):
+    def _compute_check_p(self):
         if self.purchase_related_ids:
-            self.check_purchase=False
+            self.check_purchase=True
         else:
             self.check_purchase=False
 

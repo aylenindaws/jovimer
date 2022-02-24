@@ -10,6 +10,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <header>
+                    <field name="purchase_related_ids" invisible='1'/>
                     <field name="check_purchase" invisible='1'/>
                     <button name="%(action_transientmodel_wizard)d" string="Create Purchase Order" type="action" class="btn-primary" attrs="{'invisible':['|',('state','in',['done','cancel']),('check_purchase','=',True)]}"/>
                 </header>   
