@@ -20,7 +20,12 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='analytic_account_id']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <xpath expr="//field[@name='analytic_account_id']" position="replace">
+                <field name="company_id" invisible='1'/>
+            </xpath>
             <xpath expr="//div[hasclass('oe_title')]" position="replace">
                 <group name="title">
                     <group name="oe_title">
@@ -70,6 +75,9 @@
                     </div>
                 </div>
                 <field name="pedidocerrado"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="attrs">{'editable':'top'}</attribute>
             </xpath>
         </field>
     </record>

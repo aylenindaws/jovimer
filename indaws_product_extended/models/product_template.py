@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import odoo.addons.decimal_precision as dp
 import logging
 import json
 import os
@@ -66,3 +67,8 @@ class ProductTemplate(models.Model):
             else:
                 item.bulge = item.confection.bulge_euro_palet
                 return {}
+            
+class ProductTemplate(models.Model):
+    _inherit = 'product.supplierinfo'
+
+    discount = fields.Float(string='Discount (%)', digits=dp.get_precision('Discount'), default=0.0)

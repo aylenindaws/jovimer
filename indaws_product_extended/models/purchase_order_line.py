@@ -87,6 +87,9 @@ class ModelSaleOrderLine(models.Model):
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
+    discount = fields.Float(
+        string='Discount (%)', digits=dp.get_precision('Discount'),
+    )
 
     @api.onchange('plantilla')
     def on_change_plantilla(self):
@@ -167,10 +170,6 @@ class ModelSaleOrderLine(models.Model):
         vals = super()._prepare_compute_all_values()
         vals.update({'price_unit': self._get_discounted_price_unit()})
         return vals
-
-    discount = fields.Float(
-        string='Discount (%)', digits=dp.get_precision('Discount'),
-    )
 
     _sql_constraints = [
         ('discount_limit', 'CHECK (discount <= 100.0)',

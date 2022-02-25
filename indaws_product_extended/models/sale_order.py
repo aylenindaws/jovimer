@@ -214,7 +214,7 @@ class SaleOrder(models.Model):
         if confname == "SEMANA/DIA LLEGADA-3":
             try:
                 diaresto = 3
-                ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
+                ahora = datetime.datetime.strptime(fechallegada, '%Y-%m-%d')
                 hace3diastime = str(ahora - timedelta(days=diaresto))
                 hace3diastime2 = ahora - timedelta(days=diaresto)
                 hace3dias = hace3diastime.split(' ')[0]
@@ -234,7 +234,7 @@ class SaleOrder(models.Model):
         if confname == "SEMANA/DIA LLEGADA-1":
             try:
                 diaresto = 1
-                ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
+                ahora = datetime.datetime.strptime(fechallegada, '%Y-%m-%d')
                 hace3diastime = str(ahora - timedelta(days=diaresto))
                 hace3diastime2 = ahora - timedelta(days=diaresto)
                 hace3dias = hace3diastime.split(' ')[0]
@@ -371,5 +371,5 @@ class SaleOrder(models.Model):
     def create(self, vals_list):
         vals = super(SaleOrder, self).create(vals_list)
         if not vals.analytic_account_id:
-            vals.analytic_account_id = self.env['account.analytic.account'].create({'name': 'j'+str(datetime.date.today().year)[2:]+'/'+vals.name[1:], 'partner_id':vals.partner_id.id})
+            vals.analytic_account_id = self.env['account.analytic.account'].create({'name': 'j'+str(datetime.date.today().year)[2:]+'/'+vals.name[1:]})
         return vals

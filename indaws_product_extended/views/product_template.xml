@@ -12,7 +12,6 @@
                             <field name="partner_id"/>
                             <field name="name"/>
                             <field name="partner_code"/>
-                            <field name="product_id"/>
                             <field name="not_calculate_lumps"/>
                             <field name="not_active"/>
                             <field name="bulge"/>
