@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="indaws_sale_purchase_extended_view_order_form_2_inherit" model="ir.ui.view">
+        <field name="name">indaws.sale.purchase.extended.view.order.form.2.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="bi_convert_purchase_from_sales.sale_order_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='cost_real']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
+            <xpath expr="//field[@name='purchase_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
     <record id="indaws_sale_purchase_extended_view_order_form_inherit" model="ir.ui.view">
         <field name="name">indaws.sale.purchase.extended.view.order.form.inherit</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_account_id']" position="replace"/>
             <xpath expr="//div[hasclass('oe_title')]" position="replace">
                 <group name="title">
                     <group name="oe_title">
-                        <field name="dossier_id" readonly="1"/>
+                        <field name="expediente" readonly="1" invisible="1"/>
+                        <field name="analytic_account_id" readonly="1" force_save="1" string="Expediente"/>
                         <field name="name" string="Numero" readonly="1"/>
                     </group>
                     <group name="oe_subtitle">
@@ -42,7 +59,7 @@
                 <field name="fechasalida"/>
                 <field name="fechallegada"/>
                 <field name="horallegada"/>
-                <field name="conformalote"/>
+                <field name="conformalote" force_save="1"/>
                 <label for="reslote"/>
 				<div class="o_row">
 				    <div style="padding-left:0mm;" class="col-6">

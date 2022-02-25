@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
     expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
     expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
     mododecobro = fields.Many2one('payment.acquirer', string='Modo de Cobros')
-    conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE')
+    conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE', store=True)
     reslote = fields.Char(string='Lote')
     obspedido = fields.Text(string='Observaciones PEdido')
     description = fields.Char(string='Desc.')
@@ -56,7 +56,6 @@ class SaleOrder(models.Model):
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
     serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")#, default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
-    dossier_id = fields.Many2one('jovimer.expedientes', string='expediente', store=True, copy=True, ondelete='set null')
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
 
@@ -160,14 +159,15 @@ class SaleOrder(models.Model):
 
     @api.onchange('conformalote', 'fechallegada', 'fechasalida')
     def onchange_conformalote(self):
-        confid = str(self.conformalote.id)
+        self.ensure_one()
+        confname = str(self.conformalote.name)
         fechallegada = str(self.fechallegada)
         fechasalida = str(self.fechasalida)
 
-        if confid == "3":
+        if confname == "LO PONE EL CLIENTE":
             self.reslote = ' '
 
-        if confid == "1":
+        if confname == "SEMANA/DIA LLEGADA":
             try:
                 weekday = self.fechallegada.strftime("%w")
                 if str(weekday) == "0":
@@ -183,7 +183,7 @@ class SaleOrder(models.Model):
                 self.reslote = str(wk) + '/' + str(weekday.zfill(2))
             except:
                 self.reslote = 'Faltan datos'
-        if confid == "2":
+        if confname == "SEMANA/DIA SALIDA":
             try:
                 weekday = self.fechasalida.strftime("%w")
                 if str(weekday) == "0":
@@ -200,7 +200,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "4":
+        if confname == "SEMANA/AÑO LLEGADA":
             try:
                 year = fechallegada.split('-')[0]
                 month = fechallegada.split('-')[1]
@@ -211,7 +211,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "5":
+        if confname == "SEMANA/DIA LLEGADA-3":
             try:
                 diaresto = 3
                 ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
@@ -231,7 +231,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "6":
+        if confname == "SEMANA/DIA LLEGADA-1":
             try:
                 diaresto = 1
                 ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
@@ -248,7 +248,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "7":
+        if confname == "DIA/MES/AÑO LLEGADA":
             try:
                 year = fechallegada.split('-')[0]
                 month = fechallegada.split('-')[1]
@@ -259,7 +259,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "8":
+        if confname == "FECHA LLEGADA -4 DIAS":
             try:
                 ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
                 hace4 = ahora - timedelta(days=4)
@@ -268,7 +268,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "9":
+        if confname == "DIA/MES/AÑO SALIDA":
             try:
                 ahora = datetime.strptime(fechasalida, '%Y-%m-%d')
                 dt_string = ahora.strftime("%d/%m/%Y")
@@ -276,7 +276,7 @@ class SaleOrder(models.Model):
             except:
                 self.reslote = 'Faltan datos'
 
-        if confid == "12":
+        if confname == "SEMANA/DIA LLEGADA +1":
             try:
                 ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
                 hace4 = ahora + timedelta(days=1)
@@ -366,3 +366,10 @@ class SaleOrder(models.Model):
             'context': context
         }
         return view
+    
+    @api.model
+    def create(self, vals_list):
+        vals = super(SaleOrder, self).create(vals_list)
+        if not vals.analytic_account_id:
+            vals.analytic_account_id = self.env['account.analytic.account'].create({'name': 'j'+str(datetime.date.today().year)[2:]+'/'+vals.name[1:], 'partner_id':vals.partner_id.id})
+        return vals
