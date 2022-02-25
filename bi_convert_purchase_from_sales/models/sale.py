@@ -9,11 +9,11 @@ class sale_order(models.Model):
     purchase_related_ids = fields.One2many('purchase.order', 'sale_related_id', string="Related purchase orders", readonly=True)
     check_purchase = fields.Boolean(string='Orden Creada', compute="_compute_check_purchase", store=True)
     
-    @api.onchange('puchase_related_ids')
+    @api.depends('purchase_related_ids')
     def _compute_check_purchase(self):
-        if self.puchase_related_ids:
-            self.check_purchase=True
-        else
+        if self.purchase_related_ids:
+            self.check_purchase=False
+        else:
             self.check_purchase=False
 
 class sale_order_line(models.Model):
