@@ -51,24 +51,22 @@ class ModelSaleOrderLine(models.Model):
     expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
     expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
     expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
-    bultos = fields.Float(string='Bultos x Palet')
+    bultos = fields.Float(string='Bultos x Palet', related='product_id.bulge')
     totalbultos = fields.Float(string='Total Bultos', compute='_compute_totalbultos', store=True)
     partner_id = fields.Many2one('res.partner', string='Partner', related='order_id.partner_id', store=True)
-    kgnetbulto = fields.Float(string='Kg/Net Bulto')
+    kgnetbulto = fields.Float(string='Kg/Net Bulto', related='product_id.kg_net_bulge')
     unidadesporbulto = fields.Float(string='Unidades por Bulto')
     unidabulto = fields.Many2one('uom.uom', string='Ud Vta', domain=[('invisibleudvta', '=', 'SI')])
-    plantilla = fields.Many2one('product.template', string='Plantilla de Producto')
-    variedad = fields.Many2one('jovimer.variedad', string='Variedad')
-    calibre = fields.Many2one('jovimer.calibre', string='Calibre')
-    categoria = fields.Many2one('jovimer.categoria', string='Categoria')
-    confeccion = fields.Many2one('jovimer.confeccion', string='Confección')
-    kgnetbultor = fields.Float(string='Kg/Net Bulto', related='confeccion.kg_net_bulge')
+    variedad = fields.Many2one('jovimer.variedad', string='Variedad', related='product_id.variety')
+    calibre = fields.Many2one('jovimer.calibre', string='Calibre', related='product_id.caliber')
+    categoria = fields.Many2one('jovimer.categoria', string='Categoria', related='product_id.category')
+    confeccion = fields.Many2one('jovimer.confeccion', string='Confección', related='product_id.confection')
     unidadesporbultor = fields.Float(string='Unidades por Bulto', related='confeccion.uom_for_bulge')
-    udfacturacion = fields.Many2one('uom.uom', string='Ud Albaran/Factura', related='plantilla.uom_invoice')
-    envase = fields.Many2one('jovimer.envase', string='Envase')
-    marca = fields.Many2one('jovimer.marca', string='Marca')
+    udfacturacion = fields.Many2one('uom.uom', string='Ud Albaran/Factura', related='product_id.uom_invoice')
+    envase = fields.Many2one('jovimer.envase', string='Envase', related='product_id.container')
+    marca = fields.Many2one('jovimer.marca', string='Marca', related='product_id.brand')
     name = fields.Char(string='Nombre')
-    nocalcbultos = fields.Boolean(string='No Calcula Bultos')
+    nocalcbultos = fields.Boolean(string='No Calcula Bultos', related='product_id.not_calculate_lumps')
     partner = fields.Many2one('res.partner', string='Cliente')
     cantidadpedidoi = fields.Integer(string='Palets')
     cantidadpedido = fields.Float(string='Palets Venta', digits=None, default=0)
@@ -81,7 +79,7 @@ class ModelSaleOrderLine(models.Model):
     pvpvta = fields.Float(string='Venta')
     pvpres = fields.Float(string='Resultado')
     pvpres2 = fields.Float(string='Resultado', compute='_get_total')
-    tipouom = fields.Many2one('uom.uom', string='Tipo Medida', domain=[('invisible', '=', 'NO')])
+    tipouom = fields.Many2one('uom.uom', string='Tipo Medida', domain=[('invisible', '=', 'NO')], related='product_id.uom_type')
     #multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     #reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     #reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
@@ -91,7 +89,7 @@ class ModelSaleOrderLine(models.Model):
                                      limit=2)
     provisionaleso2m = fields.One2many('purchase.order.line', 'asignacionj', string="Provisionales")
     viajedirecto = fields.Boolean(string="Viaje Directo")
-    plantillaetiqueta = fields.Many2one('jovimer.etiquetas_plantilla', string='Plantilla Etiqueta')
+    plantillaetiqueta = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla Etiqueta', related='product_id.label_templates')
     etiqueta = fields.Many2one('jovimer.etiquetas', string='Etiqueta')
     etiquetatxt = fields.Text(string='Etiqueta Resultante Bulto')
     etiquetatxtu = fields.Text(string='Etiqueta Resultante Unidad')
@@ -105,56 +103,26 @@ class ModelSaleOrderLine(models.Model):
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
+    partner_code = fields.Char(string='Codigo Cliente', related='product_id.partner_code')
+    not_active = fields.Boolean('NO Activo', related='product_id.not_active')
 
     def recalculalinea(self):
-        productid = self.plantilla.product.id
-        variedad = self.plantilla.variedad
-        calibre = self.plantilla.calibre
-        categoria = self.plantilla.categoria
-        confeccion = self.plantilla.confeccion
-        envase = self.plantilla.envase
-        marca = self.plantilla.marca
-        bultos = self.plantilla.bultos
-        self.product_id = productid
-        self.variedad = variedad
-        self.calibre = calibre
-        self.categoria = categoria
-        self.confeccion = confeccion
-        self.envase = envase
-        self.marca = marca
-        self.bultos = bultos
-        self.unidadpedido = self.plantilla.tipouom
-        self.unidabulto = self.plantilla.confeccion.unidabulto
-        self.kgnetbulto = self.plantilla.confeccion.kgnetobulto
-        self.unidadesporbulto = self.plantilla.confeccion.unidadesporbulto
-        self.product_uom = self.plantilla.tipouom
-        self.plantillaetiqueta = self.plantilla.plantillaetiquetas
+        self.unidadpedido = self.product_id.uom_type
+        self.unidabulto = self.product_id.confection.uom_bulto
+        self.kgnetbulto = self.product_id.confection.kg_net_bulge
+        self.unidadesporbulto = self.product_id.confection.uom_for_bulge
+        self.product_uom = self.product_id.uom_type
+        self.plantillaetiqueta = self.product_id.label_templates
         return {}
 
-    @api.onchange('plantilla')
+    @api.onchange('product_id')
     def on_change_plantilla(self):
-        productid = self.plantilla.product.id
-        variedad = self.plantilla.variedad
-        calibre = self.plantilla.calibre
-        categoria = self.plantilla.categoria
-        confeccion = self.plantilla.confeccion
-        envase = self.plantilla.envase
-        marca = self.plantilla.marca
-        bultos = self.plantilla.bultos
-        self.product_id = productid
-        self.variedad = variedad
-        self.calibre = calibre
-        self.categoria = categoria
-        self.confeccion = confeccion
-        self.envase = envase
-        self.marca = marca
-        self.bultos = bultos
-        self.unidadpedido = self.plantilla.tipouom
-        self.unidabulto = self.plantilla.confeccion.unidabulto
-        self.kgnetbulto = self.plantilla.confeccion.kgnetobulto
-        self.unidadesporbulto = self.plantilla.confeccion.unidadesporbulto
-        self.product_uom = self.plantilla.tipouom
-        self.plantillaetiqueta = self.plantilla.plantillaetiquetas
+        self.unidadpedido = self.product_id.uom_type
+        self.unidabulto = self.product_id.confection.uom_bulto
+        self.kgnetbulto = self.product_id.confection.kg_net_bulge
+        self.unidadesporbulto = self.product_id.confection.uom_for_bulge
+        self.product_uom = self.product_id.uom_type
+        self.plantillaetiqueta = self.product_id.label_templates
         return {}
 
     def buscaprovisionales(self):
@@ -173,25 +141,25 @@ class ModelSaleOrderLine(models.Model):
     def on_change_pvpres(self):
         self.pvpres = self.price_subtotal - self.pvpcoste
 
-    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'kgnetbultor', 'unidadesporbultor')
+    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor')
     def on_change_cantidadpedido(self):
         self.totalbultos = self.cantidadpedido * float(self.bultos)
         if self.unidabulto.id == 24:
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
         if self.unidabulto.id == 27:
-            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbultor)
+            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
         if self.unidabulto.id == 1:
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
         return {}
 
-    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'kgnetbultor', 'unidadesporbultor')
+    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor')
     def on_change_unidabulto(self):
         self.totalbultos = self.cantidadpedido * float(self.bultos)
         unidabulto = self.unidabulto
         if self.unidabulto.id == 24:
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
         if self.unidabulto.id == 27:
-            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbultor)
+            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
         if self.unidabulto.id == 1:
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
         self.pvpres = self.price_subtotal - self.pvpcoste
@@ -200,8 +168,8 @@ class ModelSaleOrderLine(models.Model):
 
     @api.onchange('confeccion')
     def on_change_confeccion(self):
-        self.bultos = self.plantilla.bultos
-        self.kgnetbulto = self.plantilla.confeccion.kgnetobulto
+        self.bultos = self.product_id.bulge
+        self.kgnetbulto = self.product_id.confection.kg_net_bulge
         return {}
 
     @api.onchange('product_uom_qty')
