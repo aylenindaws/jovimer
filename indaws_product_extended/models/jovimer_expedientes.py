@@ -40,7 +40,7 @@ class JovimerExpedientes(models.Model):
     dossier_name = fields.Char('Expediente', compute='_compute_fields_combination')
     campanya = fields.Selection([('J22', 'J22'),('J20', 'J20'),('PR20', 'PR20'),('CO20', 'CO20'),('J21', 'J21'),('PR21', 'PR21'),('CO21', 'CO21')], string='Campaña', default='J22')
     import_true = fields.Boolean(string='Importado')
-    order_id = fields.One2many('sale.order', 'dossier_id', string='Pedidos venta')
+    order_id = fields.One2many('sale.order', 'expediente', string='Pedidos venta')
     purchase_id = fields.One2many('purchase.order', 'expediente', string='Pedidos compra')
     #invoice_id = fields.One2many('account.move', 'dossier_id', string='Facturas Venta')
     #invoice_line_id = fields.One2many('account.move.line', 'dossier_id', string='Facturas Compra', domain=[('typefact', '=', 'in_invoice')])
