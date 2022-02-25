@@ -23,7 +23,7 @@
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//form//field[@name='invoice_lines']" position="before">
+            <xpath expr="//page[@name='order_lines']//field//form//div[@name='invoice_lines']" position="before">
                 <group name="template">
                     <group name="template_left">
                         <field name="partner_id"/>
