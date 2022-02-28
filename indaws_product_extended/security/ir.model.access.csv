@@ -10,3 +10,4 @@ access_jovimer_expedientes_series,jovimer.expedientes.series,model_jovimer_exped
 access_jovimer_marca,jovimer.marca,model_jovimer_marca,,1,1,1,1
 access_jovimer_variedad,jovimer.variedad,model_jovimer_variedad,,1,1,1,1
 access_jovimer_conflote,jovimer.conflote,model_jovimer_conflote,,1,1,1,1
+access_jovimer_palet,jovimer.palet,model_jovimer_palet,,1,1,1,1
