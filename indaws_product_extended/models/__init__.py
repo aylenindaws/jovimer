@@ -11,7 +11,7 @@ from . import jovimer_etiquetas
 from . import jovimer_marca
 from . import jovimer_variedad
 from . import uom_uom
-from . import jovimer_uom
+from . import jovimer_palet
 from . import product_template
 from . import sale_order
 from . import sale_order_line

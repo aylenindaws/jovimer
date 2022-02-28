@@ -1,0 +1,61 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_palet_tree_view">
+            <field name="name">jovimer_palet_tree</field>
+            <field name="model">jovimer.palet</field>
+            <field name="arch" type="xml">
+                <tree string="Palets">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="uom_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_palet_form_view">
+            <field name="name">jovimer_palet_form</field>
+            <field name="model">jovimer.palet</field>
+            <field name="arch" type="xml">
+                <form string="Palets">
+                    <sheet>
+                        <group>
+                            <group name="palet_details">
+                                <field name="name"/>
+                                <field name="category_id"/>
+                                <field name="uom_type"/>
+                                <label for="factor" attrs="{'invisible':[('uom_type','!=','smaller')]}"/>
+                                <div attrs="{'invisible':[('uom_type','!=','smaller')]}">
+                                    <field name="factor" digits="[42,5]" attrs="{'readonly':[('uom_type','=','bigger')]}"/>
+                                    <span class="oe_grey oe_inline">ejemplo: 1*(reference unit)=ratio*(this unit)</span>
+                                </div>
+                                <label for="factor_inv" attrs="{'invisible':[('uom_type','!=','bigger')]}"/>
+                                <div attrs="{'invisible':[('uom_type','!=','bigger')]}">
+                                    <field name="factor_inv" digits="[42,5]" attrs="{'readonly':[('uom_type','!=','bigger')]}"/>
+                                    <span class="oe_grey oe_inline">ejemplo: 1*(this unit)=ratio*(reference unit)</span>
+                                </div>
+                             </group>
+                             <group name="active_rounding">
+                                 <field name="active" widget="boolean_toggle"/>
+                                 <field name="rounding" digits="[42, 5]"/>
+                             </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_palet_list_action">
+            <field name="name">jovimer_palet</field>
+            <field name="res_model">jovimer.palet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer palet
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

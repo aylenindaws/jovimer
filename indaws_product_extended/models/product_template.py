@@ -39,7 +39,7 @@ class ProductTemplate(models.Model):
     sale_line_id = fields.Many2one('sale.order.line', string='Lin Pedido', store=True, copy=True, ondelete='set null')
     week = fields.Char(string='Semana', store=True, copy=True)
     uom_type = fields.Many2one('uom.uom', string='Tipo Medida', store=True, copy=True, ondelete='set null', domain=[('invisible','=','NO')])
-    palet_type = fields.Many2one('jovimer.uom', string='Tipo Palet', store=True, copy=True, ondelete='set null', domain=[('invisible','=','NO')])
+    palet_type = fields.Many2one('jovimer.palet', string='Tipo Palet', store=True, copy=True, ondelete='set null', domain=[('invisible','=','NO')])
     uom_invoice = fields.Many2one('uom.uom', string='Ud Albaran/Factura', store=True, copy=True, ondelete='set null', domain=[('invisibleudvta','=','SI')])
     variety = fields.Many2one('jovimer.variedad', string='Variedad', store=True, copy=True, ondelete='set null')
 

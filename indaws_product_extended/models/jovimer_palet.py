@@ -12,4 +12,4 @@ _logger = logging.getLogger(__name__)
 
 class ModelUom(models.Model):
     _inherit = 'uom.uom'
-    _name = 'jovimer.uom'
+    _name = 'jovimer.palet'
