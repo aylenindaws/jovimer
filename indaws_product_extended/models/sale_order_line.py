@@ -71,7 +71,7 @@ class ModelSaleOrderLine(models.Model):
     cantidadpedidoi = fields.Integer(string='Palets')
     cantidadpedido = fields.Float(string='Palets Venta', digits=None, default=0)
     cantidadpedidoorig = fields.Float(string='Palets Venta')
-    unidadpedido = fields.Many2one('uom.uom', string='Tipo Palet', domain=[('invisiblecp', '=', 'SI')])
+    unidadpedido = fields.Many2one('uom.uom', string='Unidad Pedido', domain=[('invisiblecp', '=', 'SI')])
     product = fields.Many2one('product.product', string='Producto')
     pvpcoste = fields.Float(string='Coste')
     pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo', domain=[('invisible', '=', 'NO')])

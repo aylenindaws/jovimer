@@ -11,6 +11,7 @@ import datetime
 
 _logger = logging.getLogger(__name__)
 
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -26,6 +27,8 @@ class SaleOrder(models.Model):
             rec.coste = coste
             rec.resultado = venta - coste
 
+    purchase_related_ids = fields.One2many('purchase.order', 'sale_related_id', string="Related purchase orders",
+                                           readonly=False)
     # Campos Pesonalizados en pedidos de Venta
     fechasalida = fields.Date(string='Fecha de Salida')
     fechallegada = fields.Date(string='Fecha de Llegada')
@@ -54,10 +57,11 @@ class SaleOrder(models.Model):
     coste = fields.Float(string='Compra', compute='_compute_total_coste')
     resultado = fields.Float(string='Resultado')
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
-    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")#, default=12)
+    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
-    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
+    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
+                               domain="[('mimetype','=','text/plain')]")
 
     def update_edi_file(self, default=None):
         for item in self:
@@ -65,15 +69,15 @@ class SaleOrder(models.Model):
             aux_txt = base64.b64decode(item.edi_file.datas).decode('ascii', 'ignore').split('\n')
             item.order_line.unlink()
             for linea in aux_txt:
-                count+=1
-                if count==1:
+                count += 1
+                if count == 1:
                     if '96AORDERSP' in linea:
                         _logger.info('Fichero EDI Valido para su procesamiento')
                         id_edi_jovimer = linea[3:16]
                     else:
                         _logger.info('Fichero EDI NO Valido para su procesamiento')
                         break
-                elif count==2:
+                elif count == 2:
                     id_edi_cliente = linea[26:39]
                     fecha_pedido = linea[17:25]
                     fecha_llegada = linea[111:119]
@@ -90,16 +94,16 @@ class SaleOrder(models.Model):
                             id_und = 27
                         else:
                             id_und = 1
-                        if linea[65:71].replace(' ','') is '' or linea[65:71].replace(' ','') is False:
+                        if linea[65:71].replace(' ', '') is '' or linea[65:71].replace(' ', '') is False:
                             quantity = 0
                         else:
-                            quantity = float(linea[65:71].replace(' ',''))
+                            quantity = float(linea[65:71].replace(' ', ''))
                         item.order_line.create(
                             {
                                 "order_id": item.id,
                                 "product_id": product_id.id,
-                                "product_uom_qty":quantity,
-                                "name":product_description,
+                                "product_uom_qty": quantity,
+                                "name": product_description,
                                 "price_unit": product_id.lst_price if product_id.lst_price is not False else 0,
                                 'currency_id': 1,
                             }
@@ -111,7 +115,7 @@ class SaleOrder(models.Model):
         for record in self:
             if record.edi_file_binary:
                 record.edi_file = self.env['ir.attachment'].create({
-                    'name': ("EDI IMPORT "+ str(record.id)),
+                    'name': ("EDI IMPORT " + str(record.id)),
                     'type': 'binary',
                     'datas': record.edi_file_binary,
                     'res_model': record._name,
@@ -366,10 +370,11 @@ class SaleOrder(models.Model):
             'context': context
         }
         return view
-    
+
     @api.model
     def create(self, vals_list):
         vals = super(SaleOrder, self).create(vals_list)
         if not vals.analytic_account_id:
-            vals.analytic_account_id = self.env['account.analytic.account'].create({'name': 'j'+str(datetime.date.today().year)[2:]+'/'+vals.name[1:]})
+            vals.analytic_account_id = self.env['account.analytic.account'].create(
+                {'name': 'j' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
         return vals

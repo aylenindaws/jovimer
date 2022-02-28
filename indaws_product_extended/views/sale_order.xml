@@ -20,30 +20,63 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//label[@for='product_uom_qty']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//label[@for='qty_delivered']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//label[@for='qty_invoiced']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//div[@name='ordered_qty']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//div[@name='delivered_qty']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//div[@name='invoiced_qty']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="replace">
+                <field name="purchase_related_ids">
+                    <tree create='false'>
+                        <field name="company_id" invisible="1"/>
+                        <field name="partner_ref" optional="hide"/>
+                        <field name="name"/>
+                        <field name="date_approve" optional="hide"/>
+                        <field name="partner_id"/>
+                        <field name="date_planned" optional="hide"/>
+                        <field name="user_id" optional="hide"/>
+                        <field name="origin" optional="hide"/>
+                        <field name="amount_untaxed" optional="hide"/>
+                        <field name="amount_total" optional="hide"/>
+                        <field name="state" optional="hide"/>
+                        <field name="invoice_status" optional="hide"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="attributes">
                 <attribute name="editable"/>
             </xpath>
             <xpath expr="//page[@name='order_lines']//field//form//div[@name='invoice_lines']" position="before">
                 <group name="template">
                     <group name="template_left">
-                        <field name="partner_id"/>
-                        <field name="partner_code"/>
-                        <field name="nocalcbultos"/>
-                        <field name="not_active"/>
-                        <field name="bultos"/>
-                        <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}"/>
-                        <field name="udfacturacion"/>
-                        <field name="cantidadpedidoi"/>
-                    </group>
-                    <group name="template_right">
                         <field name="variedad"/>
-                        <field name="confeccion"/>
-                        <field name="kgnetbulto"/>
-                        <field name="marca"/>
                         <field name="calibre"/>
                         <field name="categoria"/>
+                        <field name="confeccion"/>
                         <field name="envase"/>
-                        <field name="plantillaetiqueta"/>
+                        <field name="marca"/>
+                    </group>
+                    <group name="template_right">
+                        <field name="cantidadpedido" string="Palets:"/>
+                        <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}"/>
+                        <field name="bultos"/>
+                        <field name="unidadesporbultor"/>
+                        <field name="kgnetbulto"/>
+                        <field name="kgnetbulto"/>
+                        <label for="product_uom_qty"/>
+                        <div class="o_row" name="ordered_qty">
+                            <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty"/>
+                            <field name="product_uom" force_save="1" groups="uom.group_uom" class="oe_no_button" attrs="{'readonly': [('product_uom_readonly', '=', True)],'required': [('display_type', '=', False)]}"/>
+                        </div>
                     </group>
                 </group>    
             </xpath>

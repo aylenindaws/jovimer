@@ -6,6 +6,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
@@ -35,3 +36,18 @@ class PurchaseOrder(models.Model):
     totalgr = fields.Float(string='GR Palet')
     estadocrear = fields.Boolean(string='Finalizada Creacion')
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
+    account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+
+    @api.model
+    def create(self, vals):
+        result = super(PurchaseOrder, self).create(vals)
+        if result.sale_related_id:
+            if not result.fechasalida:
+                result.fechasalida = result.sale_related_id.fechasalida
+            if not result.fechallegada:
+                result.fechallegada = result.sale_related_id.fechallegada
+            if not result.horallegada:
+                result.horallegada = result.sale_related_id.horallegada
+            if not result.account_analytic_id:
+                result.account_analytic_id = result.sale_related_id.analytic_account_id
+        return result

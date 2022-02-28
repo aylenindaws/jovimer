@@ -11,7 +11,8 @@
                     <span class="o_form_label" attrs="{'invisible': [('state','in',('draft','sent'))]}">Pedido de compra </span>
                     <group name="title">
                         <group name="oe_title">
-                            <field name="expediente" readonly="1"/>
+                            <field name="expediente" invisible="1"/>
+                            <field name="account_analytic_id" readonly="1" force_save="1"/>
                             <field name="name" string="Numero" readonly="1"/>
                         </group>
                     </group>
@@ -32,7 +33,6 @@
             </xpath>
             <xpath expr="//field[@name='incoterm_id']" position="before">
                 <field name="consignatario"/>
-                <field name="expediente"/>
             </xpath>
         </field>
     </record>
