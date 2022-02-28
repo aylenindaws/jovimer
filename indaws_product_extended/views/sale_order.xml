@@ -93,9 +93,9 @@
 				    <div style="padding-left:0mm;" class="col-6">
                         <field name="reslote"/>
                     </div>
-                    <div class="col-6" style="padding-left:0mm;">
+                    <!--<div class="col-6" style="padding-left:0mm;">
                         <button name="onchange_conformalote" string="Calc" type="object"/>
-                    </div>
+                    </div>-->
                 </div>
                 <field name="pedidocerrado"/>
             </xpath>

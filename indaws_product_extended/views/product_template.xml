@@ -15,7 +15,7 @@
                             <field name="not_calculate_lumps"/>
                             <field name="not_active"/>
                             <field name="bulge"/>
-                            <field name="uom_type"/>
+                            <field name="palet_type" options="{'no_quick_create': True, 'no_create': True}"/>
                             <field name="uom_invoice"/>
                         </group>
                         <group name="template_right">
