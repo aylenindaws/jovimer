@@ -31,8 +31,9 @@
                         <field name="nocalcbultos"/>
                         <field name="not_active"/>
                         <field name="bultos"/>
-                        <field name="tipouom"/>
+                        <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}"/>
                         <field name="udfacturacion"/>
+                        <field name="cantidadpedidoi"/>
                     </group>
                     <group name="template_right">
                         <field name="variedad"/>
