@@ -103,7 +103,7 @@ class ModelSaleOrderLine(models.Model):
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
-    partner_code = fields.Char(string='Codigo Cliente', related='product_id.partner_code')
+    partner_code = fields.Char(string='Codigo Cliente', related='etiqueta.partner_code')
     not_active = fields.Boolean('NO Activo', related='product_id.not_active')
 
     def recalculalinea(self):

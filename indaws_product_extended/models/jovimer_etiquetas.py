@@ -27,3 +27,4 @@ class JovimerEtiquetas(models.Model):
     dossier_num = fields.Integer('Numero de Serie', related='dossier_id.name')
     label_template_id = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla')
     partner_id = fields.Many2one('res.partner', string='Proveedor')
+    partner_code = fields.Char(string='Codigo Cliente')
