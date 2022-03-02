@@ -390,3 +390,4 @@ class SaleOrder(models.Model):
             vals.analytic_account_id = self.env['account.analytic.account'].create(
                 {'name': 'J' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
         return vals
+

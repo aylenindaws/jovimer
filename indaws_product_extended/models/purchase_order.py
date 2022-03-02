@@ -50,4 +50,6 @@ class PurchaseOrder(models.Model):
                 result.horallegada = result.sale_related_id.horallegada
             if not result.account_analytic_id:
                 result.account_analytic_id = result.sale_related_id.analytic_account_id
+            if result.sale_related_id.order_line:
+                result.partner_id = result.sale_related_id.order_line[0].supplier_id
         return result

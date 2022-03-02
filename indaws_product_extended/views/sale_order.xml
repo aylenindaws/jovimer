@@ -33,6 +33,7 @@
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
                 <field name="supplier_id" optional="hide" string="Proveedor"/>
+                <field name="price" optional="hide"/>
             </xpath>
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
