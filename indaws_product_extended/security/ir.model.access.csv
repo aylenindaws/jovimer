@@ -11,4 +11,4 @@ access_jovimer_marca,jovimer.marca,model_jovimer_marca,,1,1,1,1
 access_jovimer_variedad,jovimer.variedad,model_jovimer_variedad,,1,1,1,1
 access_jovimer_conflote,jovimer.conflote,model_jovimer_conflote,,1,1,1,1
 access_jovimer_palet,jovimer.palet,model_jovimer_palet,,1,1,1,1
-access_jovimer_plataforma,jovimer.plataforma,model_plataforma_palet,,1,1,1,1
+access_jovimer_plataforma,jovimer.plataforma,model_jovimer_plataforma,,1,1,1,1
