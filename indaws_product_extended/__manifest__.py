@@ -20,6 +20,7 @@
         'views/jovimer_variedad.xml',
         'views/jovimer_conflote.xml',
         'views/jovimer_palet.xml',
+        'views/jovimer_plataforma.xml',
         'views/sale_order.xml',
         'views/purchase_order.xml',
         'views/product_template.xml',

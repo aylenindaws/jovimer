@@ -13,6 +13,7 @@
             <menuitem id="jovimer_marca_config_submenu" name="Marcas" action="jovimer_marca_list_action"/>
             <menuitem id="jovimer_variedad_config_submenu" name="Variedades" action="jovimer_variedad_list_action"/>
             <menuitem id="jovimer_palet_config_submenu" name="Palets" action="jovimer_palet_list_action"/>
+            <menuitem id="jovimer_plataforma_config_submenu" name="Plataformas" action="jovimer_plataforma_list_action"/>
         </menuitem>
     </data>
 </odoo>

@@ -10,6 +10,7 @@
                     <group name="template">
                         <group name="template_left">
                             <field name="name"/>
+                            <field name="partner_code"/>
                             <field name="bulge"/>
                             <field name="palet_type" options="{'no_quick_create': True, 'no_create': True}"/>
                             <field name="uom_invoice"/>
