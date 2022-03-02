@@ -52,6 +52,14 @@
                     </tree>
                 </field>
             </xpath>
+            <xpath expr="//field[@name='order_line']//field[@name='customer_lead']" position="after">
+                <field name="price_unit"/>
+                <field name="supplier_id"/>
+                <field name="uom_po_id"/>
+                <field name="price"/>
+                <field name="costetrans"/>
+                <field name="discount"/>
+            </xpath>
             <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="attributes">
                 <attribute name="editable"/>
             </xpath>
@@ -138,4 +146,3 @@
         </field>
     </record>
 </odoo>
-  
