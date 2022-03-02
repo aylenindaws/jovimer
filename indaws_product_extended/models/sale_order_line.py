@@ -79,7 +79,7 @@ class ModelSaleOrderLine(models.Model):
     pvpvta = fields.Float(string='Venta')
     pvpres = fields.Float(string='Resultado')
     pvpres2 = fields.Float(string='Resultado', compute='_get_total')
-    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida', domain=[('invisible', '=', 'NO')])
+    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
     #multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     #reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     #reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
