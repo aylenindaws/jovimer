@@ -31,7 +31,7 @@
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
                 <field name="supplier_id" optional="hide" string="Proveedor"/>
-                <field name="purchase_price" optional="hide"/>
+                <field name="purchase_price" optional="hide" string="Precio de compra"/>
             </xpath>
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
@@ -58,7 +58,7 @@
                 <field name="price_unit"/>
                 <field name="supplier_id" string="Proveedor"/>
                 <field name="uom_po_id"/>
-                <field name="purchase_price"/>
+                <field name="purchase_price" string="Precio de compra"/>
                 <field name="costetrans"/>
                 <field name="discount"/>
             </xpath>
