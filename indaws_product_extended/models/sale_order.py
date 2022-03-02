@@ -46,7 +46,7 @@ class SaleOrder(models.Model):
     palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')
     refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
-    plataforma = fields.Many2many('jovimer.plataforma',string='Plataforma', domain=lambda self: [('partner_id', '=',  self.partner_id)])
+    plataforma = fields.Many2many('jovimer.plataforma',string='Plataforma', domain=lambda self: [('partner_id', '=',  self.partner_id.id)])
     etiquetas = fields.One2many('jovimer.etiquetas', 'order_id', string='Etiquetas del Pedido')
     estadopalets = fields.Boolean(string='Estado Palets')
     faltanpalets = fields.Float(string='Faltan')
