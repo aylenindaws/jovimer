@@ -31,6 +31,9 @@
                 <attribute name='invisible'>1</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
+                <field name="supplier_id" optional="hide" string="Proveedor"/>
+            </xpath>
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
             </xpath>
@@ -52,9 +55,9 @@
                     </tree>
                 </field>
             </xpath>
-            <xpath expr="//field[@name='order_line']//field[@name='customer_lead']" position="after">
+            <xpath expr="//field[@name='order_line']//field[@name='analytic_tag_ids']" position="after">
                 <field name="price_unit"/>
-                <field name="supplier_id"/>
+                <field name="supplier_id" string="Proveedor"/>
                 <field name="uom_po_id"/>
                 <field name="price"/>
                 <field name="costetrans"/>
