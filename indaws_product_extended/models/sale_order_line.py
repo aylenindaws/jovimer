@@ -105,6 +105,7 @@ class ModelSaleOrderLine(models.Model):
     ], string='Estado', default='OK')
     partner_code = fields.Char(string='Codigo Cliente', related='etiqueta.partner_code')
     not_active = fields.Boolean('NO Activo', related='product_id.not_active')
+    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True, help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
 
     def recalculalinea(self):
         variedad = self.product_id.variety
