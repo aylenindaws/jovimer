@@ -69,8 +69,7 @@
                         <field name="cantidadpedido" string="Palets:"/>
                         <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}"/>
                         <field name="bultos"/>
-                        <field name="unidadesporbultor"/>
-                        <field name="kgnetbulto"/>
+                        <field name="unidadesporbultor" readonly="False"/>
                         <field name="kgnetbulto"/>
                         <label for="product_uom_qty"/>
                         <div class="o_row" name="ordered_qty">

@@ -206,6 +206,10 @@ class SaleOrder(models.Model):
 
         if confname == "SEMANA/AÑO LLEGADA":
             try:
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
                 year = fechallegada.split('-')[0]
                 month = fechallegada.split('-')[1]
                 day = fechallegada.split('-')[2]
@@ -228,6 +232,10 @@ class SaleOrder(models.Model):
                 day = hace3dias.split('-')[2]
                 dt = date(int(year), int(month), int(day))
                 wk = dt.isocalendar()[1]
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
                 resultado = str(weekday.zfill(2))
                 if resultado == '00':
                     resultado = '07'
@@ -248,6 +256,10 @@ class SaleOrder(models.Model):
                 day = hace3dias.split('-')[2]
                 dt = date(int(year), int(month), int(day))
                 wk = dt.isocalendar()[1]
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
                 self.reslote = str(wk) + '/' + str(weekday.zfill(2))
             except:
                 self.reslote = 'Faltan datos'
@@ -376,5 +388,5 @@ class SaleOrder(models.Model):
         vals = super(SaleOrder, self).create(vals_list)
         if not vals.analytic_account_id:
             vals.analytic_account_id = self.env['account.analytic.account'].create(
-                {'name': 'j' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
+                {'name': 'J' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
         return vals

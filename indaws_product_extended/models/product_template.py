@@ -17,7 +17,6 @@ class ProductTemplate(models.Model):
     bulge = fields.Float(string='Bultos', store=True, copy=True)
     caliber = fields.Many2one('jovimer.calibre', string="Calibre", store=True, copy=True, ondelete='set null')
     category = fields.Many2one('jovimer.categoria', string="Categoria", store=True, copy=True, ondelete='set null')
-    partner_code = fields.Char(string='Codigo Cliente')
     confection = fields.Many2one('jovimer.confeccion', string='Confección', store=True, copy=True, ondelete='set null')
     display_name = fields.Char(string='Display Name', readonly=True)
     container = fields.Many2one('jovimer.envase', string='Envase', store=True, copy=True, ondelete='set null')
@@ -29,7 +28,6 @@ class ProductTemplate(models.Model):
     name = fields.Char(string='Nombre', store=True, copy=True, required=False)
     not_active = fields.Boolean('NO Activo', store=True, copy=True, tracking=True)
     not_calculate_lumps = fields.Boolean('No Calcula Bultos', store=True, copy=True, tracking=True)
-    partner_id = fields.Many2one('res.partner', string='Cliente', store=True, copy=True, ondelete='set null')
     label_templates = fields.Many2one('jovimer.etiquetas.plantilla', string='P. Etiquetas', store=True, copy=True,
                                       ondelete='set null')
     week_price = fields.Integer(string='Semana', store=True, copy=True, ondelete='set null',

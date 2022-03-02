@@ -7,8 +7,6 @@
             <field name="arch" type="xml">
                 <tree string="Palets">
                     <field name="name"/>
-                    <field name="category_id"/>
-                    <field name="uom_type"/>
                 </tree>
             </field>
         </record>
@@ -22,23 +20,7 @@
                         <group>
                             <group name="palet_details">
                                 <field name="name"/>
-                                <field name="category_id"/>
-                                <field name="uom_type"/>
-                                <label for="factor" attrs="{'invisible':[('uom_type','!=','smaller')]}"/>
-                                <div attrs="{'invisible':[('uom_type','!=','smaller')]}">
-                                    <field name="factor" digits="[42,5]" attrs="{'readonly':[('uom_type','=','bigger')]}"/>
-                                    <span class="oe_grey oe_inline">ejemplo: 1*(reference unit)=ratio*(this unit)</span>
-                                </div>
-                                <label for="factor_inv" attrs="{'invisible':[('uom_type','!=','bigger')]}"/>
-                                <div attrs="{'invisible':[('uom_type','!=','bigger')]}">
-                                    <field name="factor_inv" digits="[42,5]" attrs="{'readonly':[('uom_type','!=','bigger')]}"/>
-                                    <span class="oe_grey oe_inline">ejemplo: 1*(this unit)=ratio*(reference unit)</span>
-                                </div>
-                             </group>
-                             <group name="active_rounding">
-                                 <field name="active" widget="boolean_toggle"/>
-                                 <field name="rounding" digits="[42, 5]"/>
-                             </group>
+                            </group>
                         </group>
                     </sheet>
                 </form>
