@@ -59,6 +59,7 @@ class SaleOrder(models.Model):
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
     serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
+    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', default=_get_default_uom_id, required=True, help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
                                domain="[('mimetype','=','text/plain')]")
