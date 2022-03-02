@@ -109,7 +109,7 @@
                 </group>
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="plataforma"/>
+                <field name="plataforma" widget="many2many_tags"/>
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="id" readonly="1"/>
