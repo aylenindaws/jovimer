@@ -28,8 +28,8 @@ class createpurchaseorder(models.TransientModel):
                 'order_id': record.order_id.id,
                 'name': record.name,
                 'product_qty': record.product_uom_qty,
-                'price_unit': record.price,
-                'product_subtotal': record.price * record.product_uom_qty,
+                'price_unit': record.price_unit,
+                'product_subtotal': record.price_subtotal,
                 'purchase_price': record.purchase_price,
                 'partner_id': record.supplier_id.id if record.supplier_id else False
             }))

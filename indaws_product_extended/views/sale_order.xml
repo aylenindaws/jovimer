@@ -10,9 +10,7 @@
             </xpath>
             <xpath expr="//field[@name='purchase_price']" position="replace"/>
             <xpath expr="//field[@name='purchase_price']" position="replace"/>
-            <xpath expr="//field[@name='purchase_price']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
         </field>
     </record>
     <record id="indaws_sale_purchase_extended_view_order_form_inherit" model="ir.ui.view">
@@ -60,7 +58,7 @@
                 <field name="price_unit"/>
                 <field name="supplier_id" string="Proveedor"/>
                 <field name="uom_po_id"/>
-                <field name="price"/>
+                <field name="purchase_price"/>
                 <field name="costetrans"/>
                 <field name="discount"/>
             </xpath>
