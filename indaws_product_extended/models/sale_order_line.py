@@ -175,29 +175,18 @@ class ModelSaleOrderLine(models.Model):
     def on_change_pvpres(self):
         self.pvpres = self.price_subtotal - self.pvpcoste
 
-    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor')
+    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor','product_uom')
     def on_change_cantidadpedido(self):
         self.totalbultos = self.cantidadpedido * float(self.bultos)
-        if self.unidabulto.id == 24:
+        if self.product_uom.name == 'Bultos':
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
-        if self.unidabulto.id == 27:
+        if self.product_uom.name == 'Kg':
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
-        if self.unidabulto.id == 1:
+        if self.product_uom.name == 'Unidades':
             self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
-        return {}
-
-    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor')
-    def on_change_unidabulto(self):
-        self.totalbultos = self.cantidadpedido * float(self.bultos)
-        unidabulto = self.unidabulto
-        if self.unidabulto.id == 24:
-            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
-        if self.unidabulto.id == 27:
-            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
-        if self.unidabulto.id == 1:
-            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
+        if self.product_uom.name == 'Palets':
+            self.product_uom_qty = float(self.cantidadpedido)
         self.pvpres = self.price_subtotal - self.pvpcoste
-        self.unidabulto = unidabulto
         return {}
 
     @api.onchange('confeccion')
@@ -223,14 +212,15 @@ class ModelSaleOrderLine(models.Model):
         orderid = self.order_id.id
         totalbultos = self.totalbultos or 0
         if totalbultos == 0:
-            totalbultos = float(self.cantidadpedido) * float(self.bultos)
-            self.totalbultos = totalbultos
-        if self.unidabulto.id == 24:
-            self.product_uom_qty = totalbultos
-        if self.unidabulto.id == 27:
-            self.product_uom_qty = float(totalbultos) * float(self.kgnetbulto)
-        if self.unidabulto.id == 1:
-            self.product_uom_qty = float(totalbultos) * float(self.unidadesporbulto)
+            self.totalbultos = self.cantidadpedido * float(self.bultos)
+        if self.product_uom.name == 'Bultos':
+            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
+        if self.product_uom.name == 'Kg':
+            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
+        if self.product_uom.name == 'Unidades':
+            self.product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
+        if self.product_uom.name == 'Palets':
+            self.product_uom_qty = float(self.cantidadpedido)
         self.pvpres = self.price_subtotal - self.pvpcoste
         self.env.cr.execute(""" select sum(price_subtotal) from sale_order_line where order_id='%s'""" % (orderid))
         resultv = self.env.cr.fetchone()
