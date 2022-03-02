@@ -231,9 +231,3 @@ class ModelSaleOrderLine(models.Model):
         if not seller:
             return
         self.discount = seller.discount
-
-    @api.model
-    def create(self, vals):
-        result = super(ModelSaleOrderLine, self).create(vals)
-        result.price_unit = record.saleorderline.price
-        return result
