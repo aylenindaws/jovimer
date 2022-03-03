@@ -85,7 +85,7 @@ class SaleOrder(models.Model):
                     if 'L' == linea[0:1]:
                         if not self.partner_id:
                             raise ValidationError('Ingrese un valor valido para cliente, para poder continuar con la importación')
-                        template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id)], limit=1)
+                        template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id.id)], limit=1)
                         if not template:
                             raise ValidationError(("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
                         product_id = template.product_id
