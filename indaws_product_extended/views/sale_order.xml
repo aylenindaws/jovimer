@@ -30,8 +30,15 @@
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
+                <field name="product_uom" optional="hide" string="Ud Venta"/>
+                <field name="price_unit" optional="hide" string="Precio de venta"/>
                 <field name="supplier_id" optional="hide" string="Proveedor"/>
+                <field name="uom_po_id" optional="hide" string="Ud Compra"/>
                 <field name="purchase_price" optional="hide" string="Precio de compra"/>
+                <field name="costetrans" optional="hide" string="Transporte "/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="attributes">
+                <attribute name="string">Descuento proveedor (%)</attribute>
             </xpath>
             <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
