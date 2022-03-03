@@ -43,12 +43,11 @@ class ProductTemplate(models.Model):
     week = fields.Char(string='Semana', store=True, copy=True)
     uom_type = fields.Many2one('uom.uom', string='Tipo Medida', store=True, copy=True, ondelete='set null',
                                domain=[('invisible', '=', 'NO')])
-    palet_type = fields.Many2one('jovimer.palet', string='Tipo Palet', store=True, copy=True, ondelete='set null',
-                                 domain=[('invisible', '=', 'NO')])
+    palet_type = fields.Many2one('jovimer.palet', string='Tipo Palet', store=True, copy=True, ondelete='set null')
     uom_invoice = fields.Many2one('uom.uom', string='Ud Albaran/Factura', store=True, copy=True, ondelete='set null',
                                   domain=[('invisibleudvta', '=', 'SI')])
     variety = fields.Many2one('jovimer.variedad', string='Variedad', store=True, copy=True, ondelete='set null')
-    partner_code = fields.Char(string='Codigo Cliente')
+    partner_code = fields.One2many('jovimer.partner.code', 'product_id', string='Codigo Cliente')
 
     @api.onchange('confection.bulge_euro_palet')
     def _compute_bulge_euro_palet(self):

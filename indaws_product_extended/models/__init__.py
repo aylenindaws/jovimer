@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import jovimer_calibre
+from . import jovimer_partner_code
 from . import jovimer_categoria
 from . import jovimer_confeccion
 from . import jovimer_envase

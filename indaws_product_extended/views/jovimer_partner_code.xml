@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_partner_code_tree_view">
+            <field name="name">jovimer_partner_code_tree</field>
+            <field name="model">jovimer.partner.code</field>
+            <field name="arch" type="xml">
+                <tree string="partner_codes">
+                    <field name="name"/>                   
+                    <field name="partner_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_partner_code_form_view">
+            <field name="name">jovimer_partner_code_form</field>
+            <field name="model">jovimer.partner.code</field>
+            <field name="arch" type="xml">
+                <form string="partner_codes">
+                    <sheet>
+                        <group>
+                            <group name="partner_code">
+                                <field name="name"/>                   
+                                <field name="partner_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_partner_code_list_action">
+            <field name="name">jovimer_partner_code</field>
+            <field name="res_model">jovimer.partner.code</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer partner_code
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

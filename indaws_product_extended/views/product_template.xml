@@ -5,12 +5,23 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+                <page string="Codigo Cliente" name="jovimer_partner_code">
+                    <group name="template_client">
+                        <field name="partner_code">
+                            <tree name="Messages" editable="bottom">
+                                <field name="partner_id"/>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
             <xpath expr="//page[@name='inventory']" position="after">
                 <page string="Plantillas de Jovimer" name="jovimer_template">
                     <group name="template">
                         <group name="template_left">
                             <field name="name"/>
-                            <field name="partner_code"/>
                             <field name="bulge"/>
                             <field name="palet_type" options="{'no_quick_create': True, 'no_create': True}"/>
                             <field name="uom_invoice"/>
