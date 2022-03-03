@@ -9,7 +9,7 @@
                 <page string="Codigo Cliente" name="jovimer_partner_code">
                     <group name="template_client">
                         <field name="partner_code">
-                            <tree name="Messages" editable="bottom">
+                            <tree name="partner_code" editable="bottom">
                                 <field name="partner_id"/>
                                 <field name="name"/>
                             </tree>
