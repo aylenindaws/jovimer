@@ -5,7 +5,7 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='Purchase']" position="after">
+            <xpath expr="//page[@name='purchase']" position="after">
                 <page string="Codigo Cliente" name="jovimer_partner_code">
                     <group name="template_client">
                         <field name="partner_code" nolabel="1">
