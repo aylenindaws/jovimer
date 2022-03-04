@@ -57,8 +57,8 @@ class StockPickingBatch(models.Model):
     #resumenlin = fields.One2many('jovimer_viajeresumenlin', 'viaje', string='Resumen Lineas')
     #grupajes = fields.One2many('jovimer_grupajes', 'name', string='Grupajes')
     proveedores = fields.Text(string='Proveedores')
-    linealbcompra = fields.Many2many('account.move.line', string='Lineas de Albarán')#,domain="[('diariofactura','=', 9)]")
-    almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
+    #linealbcompra = fields.Many2many('account.move.line', string='Lineas de Albarán')#,domain="[('diariofactura','=', 9)]")
+    #almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
     state = fields.Selection([
