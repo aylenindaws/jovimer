@@ -67,3 +67,11 @@ class StockPickingBatch(models.Model):
         ('cancel', 'ENCANCELADOCURSO'),
         ('done', 'CERRADO')
     ], string='Estado', default='draft')
+
+    def cambiadestinos(self):
+        destinoor = self.destinoor
+        lineas = ""
+        for lineasalbaranes in self.linealbcompra:
+            lineas += str(lineasalbaranes.id) + ","
+            lineasalbaranes.plataformadestino = destinoor
+        return {}

@@ -5,11 +5,46 @@
         <field name="model">stock.picking.batch</field>
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position='after'>
+                <label for="transportista"/>
+                <div>
+                    <field name="transportista" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/>
+                </div>
+                <field name="contactochofer"/>
+                <label for="matricula"/>
+                <div>
+                    <field name="matricula" class="oe_inline"/>
+                </div>
+                <label for="temperatura"/>
+                <div>
+                    <field name="temperatura" class="oe_inline"/>
+                    <field name="tempfijoauto" class="oe_inline"/>
+                    <field name="tempdoblesimple" class="oe_inline"/>
+                </div>
+                <label for="paleteur" string="Palets EURO/GRANDE"/>
+                <div>
+                    <field name="paleteur" class="oe_inline"/> /
+                    <field name="paletgr" class="oe_inline"/>
+                </div>
+                <label for="apilables" string="Apilable / Combinación"/>
+                <div>
+                    <field name="apilables" class="oe_inline"/> /
+                    <field name="combina" class="oe_inline"/>
+                </div>
+                <label for="Destino" string="Destino"/>
+                <div>
+                    <field class="oe_inline" name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+                    <button name="cambiadestinos" string="Cambiar Lineas" type="object" class="oe_inline"/>
+                </div>
+            </xpath>
             <xpath expr="//field[@name='user_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
             </xpath>
             <xpath expr="//field[@name='picking_type_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='scheduled_date']" position='after'>
+
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
