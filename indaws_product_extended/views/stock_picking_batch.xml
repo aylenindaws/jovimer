@@ -31,7 +31,7 @@
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='after'>
                 <field name="id"/>
-                <field name="name"/>
+                <field name="name" string="Número de Orden"/>
                 <field name="tipoviaje" widget="selection" required="1"/>
                 <field name="referenciatxt"/>
                 <field name="destinointerior" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
