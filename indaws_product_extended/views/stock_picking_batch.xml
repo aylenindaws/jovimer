@@ -25,11 +25,8 @@
                     <field name="apilables" class="oe_inline"/> /
                     <field name="combina" class="oe_inline"/>
                 </div>
-                <label for="destinoor" string="Destino"/>
-                <div>
-                    <field name="tipoviaje" invisible="1"/>
-                    <field class="oe_inline" name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
-                </div>
+                <field name="tipoviaje" invisible="1"/>
+                <field name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
@@ -49,10 +46,7 @@
                 <div>
                     <field name="fechaformalizado"/>
                 </div>
-                <label for="importe"/>
-                <div>
-                    <field name="importe" class="oe_inline"/>
-                </div>
+                <field name="importe"/>
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
