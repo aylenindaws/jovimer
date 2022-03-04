@@ -6,10 +6,9 @@
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position='after'>
-                <field name="transportista" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="transportista" options="{'no_create': True, 'no_create_edit':True}"/>
                 <field name="contactochofer"/>
-                <label for="matricula"/>
-                <field name="matricula" class="oe_inline"/>
+                <field name="matricula"/>
                 <label for="temperatura"/>
                 <div>
                     <field name="temperatura" class="oe_inline"/>
@@ -39,7 +38,21 @@
                 <attribute name='invisible'>1</attribute>
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='after'>
-
+                <field name="id"/>
+                <field name="name"/>
+                <field name="tipoviaje" widget="selection" required="1"/>
+                <field name="referenciatxt"/>
+                <field name="destinointerior" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
+                <field name="fechallegadanacional" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
+                <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
+                <label for="fechaformalizado"/>
+                <div>
+                    <field name="fechaformalizado"/>
+                </div>
+                <label for="importe"/>
+                <div>
+                    <field name="importe" class="oe_inline"/>
+                </div>
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
