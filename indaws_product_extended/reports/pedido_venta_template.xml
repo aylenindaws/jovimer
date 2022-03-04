@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="indaws_pedido_report_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <style type="text/css">
+                .border_px {
+                    border: 1px solid black;
+                }
+                th {
+                    border: 1px solid black;
+                    padding: 4px;
+                }
+                .no_border{
+                    padding: 4px;
+                }
+                <!-- th {
+                    border: 1px solid black;
+                }
+                td.no_border{
+                    border: 0px solid black !important;
+                } -->
+                </style>
+                <div class="row">
+                    <div class="col-4 mt-4">
+                        <img class="ml-4" t-att-src="image_data_uri(o.company_id.logo)" style="width: 70% !important;" />
+                        <span class="mt-2" t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["name", "address"], "no_marker": true}' />
+                        <span>Tlf: 962890305</span><br />
+                        <span>Fax: 962890670</span><br />
+                        <span>CIF: B96674056</span><br />
+                    </div>
+                    <div class="col-8">
+                        <table style="width:100%;">
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Sale Order Ref</td>
+                                <td class="border_px" ><span t-esc="o.analytic_account_id.name" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Customer Ref</td>
+                                <td class="border_px" ><span t-esc="o.client_order_ref" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Date</td>
+                                <td class="border_px" ><span t-esc="o.date_order" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Customer</td>
+                                <td class="border_px" ><span t-esc="o.partner_id.name" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Fiscal Code</td>
+                                <td class="border_px" ><span t-esc="o.partner_id.vat" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">Customer No :</td>
+                                <td class="border_px" ><span t-esc="o.partner_id.id" /></td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td class="border_px"  style="width:30%;">DCC</td>
+                                <td class="border_px" >
+                                    <span t-esc="o.partner_id.street" /> - <span t-esc="o.partner_id.city" /> (<span t-esc="o.partner_id.zip" />)<br />
+                                    <span t-esc="o.partner_id.state_id.name" /> - <span t-esc="o.partner_id.country_id.name" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <table style="width:100%;font-size:12px;">
+                            <tr>
+                                <th>Palets</th>
+                                <th>Box x P</th>
+                                <th>Product</th>
+                                <th>Conf</th>
+                                <th>Caliber</th>
+                                <th>Brand</th>
+                                <th>Cat</th>
+                                <th>Price Ud</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+
+                            <t t-foreach="o.order_line" t-as="order">
+                                <tr class="mt-2">
+                                    <td class="no_border">
+                                        <span t-esc="order.cantidadpedido"/> <span t-esc="order.tipouom.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.bultos"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.variedad.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.confeccion.abrev"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.calibre.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.marca.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.categoria.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.price_unit"/> €
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_uom_qty"/> <span t-esc="order.unidabulto.nameeng"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.price_subtotal"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-12 text-right mt-4 oe_subtotal_footer_separator">
+                    <div style="margin-bottom: -2em;">
+                        Amount Untaxed
+                    </div><br/>
+                    <hr style="border:1px solid black;margin-top: 0.4rem !important;margin-bottom: 0.3rem !important;"/>
+                    <span
+                        t-att-class="oe_subtotal_footer_separator"
+                        t-field="o.amount_untaxed"
+                    />
+                </div>
+
+
+
+
+            </div>
+        </t>
+    </template>
+    <template id="pedido_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="indaws_product_extended.indaws_pedido_report_document" />
+            </t>
+        </t>
+    </template>
+</odoo>
