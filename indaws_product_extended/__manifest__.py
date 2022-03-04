@@ -28,6 +28,7 @@
         'views/product_template.xml',
         'views/ir_menus.xml',
         'views/prints.xml',
+        'reports/pedido_venta_template.xml',
     ],
     "images": ["static/description/background.png",],              
     "application": True,
