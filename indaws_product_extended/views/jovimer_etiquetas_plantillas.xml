@@ -29,12 +29,12 @@
                             <notebook>
                                 <page string="Productos" name="jovimer_product">
                                     <group name="product">
-                                        <field name="template_id" />
+                                        <field name="template_id" nolabel="True"/>
                                     </group>
                                 </page>
                                 <page string="Etiquetas" name="jovimer_label">
                                     <group name="etiquetas">
-                                        <field name="label_id" />
+                                        <field name="label_id" nolabel="True"/>
                                     </group>
                                 </page>
                             </notebook>
