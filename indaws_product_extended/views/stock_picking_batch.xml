@@ -31,7 +31,7 @@
                     <field name="apilables" class="oe_inline"/> /
                     <field name="combina" class="oe_inline"/>
                 </div>
-                <label for="Destino" string="Destino"/>
+                <label for="destinoor" string="Destino"/>
                 <div>
                     <field class="oe_inline" name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
                     <button name="cambiadestinos" string="Cambiar Lineas" type="object" class="oe_inline"/>

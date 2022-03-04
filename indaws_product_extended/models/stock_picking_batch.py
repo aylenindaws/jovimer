@@ -44,7 +44,7 @@ class StockPickingBatch(models.Model):
         ('Plataforma XERESA', 'Plataforma XERESA'), ('Perpignan', 'Perpignan'), ('Barcelona', 'Barcelona')
     ], string='Destino Interior')
     almacenorigen = fields.Many2one('res.partner', string='Almacén Origen', domain="[('name','=ilike', 'JOVIMER')]")
-    destinoor = fields.Many2one('res.partner', string='Destino Cliente', domain="[('customer','=', True)]")
+    destinoor = fields.Many2one('res.partner', string='Destino Cliente')
     fechallegadanacional = fields.Date(string='Fecha LLegada Nacional')
     fechallegadainternacional = fields.Date(string='Fecha Llegada Internacional')
     #orcargacab = fields.One2many('jovimer_ordencargacab', 'viajerel', string='Orden Carga Cabecera')
