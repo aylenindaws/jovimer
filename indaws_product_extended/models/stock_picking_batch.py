@@ -15,7 +15,7 @@ class StockPickingBatch(models.Model):
 
     expediente = fields.Many2one('account.analytic.account', string='Expediente')
     tipoviaje = fields.Selection([
-        ('NACIONAL', 'NACIONAL'), ('INTERNACIONAL', 'INTERNACIONAL'), ('INTERNACIONALD', 'INTERNACIONAL DIRECTO')
+        ('NACIONAL', 'NACIONAL'), ('INTERNACIONAL', 'INTERNACIONAL')
     ], string='Tipo de Viaje')
     fechaformalizado = fields.Date(string='Fecha Formalizado')
     referencia = fields.Integer(string='Ref Interna')
@@ -27,7 +27,7 @@ class StockPickingBatch(models.Model):
     tempfijoauto = fields.Char(string='Fijo / Auto')
     tempdoblesimple = fields.Char(string='Doble/Simpel')
     importe = fields.Float('Importe')
-    transportista = fields.Many2one('res.partner', string='Transportista', domain="[('trasnportista','=', True)]")
+    transportista = fields.Many2one('res.partner', string='Transportista')
     paleteur = fields.Float(string='Eur')
     paletgr = fields.Float(string='Gr')
     apilables = fields.Char(string='Apilables')
@@ -67,6 +67,7 @@ class StockPickingBatch(models.Model):
         ('cancel', 'ENCANCELADOCURSO'),
         ('done', 'CERRADO')
     ], string='Estado', default='draft')
+    account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
 
     def cambiadestinos(self):
         destinoor = self.destinoor
