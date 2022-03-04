@@ -23,7 +23,7 @@ class StockPickingBatch(models.Model):
     matricula = fields.Char(string='Matricula')
     referenciatxt = fields.Char(string='Referencia')
     contactochofer = fields.Char(string='Contacto Chófer')
-    temperatura = fields.Char(string='Temperatura')
+    temperatura = fields.Integer(string='Temperatura')
     tempfijoauto = fields.Char(string='Fijo / Auto')
     tempdoblesimple = fields.Char(string='Doble/Simpel')
     importe = fields.Float('Importe')

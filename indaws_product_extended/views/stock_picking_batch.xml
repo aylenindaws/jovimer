@@ -9,12 +9,7 @@
                 <field name="transportista" options="{'no_create': True, 'no_create_edit':True}" domain="[('trasnportista','=', True)]"/>
                 <field name="contactochofer"/>
                 <field name="matricula"/>
-                <label for="temperatura"/>
-                <div>
-                    <field name="temperatura" class="oe_inline"/>
-                    <field name="tempfijoauto" class="oe_inline"/>
-                    <field name="tempdoblesimple" class="oe_inline"/>
-                </div>
+                <field name="temperatura"/>
                 <label for="paleteur" string="Palets EURO/GRANDE"/>
                 <div>
                     <field name="paleteur" class="oe_inline"/> /
@@ -39,7 +34,6 @@
                 <field name="name"/>
                 <field name="tipoviaje" widget="selection" required="1"/>
                 <field name="referenciatxt"/>
-                <field name="account_analytic_id"/>
                 <field name="destinointerior" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
                 <field name="fechallegadanacional" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
                 <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
