@@ -29,6 +29,27 @@
     <!-- field name="binding_model_id" ref="purchase.order"/ -->
 </record>
 
+<!-- <record id="sale_order_jovimer_report" model="ir.actions.report">
+    <field name="name">Pedido de Venta</field>
+    <field name="model">sale.order</field>
+    <field name="report_name">sale.order.jovimer</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">indaws_product_extended</field>
+    <field name="py3o_template_fallback">reports/pedido_venta.odt</field>
+    <field name="binding_type">report</field>
+</record> -->
+
+<report
+    id="indaws_pedido_venta_report"
+    string="Pedido de Venta"
+    model="sale.order"
+    report_type="qweb-pdf"
+    file="indaws_product_extended.pedido_report"
+    name="indaws_product_extended.pedido_report"
+    menu="True"
+/>
+
 <record id="sale_order_jovimer_report" model="ir.actions.report">
     <field name="name">Pedido de Venta</field>
     <field name="model">sale.order</field>
@@ -37,10 +58,9 @@
     <field name="py3o_filetype">pdf</field>
     <field name="module">indaws_product_extended</field>
     <field name="py3o_template_fallback">reports/pedido_venta.odt</field>
-    <!-- Add entry in "Print" drop-down list -->
     <field name="binding_type">report</field>
-    <!-- field name="binding_model_id" ref="purchase.order"/ -->
 </record>
+
 
 <record id="purchase_order_jovimer_report" model="ir.actions.report">
     <field name="name">Confirmar Pedido Compra</field>
