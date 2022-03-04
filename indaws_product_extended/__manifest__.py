@@ -8,6 +8,7 @@
     "data": [
         "security/security.xml",
         'security/ir.model.access.csv',
+        'views/res_partner.xml',
         'views/jovimer_calibre.xml',
         'views/jovimer_categoria.xml',
         'views/jovimer_confeccion.xml',
