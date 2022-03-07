@@ -344,3 +344,4 @@ class ModelSaleOrderLine(models.Model):
             self.uom_po_id = purchase_line.product_uom
             self.purcharse_price = purchase_line.price
             self.costetrans = supplier.transport_cost
+            self.discount = purchase_line.discount
