@@ -12,8 +12,7 @@ import datetime
 _logger = logging.getLogger(__name__)
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+class ProductSupplierinfo(models.Model):
+    _inherit = 'product.supplierinfo'
 
-    trasnportista = fields.Boolean(string='Transportista')
-    transport_cost = fields.Float('Transport / kg cost')
+    transport_cost = fields.Float('Transport / kg cost', related="name.transport_cost")

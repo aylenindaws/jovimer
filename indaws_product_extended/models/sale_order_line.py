@@ -11,6 +11,7 @@ import datetime
 
 _logger = logging.getLogger(__name__)
 
+
 class ModelSaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -80,9 +81,9 @@ class ModelSaleOrderLine(models.Model):
     pvpres = fields.Float(string='Resultado')
     pvpres2 = fields.Float(string='Resultado', compute='_get_total')
     tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
-    #multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
-    #reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
-    #reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
+    # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
+    # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
+    # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     paletsc = fields.Float(string='Compra', compute='_calc_palets', store=True)
     provisionales = fields.Many2many('purchase.order.line', string='Provisionales',
                                      domain=[('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])],
@@ -105,7 +106,8 @@ class ModelSaleOrderLine(models.Model):
     ], string='Estado', default='OK')
     not_active = fields.Boolean('NO Activo', related='product_id.not_active')
     costetrans = fields.Float(string='Transporte')
-    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True, help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
+    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True,
+                                help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
 
     def recalculalinea(self):
         variedad = self.product_id.variety
@@ -129,7 +131,8 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.env['jovimer.partner.code'].search([('product_id','=',self.product_id.id),('partner_id','=',self.partner_id.id)])
+        self.plantillaetiqueta = self.env['jovimer.partner.code'].search(
+            [('product_id', '=', self.product_id.id), ('partner_id', '=', self.partner_id.id)])
         return {}
 
     @api.onchange('product_id')
@@ -155,7 +158,8 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.env['jovimer.partner.code'].search([('product_id','=',self.product_id.id),('partner_id','=',self.partner_id.id)])
+        self.plantillaetiqueta = self.env['jovimer.partner.code'].search(
+            [('product_id', '=', self.product_id.id), ('partner_id', '=', self.partner_id.id)])
         return {}
 
     def buscaprovisionales(self):
@@ -174,7 +178,7 @@ class ModelSaleOrderLine(models.Model):
     def on_change_pvpres(self):
         self.pvpres = self.price_subtotal - self.pvpcoste
 
-    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor','product_uom')
+    @api.onchange('cantidadpedido', 'bultos', 'kgnetbulto', 'unidabulto', 'unidadesporbultor', 'product_uom')
     def on_change_cantidadpedido(self):
         self.totalbultos = self.cantidadpedido * float(self.bultos)
         if self.product_uom.name == 'Bultos':
@@ -287,7 +291,8 @@ class ModelSaleOrderLine(models.Model):
         expediente = self.order_id.expediente.id
         expediente_serie = self.order_id.expediente.campanya
         expediente_num = self.order_id.expediente.name
-        nameasig = "" + str(expediente_serieo) + "/" + str(expediente_numo) + " para " + str(expediente_serie) + "/" + str(expediente_num) + ". LineaVenta: " + str(saleorderline) + "."
+        nameasig = "" + str(expediente_serieo) + "/" + str(expediente_numo) + " para " + str(
+            expediente_serie) + "/" + str(expediente_num) + ". LineaVenta: " + str(saleorderline) + "."
         orderline_obj = self.env['jovimer_asignaciones']
         invoice = orderline_obj.create({
             'saleorderlinedestino': saleorderline,
@@ -328,3 +333,14 @@ class ModelSaleOrderLine(models.Model):
             'res_id': invoice
         }
         return view
+
+    @api.onchange('product_id')
+    def on_change_product_id_sale_items(self):
+        supplier_list = self.env['getsale.orderdata'].mapped('partner_id')
+        for supplier in supplier_list:
+            purchase_line = self.env['product.supplierinfo'].search(
+                [('name', '=', supplier.id), ('product_id', '=', self.product_id)], limit=1)
+            self.supplier_id = supplier.id
+            self.uom_po_id = purchase_line.product_uom
+            self.purcharse_price = purchase_line.price
+            self.costetrans = supplier.transport_cost
