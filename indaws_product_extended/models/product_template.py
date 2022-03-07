@@ -28,8 +28,6 @@ class ProductTemplate(models.Model):
     name = fields.Char(string='Nombre', store=True, copy=True, required=False)
     not_active = fields.Boolean('NO Activo', store=True, copy=True, tracking=True)
     not_calculate_lumps = fields.Boolean('No Calcula Bultos', store=True, copy=True, tracking=True)
-    label_templates = fields.Many2one('jovimer.etiquetas.plantilla', string='P. Etiquetas', store=True, copy=True,
-                                      ondelete='set null')
     week_price = fields.Integer(string='Semana', store=True, copy=True, ondelete='set null',
                                 help='Semana a la que se aplica el precio atendiendo a la fecha de llegada del Pedido')
     product_id = fields.Many2one('product.product', string='Producto', store=True, copy=True, ondelete='set null')

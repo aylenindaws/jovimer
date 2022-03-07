@@ -129,7 +129,7 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.product_id.label_templates
+        self.plantillaetiqueta = self.env['jovimer.partner.code'].search([('product_id','=',self.product_id.id),('partner_id','=',self.partner_id.id)])
         return {}
 
     @api.onchange('product_id')
@@ -155,7 +155,7 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.product_id.label_templates
+        self.plantillaetiqueta = self.env['jovimer.partner.code'].search([('product_id','=',self.product_id.id),('partner_id','=',self.partner_id.id)])
         return {}
 
     def buscaprovisionales(self):

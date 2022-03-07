@@ -211,10 +211,6 @@ class SaleOrder(models.Model):
 
         if confname == "SEMANA/AÑO LLEGADA":
             try:
-                if str(weekday) == "0":
-                    weekday = "7"
-                else:
-                    weekday = str(weekday)
                 year = fechallegada.split('-')[0]
                 month = fechallegada.split('-')[1]
                 day = fechallegada.split('-')[2]

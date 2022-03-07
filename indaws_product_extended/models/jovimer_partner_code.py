@@ -17,3 +17,5 @@ class JovimerPartnerCode(models.Model):
     name = fields.Char('Codigo de Cliente')
     partner_id = fields.Many2one('res.partner', string='Cliente')
     product_id = fields.Many2one('product.product', string='Producto')
+    label_templates = fields.Many2one('jovimer.etiquetas.plantilla', string='P. Etiquetas', store=True, copy=True,
+                                      ondelete='set null')

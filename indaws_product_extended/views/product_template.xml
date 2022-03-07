@@ -12,6 +12,7 @@
                             <tree name="partner_code">
                                 <field name="partner_id"/>
                                 <field name="name"/>
+                                <field name="label_templates"/>
                             </tree>
                         </field>
                     </group>
@@ -34,7 +35,6 @@
                             <field name="caliber"/>
                             <field name="category"/>
                             <field name="container"/>
-                            <field name="label_templates"/>
                         </group>
                         <!--<notebook>
                             <page string="Precios" name="jovimer_price">
