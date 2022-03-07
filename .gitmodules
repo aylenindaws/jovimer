@@ -25,10 +25,10 @@
 
 [submodule "OCA/purchase-workflow"]
 	path = OCA/purchase-workflow
-	url = git@github.com:OCA/purchase-workflow.git
+	url = https://github.com/OCA/purchase-workflow.git
 	branch = 14.0
 
 [submodule "OCA/partner-contact"]
 	path = OCA/partner-contact
-	url = git@github.com:OCA/partner-contact.git
+	url = https://github.com/OCA/partner-contact.git
 	branch = 14.0
