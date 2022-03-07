@@ -4,7 +4,7 @@
     "name" : "Ajustes de Productos",
     "author" : "Indaws",
     "version":"14.0.1",
-    "depends" : ['sale', "base", "product","stock","bi_convert_purchase_from_sales","purchase_discount","stock_picking_batch"],
+    "depends" : ['sale', 'base', 'product','stock','bi_convert_purchase_from_sales','purchase_discount','stock_picking_batch'],
     "data": [
         "security/security.xml",
         'security/ir.model.access.csv',
