@@ -117,6 +117,8 @@ class ModelSaleOrderLine(models.Model):
         envase = self.product_id.container
         marca = self.product_id.brand
         bultos = self.product_id.bulge
+        label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.id), (
+        'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
@@ -131,8 +133,7 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.env['jovimer.partner.code'].search(
-            [('product_id', '=', self.product_id.id), ('partner_id', '=', self.partner_id.id)])
+        self.plantillaetiqueta = label if label else False
         return {}
 
     @api.onchange('product_id')
@@ -144,6 +145,8 @@ class ModelSaleOrderLine(models.Model):
         envase = self.product_id.container
         marca = self.product_id.brand
         bultos = self.product_id.bulge
+        label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.id), (
+        'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
@@ -158,8 +161,25 @@ class ModelSaleOrderLine(models.Model):
         self.kgnetbulto = self.product_id.confection.kg_net_bulge
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = self.env['jovimer.partner.code'].search(
-            [('product_id', '=', self.product_id.id), ('partner_id', '=', self.partner_id.id)])
+        self.plantillaetiqueta = label if label else False
+        supplier_list = self.env['getsale.orderdata'].mapped('partner_id')
+        validate_check = False
+        for supplier in supplier_list:
+            purchase_line = self.env['product.supplierinfo'].search(
+                [('name', '=', supplier.id), ('product_id', '=', self.product_id)], limit=1)
+            self.uom_po_id = purchase_line.product_uom.id
+            self.purchase_price = purchase_line.price
+            self.discount = purchase_line.discount
+            self.supplier_id = supplier
+            self.costetrans = supplier.transport_cost
+            validate_check = True
+        if validate_check == False:
+            self.uom_po_id = False
+            self.purchase_price = False
+            self.discount = False
+            self.supplier_id = False
+            self.costetrans = False
+
         return {}
 
     def buscaprovisionales(self):
@@ -333,15 +353,3 @@ class ModelSaleOrderLine(models.Model):
             'res_id': invoice
         }
         return view
-
-    @api.onchange('product_id')
-    def on_change_product_id_sale_items(self):
-        supplier_list = self.env['getsale.orderdata'].mapped('partner_id')
-        for supplier in supplier_list:
-            purchase_line = self.env['product.supplierinfo'].search(
-                [('name', '=', supplier.id), ('product_id', '=', self.product_id)], limit=1)
-            self.supplier_id = supplier.id
-            self.uom_po_id = purchase_line.product_uom
-            self.purcharse_price = purchase_line.price
-            self.costetrans = supplier.transport_cost
-            self.discount = purchase_line.discount
