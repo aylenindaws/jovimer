@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_jovimer_calibre,jovimer.calibre,model_jovimer_calibre,,1,1,1,1
+access_jovimer_categoria,jovimer.categoria,model_jovimer_categoria,,1,1,1,1
+access_jovimer_confeccion,jovimer.confeccion,model_jovimer_confeccion,,1,1,1,1
+access_jovimer_envase,jovimer.envase,model_jovimer_envase,,1,1,1,1
+access_jovimer_etiquetas,jovimer.etiquetas,model_jovimer_etiquetas,,1,1,1,1
+access_jovimer_etiquetas_plantilla,jovimer.etiquetas.plantilla,model_jovimer_etiquetas_plantilla,,1,1,1,1
+access_jovimer_expedientes,jovimer.expedientes,model_jovimer_expedientes,,1,1,1,1
+access_jovimer_expedientes_series,jovimer.expedientes.series,model_jovimer_expedientes_series,,1,1,1,1
+access_jovimer_marca,jovimer.marca,model_jovimer_marca,,1,1,1,1
+access_jovimer_variedad,jovimer.variedad,model_jovimer_variedad,,1,1,1,1
+access_jovimer_conflote,jovimer.conflote,model_jovimer_conflote,,1,1,1,1
+access_jovimer_palet,jovimer.palet,model_jovimer_palet,,1,1,1,1
+access_jovimer_plataforma,jovimer.plataforma,model_jovimer_plataforma,,1,1,1,1
+access_jovimer_partner_code,jovimer.partner.code,model_jovimer_partner_code,,1,1,1,1

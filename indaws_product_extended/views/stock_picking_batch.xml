@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_picking_batch_stock_picking_batch_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.batch.stock.picking.batch.form.inherit</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position='after'>
+                <field name="transportista" options="{'no_create': True, 'no_create_edit':True}" domain="[('trasnportista','=', True)]"/>
+                <field name="contactochofer"/>
+                <field name="matricula"/>
+                <field name="temperatura"/>
+                <label for="paleteur" string="Palets EURO/GRANDE"/>
+                <div>
+                    <field name="paleteur" class="oe_inline"/> /
+                    <field name="paletgr" class="oe_inline"/>
+                </div>
+                <label for="apilables" string="Apilable / Combinación"/>
+                <div>
+                    <field name="apilables" class="oe_inline"/> /
+                    <field name="combina" class="oe_inline"/>
+                </div>
+                <field name="tipoviaje" invisible="1"/>
+                <field name="destinoor" attrs="{'invisible': [('tipoviaje', '=', 'NACIONAL')]}" options="{'no_create': True, 'no_create_edit':True}"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='picking_type_id']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='scheduled_date']" position='after'>
+                <field name="id"/>
+                <field name="name" string="Número de Orden"/>
+                <field name="tipoviaje" widget="selection" required="1"/>
+                <field name="referenciatxt"/>
+                <field name="destinointerior" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
+                <field name="fechallegadanacional" attrs="{'invisible': [('tipoviaje', '!=', 'NACIONAL')]}"/>
+                <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
+                <label for="fechaformalizado"/>
+                <div>
+                    <field name="fechaformalizado"/>
+                </div>
+                <field name="importe"/>
+            </xpath>
+            <xpath expr="//field[@name='scheduled_date']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+  

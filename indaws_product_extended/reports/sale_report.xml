@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            id="report_ordenpedido_sale"
+            string="Orden de pedido"
+            model="sale.order"
+            report_type="qweb-pdf"
+            file="orden_de_pedido"
+            name="indaws_product_extended.report_orden_pedido_template"
+        />
+    </data>
+</openerp>

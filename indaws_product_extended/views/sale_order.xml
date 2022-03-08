@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="indaws_sale_purchase_extended_view_order_form_2_inherit" model="ir.ui.view">
+        <field name="name">indaws.sale.purchase.extended.view.order.form.2.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="bi_convert_purchase_from_sales.sale_order_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='cost_real']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
+            <xpath expr="//field[@name='purchase_price']" position="replace"/>
+        </field>
+    </record>
+    <record id="indaws_sale_purchase_extended_view_order_form_inherit" model="ir.ui.view">
+        <field name="name">indaws.sale.purchase.extended.view.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//label[@for='product_uom_qty']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//label[@for='qty_delivered']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//label[@for='qty_invoiced']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//div[@name='ordered_qty']" position="replace"/>
+            <xpath expr="//field[@name='order_line']//div[@name='delivered_qty']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//div[@name='invoiced_qty']" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
+                <field name="supplier_id" optional="hide" string="Proveedor"/>
+                <field name="uom_po_id" optional="hide" string="Ud Compra"/>
+                <field name="purchase_price" optional="hide" string="Precio de compra"/>
+                <field name="costetrans" optional="hide" string="Transporte "/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="attributes">
+                <attribute name="string">Precio de venta</attribute>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom']" position="attributes">
+                <attribute name="string">Ud Venta</attribute>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="attributes">
+                <attribute name="string">Descuento proveedor (%)</attribute>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="replace">
+                <field name="purchase_related_ids">
+                    <tree create='false'>
+                        <field name="company_id" invisible="1"/>
+                        <field name="partner_ref" optional="hide"/>
+                        <field name="name"/>
+                        <field name="date_approve" optional="hide"/>
+                        <field name="partner_id"/>
+                        <field name="date_planned" optional="hide"/>
+                        <field name="user_id" optional="hide"/>
+                        <field name="origin" optional="hide"/>
+                        <field name="amount_untaxed" optional="hide"/>
+                        <field name="amount_total" optional="hide"/>
+                        <field name="state" optional="hide"/>
+                        <field name="invoice_status" optional="hide"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//field[@name='analytic_tag_ids']" position="after">
+                <field name="price_unit" string="Precio de Venta"/>
+                <field name="supplier_id" string="Proveedor"/>
+                <field name="uom_po_id"/>
+                <field name="purchase_price" string="Precio de compra"/>
+                <field name="costetrans"/>
+                <field name="discount" string="Descuento proveedor (%)"/>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//form//div[@name='invoice_lines']" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field//form//div[@name='invoice_lines']" position="before">
+                <group name="template">
+                    <group name="template_left">
+                        <field name="variedad"/>
+                        <field name="calibre"/>
+                        <field name="categoria"/>
+                        <field name="confeccion"/>
+                        <field name="envase"/>
+                        <field name="marca"/>
+                    </group>
+                    <group name="template_right">
+                        <field name="cantidadpedido" string="Palets:"/>
+                        <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}"/>
+                        <field name="bultos"/>
+                        <field name="unidadesporbultor" readonly="False"/>
+                        <field name="kgnetbulto"/>
+                        <label for="product_uom_qty"/>
+                        <div class="o_row" name="ordered_qty">
+                            <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty"/>
+                            <field name="product_uom" force_save="1" groups="uom.group_uom" class="oe_no_button" attrs="{'readonly': [('product_uom_readonly', '=', True)],'required': [('display_type', '=', False)]}"/>
+                        </div>
+                    </group>
+                </group>    
+            </xpath>
+            <xpath expr="//field[@name='analytic_account_id']" position="replace">
+                <field name="company_id" invisible='1'/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="replace">
+                <group name="title">
+                    <group name="oe_title">
+                        <field name="expediente" readonly="1" invisible="1"/>
+                        <field name="analytic_account_id" readonly="1" force_save="1" string="Expediente"/>
+                        <field name="name" string="Numero" readonly="1"/>
+                    </group>
+                    <group name="oe_subtitle">
+                        <div name="paletsv">
+                            <label for="paletsv"/>
+                            <field name="paletsv" readonly="1"/>
+                            <span> / </span>
+                            <label for="palets"/>
+                            <field name="palets" readonly="1"/>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="plataforma" domain="[('partner_id','=',partner_id)]"/>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="before">
+                <field name="id" readonly="1"/>
+                <label for="edi_file_binary"/>
+				<div class="o_row">
+				    <div style="padding-left:0mm;" class="col-6">
+                        <field name="edi_file_binary" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}"/>
+                        <field name="edi_file" class="oe_inline" domain="[('res_id','=', id)]" context="{'default_res_id': id,'default_res_model': 'sale.order','default_res_name': 'EDI IMPORT'}" options="{'no_quick_create': True}" invisible="1"/>
+                    </div>
+                    <div class="col-6" style="padding-left:0mm;">
+                        <button name="update_edi_file" string="Leer Fichero" type="object" class="oe_inline" attrs="{'invisible': [('edi_file', '=', False)]}"/>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="fechasalida"/>
+                <field name="fechallegada"/>
+                <field name="horallegada"/>
+                <field name="conformalote" force_save="1"/>
+                <label for="reslote"/>
+				<div class="o_row">
+				    <div style="padding-left:0mm;" class="col-6">
+                        <field name="reslote"/>
+                    </div>
+                    <!--<div class="col-6" style="padding-left:0mm;">
+                        <button name="onchange_conformalote" string="Calc" type="object"/>
+                    </div>-->
+                </div>
+                <field name="pedidocerrado"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="attrs">{'editable':'top'}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

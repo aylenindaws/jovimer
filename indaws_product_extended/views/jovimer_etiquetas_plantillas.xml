@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <!-- start:views -->
+        <record model="ir.ui.view" id="jovimer_etiquetas_plantilla_tree_view">
+            <field name="name">jovimer_etiquetas_plantilla_tree</field>
+            <field name="model">jovimer.etiquetas.plantilla</field>
+            <field name="arch" type="xml">
+                <tree string="Plantillas de Etiquetas">
+                    <field name="name" />
+                    <field name="content" />
+                    <field name="content_uom" />
+                    <field name="label_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_etiquetas_plantilla_form_view">
+            <field name="name">jovimer_etiquetas_plantilla_form</field>
+            <field name="model">jovimer.etiquetas.plantilla</field>
+            <field name="arch" type="xml">
+                <form string="Plantillas de Etiquetas">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="content" />
+                            <field name="content_uom" />
+                            <field name="lang" />
+                            <field name="content_html" />
+                        </group>
+                        <notebook>
+                            <page string="Productos" name="jovimer_product">
+                                <field name="template_id" nolabel="True"/>
+                            </page>
+                            <page string="Etiquetas" name="jovimer_label">
+                                <field name="label_id" nolabel="True"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- end:views -->
+
+        <!-- start:actions -->
+        <record model="ir.actions.act_window"
+            id="jovimer_etiquetas_plantilla_list_action">
+            <field name="name">jovimer_etiquetas.plantilla</field>
+            <field name="res_model">jovimer.etiquetas.plantilla</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first jovimer etiquetas.plantilla
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

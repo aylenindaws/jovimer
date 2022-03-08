@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sale_margin_sale_order_inherit">
+            <field name="name">sale.order.margin.view.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('text-nowrap')]" position="after">
+                    <label for="margin_real" groups="base.group_user"/>
+                    <div class="text-nowrap" groups="base.group_user">
+                        <field name="margin_real" class="oe_inline" widget="monetary"/>
+                        <span class="oe_inline" attrs="{'invisible': [('amount_untaxed', '=', 0)]}">
+                            (<field name="margin_real_percentage" nolabel="1" class="oe_inline" widget="percentage" />)
+                        </span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
