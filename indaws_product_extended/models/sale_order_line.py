@@ -162,23 +162,22 @@ class ModelSaleOrderLine(models.Model):
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
         self.plantillaetiqueta = label if label else False
-        supplier_list = self.env['getsale.orderdata'].mapped('partner_id')
-        validate_check = False
-        for supplier in supplier_list:
-            purchase_line = self.env['product.supplierinfo'].search(
-                [('name', '=', supplier.id), ('product_id', '=', self.product_id)], limit=1)
-            self.uom_po_id = purchase_line.product_uom.id
-            self.purchase_price = purchase_line.price
-            self.discount = purchase_line.discount
-            self.supplier_id = supplier
-            self.costetrans = supplier.transport_cost
-            validate_check = True
-        if validate_check == False:
-            self.uom_po_id = False
-            self.purchase_price = False
-            self.discount = False
-            self.supplier_id = False
-            self.costetrans = False
+        #supplier_list = self.env['getsale.orderdata'].search([('order_id','=',self.id)]).mapped('partner_id')
+        if self.product_id:
+            purchase_line = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
+            supplier = purchase_line.name
+            if supplier:
+                self.uom_po_id = purchase_line.product_uom.id
+                self.purchase_price = purchase_line.price
+                self.discount = purchase_line.discount
+                self.supplier_id = supplier
+                self.costetrans = supplier.transport_cost
+            else:
+                self.uom_po_id = False
+                self.purchase_price = False
+                self.discount = False
+                self.supplier_id = False
+                self.costetrans = False
 
         return {}
 
