@@ -50,6 +50,16 @@
     menu="True"
 />
 
+<report
+    id="indaws_pedido_compra_report"
+    string="Pedido de Compra"
+    model="purchase.order"
+    report_type="qweb-pdf"
+    file="indaws_product_extended.purchase_report"
+    name="indaws_product_extended.purchase_report"
+    menu="True"
+/>
+
 <record id="sale_order_jovimer_report" model="ir.actions.report">
     <field name="name">Pedido de Venta</field>
     <field name="model">sale.order</field>
