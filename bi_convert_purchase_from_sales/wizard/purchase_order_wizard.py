@@ -5,16 +5,11 @@ import time
 from odoo import api, fields, models, _
 from datetime import datetime
 import odoo.addons.decimal_precision as dp
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class createpurchaseorder(models.TransientModel):
-    _name = 'create.purchaseorder'
-    _description = "Create Purchase Order"
-
-    new_order_line_ids = fields.One2many('getsale.orderdata', 'new_order_line_id', string="Order Line")
-    partner_id = fields.Many2one('res.partner', string='Vendor')
-    date_order = fields.Datetime(string='Order Date', required=True, copy=False, default=fields.Datetime.now)
+    _inherit = 'create.purchaseorder'
 
     @api.model
     def default_get(self, default_fields):
@@ -24,13 +19,22 @@ class createpurchaseorder(models.TransientModel):
         for record in data.order_line:
             update.append((0, 0, {
                 'product_id': record.product_id.id,
-                'product_uom': record.product_uom.id,
+                'product_uom': record.uom_po_id.id,
                 'order_id': record.order_id.id,
                 'name': record.name,
                 'product_qty': record.product_uom_qty,
                 'price_unit': record.price_unit,
                 'product_subtotal': record.price_subtotal,
                 'purchase_price': record.purchase_price,
+                'cantidadpedido': record.cantidadpedido,
+                'tipouom': record.tipouom.id,
+                'bultos': record.bultos,
+                'variedad': record.variedad.id,
+                'confeccion': record.confeccion.id,
+                'calibre': record.calibre.id,
+                'marca': record.marca.id,
+                'envase': record.envase.id,
+                'account_analytic_id': data.analytic_account_id.id,
                 'partner_id': record.supplier_id.id if record.supplier_id else False
             }))
         res.update({'new_order_line_ids': update})
@@ -55,6 +59,15 @@ class createpurchaseorder(models.TransientModel):
                     'taxes_id': order_line.product_id.supplier_taxes_id.ids,
                     'date_planned': order_line.date_planned,
                     'price_unit': order_line.purchase_price,
+                    'cantidadpedido': order_line.cantidadpedido,
+                    'tipouom': order_line.tipouom.id,
+                    'bultos': order_line.bultos,
+                    'variedad': order_line.variedad.id,
+                    'confeccion': order_line.confeccion.id,
+                    'calibre': order_line.calibre.id,
+                    'marca': order_line.marca.id,
+                    'envase': order_line.envase.id,
+                    'account_analytic_id': order_line.account_analytic_id.id,
                 }])
             res.create({
                 'partner_id': supplier.id,
@@ -68,23 +81,14 @@ class createpurchaseorder(models.TransientModel):
 
 
 class Getsaleorderdata(models.TransientModel):
-    _name = 'getsale.orderdata'
-    _description = "Get Sale Order Data"
+    _inherit = 'getsale.orderdata'
 
-    new_order_line_id = fields.Many2one('create.purchaseorder')
-
-    product_id = fields.Many2one('product.product', string="Product")
-    name = fields.Char(string="Description")
-    product_qty = fields.Float(string='Quantity', required=True)
-    date_planned = fields.Datetime(string='Scheduled Date', default=datetime.today())
-    product_uom = fields.Many2one('uom.uom', string='Product Unit of Measure')
-    order_id = fields.Many2one('sale.order', string='Order Reference', ondelete='cascade', index=True)
-    price_unit = fields.Float(string='Unit Price', digits='Product Price')
-    product_subtotal = fields.Float(string="Sub Total", compute='_compute_total')
-    purchase_price = fields.Float(string="Purchase price")
-    partner_id = fields.Many2one('res.partner', string="Supplier")
-
-    @api.depends('product_qty', 'price_unit')
-    def _compute_total(self):
-        for record in self:
-            record.product_subtotal = record.product_qty * record.price_unit
+    cantidadpedido = fields.Float(string='Cantidad Pedido')
+    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
+    bultos = fields.Float(string='Bultos')
+    variedad = fields.Many2one('jovimer.variedad', string='Variedad')
+    confeccion = fields.Many2one('jovimer.confeccion', string='Confección')
+    calibre = fields.Many2one('jovimer.calibre', string='Calibre')
+    marca = fields.Many2one('jovimer.marca', string='Marca')
+    envase = fields.Many2one('jovimer.envase', string='Envase')
+    account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
