@@ -5,6 +5,7 @@ import os.path
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError, AccessError
 from datetime import datetime, date, time, timedelta
+import odoo.addons.decimal_precision as dp
 import subprocess
 import logging
 import datetime
@@ -81,6 +82,7 @@ class ModelSaleOrderLine(models.Model):
     pvpres = fields.Float(string='Resultado')
     pvpres2 = fields.Float(string='Resultado', compute='_get_total')
     tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
+    discount_supplier = fields.Float(string='Descuento proveedor (%)', digits=dp.get_precision('Discount'), default=0.0)
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
@@ -134,6 +136,21 @@ class ModelSaleOrderLine(models.Model):
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
         self.plantillaetiqueta = label if label else False
+        if self.product_id:
+            purchase_line = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
+            supplier = purchase_line.name
+            if supplier:
+                self.uom_po_id = purchase_line.product_uom.id
+                self.purchase_price = purchase_line.price
+                self.discount_supplier = purchase_line.discount
+                self.supplier_id = supplier
+                self.costetrans = supplier.transport_cost
+            else:
+                self.uom_po_id = False
+                self.purchase_price = False
+                self.discount_supplier = False
+                self.supplier_id = False
+                self.costetrans = False
         return {}
 
     @api.onchange('product_id')
@@ -169,16 +186,15 @@ class ModelSaleOrderLine(models.Model):
             if supplier:
                 self.uom_po_id = purchase_line.product_uom.id
                 self.purchase_price = purchase_line.price
-                self.discount = purchase_line.discount
+                self.discount_supplier = purchase_line.discount
                 self.supplier_id = supplier
                 self.costetrans = supplier.transport_cost
             else:
                 self.uom_po_id = False
                 self.purchase_price = False
-                self.discount = False
+                self.discount_supplier = False
                 self.supplier_id = False
                 self.costetrans = False
-
         return {}
 
     def buscaprovisionales(self):

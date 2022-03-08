@@ -76,7 +76,7 @@
                 <field name="uom_po_id"/>
                 <field name="purchase_price" string="Precio de compra"/>
                 <field name="costetrans"/>
-                <field name="discount" string="Descuento proveedor (%)"/>
+                <field name="discount_supplier" string="Descuento proveedor (%)"/>
             </xpath>
             <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="attributes">
                 <attribute name="editable"/>
