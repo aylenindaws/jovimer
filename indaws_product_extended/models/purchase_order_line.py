@@ -62,7 +62,7 @@ class ModelSaleOrderLine(models.Model):
     pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo')
     pvptrans = fields.Float(string='Transporte')
     pvpvta = fields.Float(string='Venta')
-    tipouom = fields.Many2one('uom.uom', string='Tipo Medida')
+    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     saleorderline = fields.Many2one('sale.order.line', string='Lineas de Venta')
     lotecomp = fields.Char(string='Lote', related='saleorderline.order_id.reslote')

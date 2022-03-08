@@ -5,6 +5,22 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//page[@name='products']//field[@name='order_line']//tree" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <xpath expr="//page[@name='products']//field[@name='order_line']//form//field[@name='account_analytic_id']" position="attributes">
+                <attribute name="string">Expediente</attribute>
+            </xpath>
+            <xpath expr="//page[@name='products']//field[@name='order_line']//form//field[@name='account_analytic_id']" position="after">
+                <field name="cantidadpedido" string='Palets'/>
+                <field name="tipouom"/>
+                <field name="bultos"/>
+                <field name="variedad"/>
+                <field name="confeccion"/>
+                <field name="calibre"/>
+                <field name="marca"/>
+                <field name="envase"/>
+            </xpath>
             <xpath expr="//div[hasclass('oe_title')]" position="replace">
                 <div class="oe_title">
                     <span class="o_form_label" attrs="{'invisible': [('state','not in',('draft','sent'))]}">Solicitud de presupuesto </span>
