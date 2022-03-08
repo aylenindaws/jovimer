@@ -30,6 +30,7 @@
         'views/ir_menus.xml',
         'views/prints.xml',
         'reports/pedido_venta_template.xml',
+        'reports/pedido_compra_template.xml',
     ],
     "images": ["static/description/background.png",],              
     "application": True,
