@@ -33,7 +33,7 @@
                         <table style="width:100%;">
                             <tr style="text-align:center;">
                                 <td class="border_px"  style="width:30%;">Sale Order Ref</td>
-                                <td class="border_px" ><span t-esc="o.analytic_account_id.name" /></td>
+                                <td class="border_px" ><span t-esc="o.account_analytic_id.name" /></td>
                             </tr>
                             <tr style="text-align:center;">
                                 <td class="border_px"  style="width:30%;">Customer Ref</td>
