@@ -25,6 +25,7 @@
         'views/jovimer_partner_code.xml',
         'views/stock_picking_batch.xml',
         'views/sale_order.xml',
+        'views/purchase_order_wizard_view.xml',
         'views/purchase_order.xml',
         'views/product_template.xml',
         'views/stock_move.xml',
