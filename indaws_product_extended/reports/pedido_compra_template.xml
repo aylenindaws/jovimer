@@ -69,7 +69,7 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <t t-foreach="o.order_line" t-as="order">
-                            <t t-if="order.product_id">
+                            <t t-if="order.display_type!='line_note' and order.display_type!='line_section'">
                                 <table style="width:100%;font-size:12px;">
                                     <tr>
                                         <th>Palets</th>
@@ -117,15 +117,15 @@
                                     </tr>
                                 </table>
                             </t>
-                        </t>
-                        <t t-if="not order.product_id">
-                            <table style="width:100%;font-size:12px;">
-                                <tr>
-                                    <td>
-                                        <span t-esc="order.name"/>
-                                    </td>
-                                </tr>
-                            </table>
+                            <t t-if="order.display_type=='line_note' and order.display_type=='line_section'">
+                                <table style="width:100%;font-size:12px;">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="order.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
                         </t>
                     </div>
                 </div>
