@@ -9,7 +9,12 @@ from odoo.exceptions import UserError, ValidationError
 
 
 class createpurchaseorder(models.TransientModel):
-    _inherit = 'create.purchaseorder'
+    _name = 'create.purchaseorder'
+    _description = "Create Purchase Order"
+
+    new_order_line_ids = fields.One2many('getsale.orderdata', 'new_order_line_id', string="Order Line")
+    partner_id = fields.Many2one('res.partner', string='Vendor')
+    date_order = fields.Datetime(string='Order Date', required=True, copy=False, default=fields.Datetime.now)
 
     @api.model
     def default_get(self, default_fields):
@@ -81,8 +86,21 @@ class createpurchaseorder(models.TransientModel):
 
 
 class Getsaleorderdata(models.TransientModel):
-    _inherit = 'getsale.orderdata'
+    _name = 'getsale.orderdata'
+    _description = "Get Sale Order Data"
 
+    new_order_line_id = fields.Many2one('create.purchaseorder')
+
+    product_id = fields.Many2one('product.product', string="Product")
+    name = fields.Char(string="Description")
+    product_qty = fields.Float(string='Quantity', required=True)
+    date_planned = fields.Datetime(string='Scheduled Date', default=datetime.today())
+    product_uom = fields.Many2one('uom.uom', string='Product Unit of Measure')
+    order_id = fields.Many2one('sale.order', string='Order Reference', ondelete='cascade', index=True)
+    price_unit = fields.Float(string='Unit Price', digits='Product Price')
+    product_subtotal = fields.Float(string="Sub Total", compute='_compute_total')
+    purchase_price = fields.Float(string="Purchase price")
+    partner_id = fields.Many2one('res.partner', string="Supplier")
     cantidadpedido = fields.Float(string='Cantidad Pedido')
     tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
     bultos = fields.Float(string='Bultos')
@@ -92,3 +110,8 @@ class Getsaleorderdata(models.TransientModel):
     marca = fields.Many2one('jovimer.marca', string='Marca')
     envase = fields.Many2one('jovimer.envase', string='Envase')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+
+    @api.depends('product_qty', 'price_unit')
+    def _compute_total(self):
+        for record in self:
+            record.product_subtotal = record.product_qty * record.price_unit
