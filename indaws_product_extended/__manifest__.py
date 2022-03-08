@@ -27,6 +27,7 @@
         'views/sale_order.xml',
         'views/purchase_order.xml',
         'views/product_template.xml',
+        'views/stock_move.xml',
         'views/ir_menus.xml',
         'views/prints.xml',
         'reports/pedido_venta_template.xml',

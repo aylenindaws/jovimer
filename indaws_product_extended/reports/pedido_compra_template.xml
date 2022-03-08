@@ -68,55 +68,65 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <table style="width:100%;font-size:12px;">
-                            <tr>
-                                <th>Palets</th>
-                                <th>Box x P</th>
-                                <th>Product</th>
-                                <th>Conf</th>
-                                <th>Caliber</th>
-                                <th>Brand</th>
-                                <th>Cat</th>
-                                <th>Price Ud</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                            </tr>
-
-                            <t t-foreach="o.order_line" t-as="order">
-                                <tr class="mt-2">
-                                    <td class="no_border">
-                                        <span t-esc="order.cantidadpedido"/> <span t-esc="order.tipouom.name"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.bultos"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.variedad.name"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.confeccion.abrev"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.calibre.name"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.marca.name"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.categoria.name"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.price_unit"/> €
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.product_uom_qty"/> <span t-esc="order.unidabulto.nameeng"/>
-                                    </td>
-                                    <td class="no_border">
-                                        <span t-esc="order.price_subtotal"/>
+                        <t t-foreach="o.order_line" t-as="order">
+                            <t t-if="order.product_id">
+                                <table style="width:100%;font-size:12px;">
+                                    <tr>
+                                        <th>Palets</th>
+                                        <th>Box x P</th>
+                                        <th>Product</th>
+                                        <th>Conf</th>
+                                        <th>Caliber</th>
+                                        <th>Brand</th>
+                                        <th>Cat</th>
+                                        <th>Price Ud</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    <tr class="mt-2">
+                                        <td class="no_border">
+                                            <span t-esc="order.cantidadpedido"/> <span t-esc="order.tipouom.name"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.bultos"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.variedad.name"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.confeccion.abrev"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.calibre.name"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.marca.name"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.categoria.name"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.price_unit"/> €
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.product_uom_qty"/> <span t-esc="order.unidabulto.nameeng"/>
+                                        </td>
+                                        <td class="no_border">
+                                            <span t-esc="order.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                        </t>
+                        <t t-if="not order.product_id">
+                            <table style="width:100%;font-size:12px;">
+                                <tr>
+                                    <td>
+                                        <span t-esc="order.name"/>
                                     </td>
                                 </tr>
-                            </t>
-                        </table>
+                            </table>
+                        </t>
                     </div>
                 </div>
                 <div class="col-12 text-right mt-4 oe_subtotal_footer_separator">
