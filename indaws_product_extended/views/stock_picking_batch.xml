@@ -39,12 +39,29 @@
                 <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
                 <label for="fechaformalizado"/>
                 <div>
-                    <field name="fechaformalizado"/>
+                    <field name="fechaaaaaaaaaaaaaaaaaaaaaaaaaaaformalizado"/>
                 </div>
                 <field name="importe"/>
             </xpath>
             <xpath expr="//field[@name='scheduled_date']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//notebook" position='inside'>
+                <page string="Órdenes de Carga y Descarga" name="carga_descarga">
+                    <group name="left_group">
+                        <field name="account_analytic_id"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="stock_picking_batch_stock_picking_batch_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.batch.stock.picking.batch.tree.inherit</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position='after'>
+                <field name='picking_type_id'/>
             </xpath>
         </field>
     </record>
