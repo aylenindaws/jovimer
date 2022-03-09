@@ -39,7 +39,7 @@
                 <field name="fechallegadainternacional" attrs="{'invisible': [('tipoviaje', '!=', 'INTERNACIONAL')]}"/>
                 <label for="fechaformalizado"/>
                 <div>
-                    <field name="fechaaaaaaaaaaaaaaaaaaaaaaaaaaaformalizado"/>
+                    <field name="fechaformalizado"/>
                 </div>
                 <field name="importe"/>
             </xpath>
