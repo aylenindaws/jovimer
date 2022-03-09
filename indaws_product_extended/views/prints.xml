@@ -29,7 +29,7 @@
     <!-- field name="binding_model_id" ref="purchase.order"/ -->
 </record>
 
-<report
+<!--<report
     id="indaws_pedido_venta_report"
     string="Pedido de Venta"
     model="sale.order"
@@ -47,7 +47,7 @@
     file="indaws_product_extended.purchase_report"
     name="indaws_product_extended.purchase_report"
     menu="True"
-/>
+/>-->
 
 <record id="sale_order_jovimer_report" model="ir.actions.report">
     <field name="name">Pedido de Venta</field>
@@ -567,7 +567,5 @@
     <field name="binding_type">report</field>
 
 </record>
-
-
   </data>
 </odoo>
