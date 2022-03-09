@@ -70,3 +70,6 @@ class StockPickingBatch(models.Model):
             lineas += str(lineasalbaranes.id) + ","
             lineasalbaranes.plataformadestino = destinoor
         return {}
+
+    def _sanity_check(self):
+        _logger.error('Pass')
