@@ -118,7 +118,7 @@
 
 <record id="orcar_jovimer_report" model="ir.actions.report">
     <field name="name">Orden de Carga</field>
-    <field name="model">jovimer_viajes</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viajes.orcar.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
@@ -132,7 +132,7 @@
 
 <record id="orcaragr_jovimer_report" model="ir.actions.report">
     <field name="name">Orden de Carga Agrupado</field>
-    <field name="model">jovimer_viajes</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viajes.orcaragr.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
@@ -146,7 +146,7 @@
 
 <record id="cmr_jovimer_report" model="ir.actions.report">
     <field name="name">CMR</field>
-    <field name="model">jovimer_cmr</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_cmr.jovimer</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
@@ -172,7 +172,7 @@
 
 <record id="viaje_grupajes_jovimer_report" model="ir.actions.report">
     <field name="name">Grupajes</field>
-    <field name="model">jovimer_viajes</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viaje_grupajes.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
@@ -183,7 +183,7 @@
 
 <record id="viaje_ctn_jovimer_report" model="ir.actions.report">
     <field name="name">Orden Almacen</field>
-    <field name="model">jovimer_viajes</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viaje_ctn.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
@@ -221,7 +221,7 @@
 
 <record id="resumenviaje_jovimer_report" model="ir.actions.report">
     <field name="name">Resumen Viaje</field>
-    <field name="model">jovimer_viajes</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_resumenviaje.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>

@@ -61,12 +61,6 @@ class StockPickingBatch(models.Model):
     #almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
-    state = fields.Selection([
-        ('draft', 'BORRADOR'),
-        ('online', 'EN CURSO'),
-        ('cancel', 'ENCANCELADOCURSO'),
-        ('done', 'CERRADO')
-    ], string='Estado', default='draft')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
 
     def cambiadestinos(self):
