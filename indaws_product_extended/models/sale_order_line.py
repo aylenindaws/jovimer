@@ -237,6 +237,19 @@ class ModelSaleOrderLine(models.Model):
         self.pvpres = self.price_subtotal - self.pvpcoste
         return {}
 
+    def on_change_cantidadpedido_purchase(self):
+        product_uom_qty = 0
+        raise ValidationError(self.product_uom.name)
+        if self.product_uom.name == 'Bultos':
+            product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
+        if self.product_uom.name == 'Kg':
+            product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
+        if self.product_uom.name == 'Unidades':
+            product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
+        if self.product_uom.name == 'Palets':
+            product_uom_qty = float(self.cantidadpedido)
+        return product_uom_qty
+
     @api.onchange('confeccion')
     def on_change_confeccion(self):
         self.bultos = self.product_id.bulge

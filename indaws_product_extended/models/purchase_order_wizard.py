@@ -22,7 +22,7 @@ class createpurchaseorder(models.TransientModel):
                 'product_uom': record.uom_po_id.id,
                 'order_id': record.order_id.id,
                 'name': record.name,
-                'product_qty': record.product_uom_qty,
+                'product_qty': record.on_change_cantidadpedido_purchase(),
                 'price_unit': record.price_unit,
                 'product_subtotal': record.price_subtotal,
                 'purchase_price': record.purchase_price,

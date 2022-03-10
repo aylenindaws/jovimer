@@ -65,6 +65,16 @@ class ProductTemplate(models.Model):
             item.kg_net_bulge = item.confection.kg_net_bulge
         return {}
 
+    @api.onchange('confection', 'palet_type')
+    def _compute_confeccion(self):
+        for item in self:
+            if 'EUR' in item.palet_type.name:
+                item.bulge = item.confection.bulge_euro_palet
+            if 'Grande' in item.palet_type.name:
+                item.bulge = item.confection.bulge_grand_palet
+            item.kg_net_bulge = item.confection.kg_net_bulge
+        return {}
+
     def calcula_bultos(self):
         for item in self:
             if item.not_calculate_lumps == True:

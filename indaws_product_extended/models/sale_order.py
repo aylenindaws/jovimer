@@ -177,7 +177,7 @@ class SaleOrder(models.Model):
             self.reslote = ' '
 
         if confname == "SEMANA/DIA LLEGADA":
-            try
+            try:
                 weekday = self.commitment_date.date().strftime("%w")
                 if str(weekday) == "0":
                     weekday = "7"
