@@ -82,7 +82,7 @@ class ModelSaleOrderLine(models.Model):
     pvpres = fields.Float(string='Resultado')
     pvpres2 = fields.Float(string='Resultado', compute='_get_total')
     tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
-    discount_supplier = fields.Float(string='Descuento proveedor (%)', digits=dp.get_precision('Discount'), default=0.0)
+    discount_supplier = fields.Float(string='Descuento proveedor (%)', digits=dp.get_precision('Discount'), default=lambda self: self.supplier_id.default_supplierinfo_discount)
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
@@ -186,7 +186,7 @@ class ModelSaleOrderLine(models.Model):
             if supplier:
                 self.uom_po_id = purchase_line.product_uom.id
                 self.purchase_price = purchase_line.price
-                self.discount_supplier = purchase_line.discount
+                self.discount_supplier = supplier.default_supplierinfo_discount
                 self.supplier_id = supplier
                 self.costetrans = supplier.transport_cost
             else:
@@ -196,6 +196,16 @@ class ModelSaleOrderLine(models.Model):
                 self.supplier_id = False
                 self.costetrans = False
         return {}
+
+    @api.onchange('supplier_id')
+    def onchange_supplier_id(self):
+        for item in self:
+            if item.supplier_id:
+                item.discount_supplier = item.supplier_id.default_supplierinfo_discount
+                item.costetrans = item.supplier_id.transport_cost
+            else:
+                item.discount_supplier = False
+                item.costetrans = False
 
     def buscaprovisionales(self):
         idline = self.id

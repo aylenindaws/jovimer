@@ -166,19 +166,19 @@ class SaleOrder(models.Model):
             self.write({'expediente': expedientenuevo.id})
             return {}
 
-    @api.onchange('conformalote', 'fechallegada', 'fechasalida')
+    @api.onchange('conformalote', 'commitment_date', 'fechasalida')
     def onchange_conformalote(self):
         self.ensure_one()
         confname = str(self.conformalote.name)
-        fechallegada = str(self.fechallegada)
+        fechallegada = str(self.commitment_date.date())
         fechasalida = str(self.fechasalida)
 
         if confname == "LO PONE EL CLIENTE":
             self.reslote = ' '
 
         if confname == "SEMANA/DIA LLEGADA":
-            try:
-                weekday = self.fechallegada.strftime("%w")
+            try
+                weekday = self.commitment_date.date().strftime("%w")
                 if str(weekday) == "0":
                     weekday = "7"
                 else:

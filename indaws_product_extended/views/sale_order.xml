@@ -22,6 +22,7 @@
             <xpath expr="//field[@name='order_line']//label[@for='qty_delivered']" position="replace"/>
             <xpath expr="//field[@name='order_line']//label[@for='qty_invoiced']" position="replace"/>
             <xpath expr="//field[@name='order_line']//div[@name='ordered_qty']" position="replace"/>
+            <xpath expr="//group[@name='sale_shipping']" position="replace"/>
             <xpath expr="//field[@name='order_line']//div[@name='delivered_qty']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
             </xpath>
@@ -147,7 +148,11 @@
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="fechasalida"/>
-                <field name="fechallegada"/>
+                <label for="commitment_date" string="Fecha de llegada"/>
+                <div name="commitment_date_div" class="o_row">
+                    <field name="commitment_date"/>
+                    <span name="expected_date_span" class="text-muted">Expected: <field name="expected_date" widget="date"/></span>
+                </div>
                 <field name="horallegada"/>
                 <field name="conformalote" force_save="1"/>
                 <label for="reslote"/>
