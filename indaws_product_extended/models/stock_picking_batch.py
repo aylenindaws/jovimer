@@ -10,6 +10,24 @@ import sys
 _logger = logging.getLogger(__name__)
 
 
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    def action_confirm(self):
+        for item in self:
+            for record in item.move_ids_without_package:
+                record.supplier_id = record.sale_line_id.supplier_id
+                record.client_id = record.sale_line_id.partner_id
+                record.variedad = record.sale_line_id.variedad
+                record.confeccion = record.sale_line_id.confeccion
+                record.envase = record.sale_line_id.envase
+                record.cantidadpedido = record.sale_line_id.cantidadpedido
+                record.tipouom = record.sale_line_id.tipouom
+                record.costetrans = record.sale_line_id.costetrans
+                record.analytic_account_id = record.sale_line_id.order_id.analytic_account_id
+        res = super(StockPicking, self).action_confirm()
+
+
 class StockPickingBatch(models.Model):
     _inherit = 'stock.picking.batch'
 
@@ -32,13 +50,13 @@ class StockPickingBatch(models.Model):
     paletgr = fields.Float(string='Gr')
     apilables = fields.Char(string='Apilables')
     combina = fields.Boolean(string='Combina')
-    #ctn = fields.Many2many('jovimer_ctn', string='Control Transporte Nacional')
-    #cti = fields.Many2many('jovimer_cti', string='Control Transporte Internacional')
-    #ctno2m = fields.One2many('jovimer_ctn', 'orcarga', string='Control Transporte Nacional')
-    #ctio2m = fields.One2many('jovimer_cti', 'viaje', string='Control Transporte Internacional')
-    #ordenrecoalma = fields.One2many('jovimer_ordenrecalm', 'viaje', string='Orden Recogida Almacén')
-    #cmr = fields.Many2many('jovimer_cmr', string='CMR')
-    #ordencarga = fields.One2many('jovimer_ordencarga', 'viaje', string='Ordenes de Carga')
+    # ctn = fields.Many2many('jovimer_ctn', string='Control Transporte Nacional')
+    # cti = fields.Many2many('jovimer_cti', string='Control Transporte Internacional')
+    # ctno2m = fields.One2many('jovimer_ctn', 'orcarga', string='Control Transporte Nacional')
+    # ctio2m = fields.One2many('jovimer_cti', 'viaje', string='Control Transporte Internacional')
+    # ordenrecoalma = fields.One2many('jovimer_ordenrecalm', 'viaje', string='Orden Recogida Almacén')
+    # cmr = fields.Many2many('jovimer_cmr', string='CMR')
+    # ordencarga = fields.One2many('jovimer_ordencarga', 'viaje', string='Ordenes de Carga')
     observaciones = fields.Text(string='Observaciones')
     destinointerior = fields.Selection([
         ('Plataforma XERESA', 'Plataforma XERESA'), ('Perpignan', 'Perpignan'), ('Barcelona', 'Barcelona')
@@ -47,18 +65,18 @@ class StockPickingBatch(models.Model):
     destinoor = fields.Many2one('res.partner', string='Destino Cliente')
     fechallegadanacional = fields.Date(string='Fecha LLegada Nacional')
     fechallegadainternacional = fields.Date(string='Fecha Llegada Internacional')
-    #orcargacab = fields.One2many('jovimer_ordencargacab', 'viajerel', string='Orden Carga Cabecera')
-    #orcargacabprint = fields.One2many('jovimer_ordencargacabprint', 'viajerel', string='Impresion Orden de Carga')
+    # orcargacab = fields.One2many('jovimer_ordencargacab', 'viajerel', string='Orden Carga Cabecera')
+    # orcargacabprint = fields.One2many('jovimer_ordencargacabprint', 'viajerel', string='Impresion Orden de Carga')
     productos = fields.Text(string='Productos')
     preparafactura = fields.Boolean(string='Prep Factura')
     facturado = fields.Boolean(string='Facturado')
     facturarel = fields.Many2one(string='account.invoice')
-    #resumencabe = fields.One2many('jovimer_viajeresumen', 'viaje', string='Resumen Cliente')
-    #resumenlin = fields.One2many('jovimer_viajeresumenlin', 'viaje', string='Resumen Lineas')
-    #grupajes = fields.One2many('jovimer_grupajes', 'name', string='Grupajes')
+    # resumencabe = fields.One2many('jovimer_viajeresumen', 'viaje', string='Resumen Cliente')
+    # resumenlin = fields.One2many('jovimer_viajeresumenlin', 'viaje', string='Resumen Lineas')
+    # grupajes = fields.One2many('jovimer_grupajes', 'name', string='Grupajes')
     proveedores = fields.Text(string='Proveedores')
-    #linealbcompra = fields.Many2many('account.move.line', string='Lineas de Albarán')#,domain="[('diariofactura','=', 9)]")
-    #almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
+    # linealbcompra = fields.Many2many('account.move.line', string='Lineas de Albarán')#,domain="[('diariofactura','=', 9)]")
+    # almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
