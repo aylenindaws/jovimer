@@ -68,7 +68,7 @@ class ProductTemplate(models.Model):
     @api.onchange('confection', 'palet_type')
     def _compute_confeccion(self):
         for item in self:
-            if 'EUR' in item.palet_type.name:
+            if 'EUR' in item.palet_type.name or 'GREENBOX' in item.palet_type.name:
                 item.bulge = item.confection.bulge_euro_palet
             if 'Grande' in item.palet_type.name:
                 item.bulge = item.confection.bulge_grand_palet
