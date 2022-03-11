@@ -239,7 +239,6 @@ class ModelSaleOrderLine(models.Model):
 
     def on_change_cantidadpedido_purchase(self):
         product_uom_qty = 0
-        raise ValidationError(self.product_uom.name)
         if self.product_uom.name == 'Bultos':
             product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
         if self.product_uom.name == 'Kg':

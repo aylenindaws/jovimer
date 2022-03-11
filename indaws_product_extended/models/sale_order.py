@@ -170,7 +170,7 @@ class SaleOrder(models.Model):
     def onchange_conformalote(self):
         self.ensure_one()
         confname = str(self.conformalote.name)
-        fechallegada = str(self.commitment_date.date())
+        fechallegada = str(self.commitment_date.date()) if self.commitment_date else False
         fechasalida = str(self.fechasalida)
 
         if confname == "LO PONE EL CLIENTE":
