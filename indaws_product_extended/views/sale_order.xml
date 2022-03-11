@@ -35,24 +35,36 @@
                 <attribute name='invisible'>1</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom_qty']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="after">
+                <field name="cantidadpedido" string="Palets:" optional="hide"/>
+                <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}" optional="hide"/>
+                <field name="bultos" optional="hide"/>
+                <field name="unidadesporbultor" readonly="False" optional="hide"/>
+                <field name="kgnetbulto" optional="hide"/>
+                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="hide"/>
+                <field name="product_uom" optional="hide" string="Ud Venta"/>
+                <field name="price_unit" optional="hide" string="Precio de Venta"/>
+                <field name="discount" optional="hide" string="Descuento"/>
                 <field name="supplier_id" optional="hide" string="Proveedor"/>
                 <field name="uom_po_id" optional="hide" string="Ud Compra"/>
                 <field name="purchase_price" optional="hide" string="Precio de compra"/>
-                <field name="costetrans" optional="hide" string="Transporte "/>
+                <field name="discount_supplier" optional="hide" string="Descuento proveedor (%)"/>
+                <field name="costetrans" optional="hide" string="Transporte"/>
+                <field name="variedad" optional="hide"/>
+                <field name="calibre" optional="hide"/>
+                <field name="categoria" optional="hide"/>
+                <field name="confeccion" optional="hide"/>
+                <field name="envase" optional="hide"/>
+                <field name="marca" optional="hide"/>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="attributes">
-                <attribute name="string">Precio de venta</attribute>
-            </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom']" position="attributes">
-                <attribute name="string">Ud Venta</attribute>
-            </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="attributes">
-                <attribute name="string">Descuento proveedor (%)</attribute>
-            </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
+            <!--<xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
-            </xpath>
+            </xpath>-->
             <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="replace">
                 <field name="purchase_related_ids">
                     <tree create='false'>
@@ -70,6 +82,11 @@
                         <field name="invoice_status" optional="hide"/>
                     </tree>
                 </field>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']" position="after">
+                <page name='administration_sale_lines' string="GERENCIA">
+                    <field name="order_line"/>
+                </page>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='analytic_tag_ids']" position="after">
                 <field name="price_unit" string="Precio de Venta"/>
