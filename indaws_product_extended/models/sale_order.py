@@ -60,8 +60,8 @@ class SaleOrder(models.Model):
     serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
-    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
-                               domain="[('mimetype','=','text/plain')]")
+    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
+    order_line_admin = fields.One2many('sale.order.line', 'order_id', related='order_line', string='Order Lines', copy=True)
 
     def update_edi_file(self, default=None):
         for item in self:

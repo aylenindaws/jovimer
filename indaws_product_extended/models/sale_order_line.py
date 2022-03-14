@@ -54,6 +54,7 @@ class ModelSaleOrderLine(models.Model):
     expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
     expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
     bultos = fields.Float(string='Bultos x Palet')
+    price_trans = fields.Float(string='Precio por kg de transporte', compute='on_change_km_transporte')
     totalbultos = fields.Float(string='Total Bultos', compute='_compute_totalbultos', store=True)
     partner_id = fields.Many2one('res.partner', string='Partner', related='order_id.partner_id', store=True)
     kgnetbulto = fields.Float(string='Kg/Net Bulto')
@@ -249,6 +250,12 @@ class ModelSaleOrderLine(models.Model):
             product_uom_qty = float(self.cantidadpedido)
         return product_uom_qty
 
+    @api.depends('cantidadpedido','bultos','kgnetbulto')
+    def on_change_km_transporte(self):
+        price_trans = costetrans / (float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto))
+        self.price_trans = price_trans
+        return price_trans
+
     @api.onchange('confeccion')
     def on_change_confeccion(self):
         self.bultos = self.product_id.bulge
@@ -390,3 +397,7 @@ class ModelSaleOrderLine(models.Model):
             'res_id': invoice
         }
         return view
+
+    @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount')
+    def onchange_margin(self):
+        self.margin = self.price_unit - self.costetrans - self.purchase_price - (self.discount_supplier*self.price_subtotal) - (self.discount*self.price_subtotal)

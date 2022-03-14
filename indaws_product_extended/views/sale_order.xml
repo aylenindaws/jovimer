@@ -41,26 +41,27 @@
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="after">
-                <field name="cantidadpedido" string="Palets:" optional="hide"/>
-                <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}" optional="hide"/>
-                <field name="bultos" optional="hide"/>
-                <field name="unidadesporbultor" readonly="False" optional="hide"/>
-                <field name="kgnetbulto" optional="hide"/>
-                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="hide"/>
-                <field name="product_uom" optional="hide" string="Ud Venta"/>
-                <field name="price_unit" optional="hide" string="Precio de Venta"/>
-                <field name="discount" optional="hide" string="Descuento"/>
-                <field name="supplier_id" optional="hide" string="Proveedor"/>
-                <field name="uom_po_id" optional="hide" string="Ud Compra"/>
-                <field name="purchase_price" optional="hide" string="Precio de compra"/>
-                <field name="discount_supplier" optional="hide" string="Descuento proveedor (%)"/>
-                <field name="costetrans" optional="hide" string="Transporte"/>
-                <field name="variedad" optional="hide"/>
-                <field name="calibre" optional="hide"/>
-                <field name="categoria" optional="hide"/>
-                <field name="confeccion" optional="hide"/>
-                <field name="envase" optional="hide"/>
-                <field name="marca" optional="hide"/>
+                <field name="price_trans" invisible="1"/>
+                <field name="cantidadpedido" string="Palets:" optional="show"/>
+                <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}" optional="show"/>
+                <field name="bultos" optional="show"/>
+                <field name="unidadesporbultor" readonly="False" optional="show"/>
+                <field name="kgnetbulto" optional="show"/>
+                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="show"/>
+                <field name="product_uom" optional="show" string="Ud Venta"/>
+                <field name="price_unit" optional="show" string="Precio de Venta"/>
+                <field name="discount" optional="show" string="Descuento"/>
+                <field name="supplier_id" optional="show" string="Proveedor"/>
+                <field name="uom_po_id" optional="show" string="Ud Compra"/>
+                <field name="purchase_price" optional="show" string="Precio de compra"/>
+                <field name="discount_supplier" optional="show" string="Descuento proveedor (%)"/>
+                <field name="costetrans" optional="show" string="Transporte"/>
+                <field name="variedad" optional="show"/>
+                <field name="calibre" optional="show"/>
+                <field name="categoria" optional="show"/>
+                <field name="confeccion" optional="show"/>
+                <field name="envase" optional="show"/>
+                <field name="marca" optional="show"/>
             </xpath>
             <!--<xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
@@ -85,7 +86,15 @@
             </xpath>
             <xpath expr="//page[@name='related_purchases']" position="after">
                 <page name='administration_sale_lines' string="GERENCIA">
-                    <field name="order_line"/>
+                    <field name="order_line_admin">
+                        <tree create='false'>
+                            <field name="margin"/>
+                            <field name="purchase_price" string="Precio de compra"/>
+                            <field name="price_unit" string="Precio de Venta"/>
+                            <field name="product_id" string="Producto"/>
+                            <field name="price_trans" string="Precio por KG de Transporte"/>
+                        </tree>
+                    </field>
                 </page>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='analytic_tag_ids']" position="after">
@@ -124,7 +133,7 @@
                             <field name="product_uom" force_save="1" groups="uom.group_uom" class="oe_no_button" attrs="{'readonly': [('product_uom_readonly', '=', True)],'required': [('display_type', '=', False)]}"/>
                         </div>
                     </group>
-                </group>    
+                </group>
             </xpath>
             <xpath expr="//field[@name='analytic_account_id']" position="replace">
                 <field name="company_id" invisible='1'/>
@@ -182,9 +191,6 @@
                     </div>-->
                 </div>
                 <field name="pedidocerrado"/>
-            </xpath>
-            <xpath expr="//field[@name='order_line']" position="attributes">
-                <attribute name="attrs">{'editable':'top'}</attribute>
             </xpath>
         </field>
     </record>
