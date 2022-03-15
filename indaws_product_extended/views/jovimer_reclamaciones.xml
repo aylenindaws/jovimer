@@ -2,7 +2,7 @@
     <data>
         <record model="ir.ui.view" id="jovimer_reclamaciones_view_tree">
               <field name="name">JOVIMER - Reclamaciones</field>
-              <field name="model">jovimer_reclamaciones</field>
+              <field name="model">jovimer.reclamaciones</field>
               <field name="priority">0</field>
               <field name="arch" type="xml">
                   <tree string="Reclamaciones" import="False">
@@ -17,7 +17,7 @@
         </record>
         <record model="ir.ui.view" id="jovimer_reclamaciones_view_form">
             <field name="name">JOVIMER - Reclamaciones</field>
-            <field name="model">jovimer_reclamaciones</field>
+            <field name="model">jovimer.reclamaciones</field>
             <field name="priority">0</field>
             <field name="arch" type="xml">
                 <form string="Viajes">
@@ -78,6 +78,7 @@
         name="Cuentas de Venta"
         web_icon="indaws_product_extended,static\src\img\ventas.png"
         sequence="10"/>
+
     <menuitem name="Reclamaciones"
         id="menu_jovimer_reclamaciones"
         parent="menu_jovimerctavta"
