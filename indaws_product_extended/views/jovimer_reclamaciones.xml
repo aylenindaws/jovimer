@@ -1,0 +1,87 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="jovimer_reclamaciones_view_tree">
+              <field name="name">JOVIMER - Reclamaciones</field>
+              <field name="model">jovimer_reclamaciones</field>
+              <field name="priority">0</field>
+              <field name="arch" type="xml">
+                  <tree string="Reclamaciones" import="False">
+                      <field name="expediente" string="Expediente"/>
+                      <field name="name"/>
+                      <field name="asunto"/>
+                      <field name="cliente"/>
+                      <field name="fechasaalta"/>
+                      <field name="status"/>
+                  </tree>
+              </field>
+        </record>
+        <record model="ir.ui.view" id="jovimer_reclamaciones_view_form">
+            <field name="name">JOVIMER - Reclamaciones</field>
+            <field name="model">jovimer_reclamaciones</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <form string="Viajes">
+                    <header>
+                        <button name="778" string="Imprimir desde Documentos contables" type="action"/>
+                    </header>
+                    <group>
+                        <group>
+                            <label for="expediente"/>
+                            <div>
+                                <field name="expediente_serien" string="Exp." readonly="1"/>
+                                <field name="expediente" string="Num."/>
+                            </div>
+                            <field name="cliente"/>
+                        </group>
+                        <group>
+                            <field name="fechasaalta"/>
+                            <field name="fechabaja"/>
+                        </group>
+                    </group>
+                    <group>
+					    <field name="asunto" placeholder="Asunto Reclamación..."/>
+                    </group>
+                    <notebook>
+                        <page string="Detalle">
+	                        <group>
+                                <group>
+                                    <field name="observacionescliente"/>
+                                    <field name="accionescorrectivas"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Fotografias Detalle">
+                            <field name="imagenes">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="imagen" widget="image"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Detalle de Documentos Contables">
+                            <field name="detalledocumentoscontables"/>
+                        </page>
+                    </notebook>
+		        </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_jovimer_reclamaciones">
+            <field name="name">Reclamaciones</field>
+            <field name="res_model">jovimer_reclamaciones</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">Reclamaciones</field>
+            <field name="context"></field>
+            <field name="domain"></field>
+            <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_reclamaciones_view_tree')}),(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_reclamaciones_view_form')})]"/>
+    </record>
+    <menuitem id="menu_jovimerctavta"
+        name="Cuentas de Venta"
+        web_icon="indaws_product_extended,static\src\img\ventas.png"
+        sequence="10"/>
+    <menuitem name="Reclamaciones"
+        id="menu_jovimer_reclamaciones"
+        parent="menu_jovimerctavta"
+        sequence="1"
+        action="action_jovimer_reclamaciones"/>
+    </data>
+</odoo>	
