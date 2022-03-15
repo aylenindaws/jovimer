@@ -82,17 +82,6 @@ class StockPickingBatch(models.Model):
     # almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
-    picking_ids = fields.One2many(
-        'stock.picking', 'batch_id', string='Transfers', readonly=True,
-        domain= lambda self: self._domain_picking_ids(), check_company=True,
-        states={'draft': [('readonly', False)], 'in_progress': [('readonly', False)]},
-        help='List of transfers associated to this batch')
-
-    def _domain_picking_ids(self):
-        if self.expediente:
-            return "[('id', 'in', allowed_picking_ids),('analytic_account_id', '=', expediente)]"
-        else:
-            return "[('id', 'in', allowed_picking_ids)]"
 
     def cambiadestinos(self):
         destinoor = self.destinoor

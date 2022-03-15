@@ -72,15 +72,11 @@
             <field name="domain"></field>
             <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_reclamaciones_view_tree')}),(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_reclamaciones_view_form')})]"/>
     </record>
-    <menuitem id="menu_jovimerctavta"
-        name="Cuentas de Venta"
-        web_icon="static\src\img\ventas.png"
-        sequence="10"/>
 
     <menuitem name="Reclamaciones"
         id="menu_jovimer_reclamaciones"
-        parent="menu_jovimerctavta"
-        sequence="1"
+        parent="sale.sale_menu_root"
+        sequence="2"
         action="action_jovimer_reclamaciones"/>
     </data>
 </odoo>	
