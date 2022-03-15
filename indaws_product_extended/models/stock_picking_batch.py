@@ -13,6 +13,9 @@ _logger = logging.getLogger(__name__)
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Expediente',
+                                          related='sale_id.analytic_account_id')
+
     def action_confirm(self):
         for item in self:
             for record in item.move_ids_without_package:
@@ -79,7 +82,17 @@ class StockPickingBatch(models.Model):
     # almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
-    account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+    picking_ids = fields.One2many(
+        'stock.picking', 'batch_id', string='Transfers', readonly=True,
+        domain= lambda self: self._domain_picking_ids(), check_company=True,
+        states={'draft': [('readonly', False)], 'in_progress': [('readonly', False)]},
+        help='List of transfers associated to this batch')
+
+    def _domain_picking_ids(self):
+        if self.expediente:
+            return "[('id', 'in', allowed_picking_ids),('analytic_account_id', '=', expediente)]"
+        else:
+            return "[('id', 'in', allowed_picking_ids)]"
 
     def cambiadestinos(self):
         destinoor = self.destinoor

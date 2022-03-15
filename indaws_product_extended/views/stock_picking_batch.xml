@@ -45,7 +45,7 @@
                     <field name="apilables" class="oe_inline"/> /
                     <field name="combina" class="oe_inline"/>
                 </div>
-                <field name="account_analytic_id"/>
+                <field name="expediente"/>
                 <field name="tipoviaje" invisible="1"/>
                 <field name="destinoor" invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
             </xpath>
