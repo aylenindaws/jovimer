@@ -82,6 +82,15 @@ class StockPickingBatch(models.Model):
     # almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
+    exp_picking_ids = fields.One2many('stock.picking', 'batch_id', string='Pickings', compute="_compute_exp_picking_ids")
+
+    @api.depends("picking_ids","expediente")
+    def _compute_exp_picking_ids(self):
+        for item in self:
+            if item.expediente:
+                item.exp_picking_ids = self.env['stock.picking'].search([('analytic_account_id','in',item.expediente.id)])
+            else:
+                item.exp_picking_ids =self.env['stock.picking'].search([('id','>',0)])
 
     def cambiadestinos(self):
         destinoor = self.destinoor

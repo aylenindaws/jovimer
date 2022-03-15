@@ -46,11 +46,12 @@
                     <field name="combina" class="oe_inline"/>
                 </div>
                 <field name="expediente"/>
+                <field name="exp_picking_id" invisible="1"/>
                 <field name="tipoviaje" invisible="1"/>
                 <field name="destinoor" invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
             </xpath>
             <xpath expr="//field[@name='picking_ids']" position="attributes">
-                <attribute name="domain">[('analytic_account_id','ilike',expediente)]</attribute>
+                <attribute name="domain">[('analytic_account_id','in',exp_picking_id)]</attribute>
             </xpath>
             <xpath expr="//field[@name='user_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
