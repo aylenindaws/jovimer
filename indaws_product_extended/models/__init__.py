@@ -14,6 +14,7 @@ from . import jovimer_variedad
 from . import uom_uom
 from . import jovimer_palet
 from . import jovimer_plataforma
+from . import jovimer_reclamaciones
 from . import res_partner
 from . import stock_picking_batch
 from . import product_template
