@@ -26,7 +26,7 @@
                             <group>
                                 <label for="expediente"/>
                                 <div>
-                                    <field name="expediente" readonly="1"/>
+                                    <field name="expediente"/>
                                 </div>
                                 <field name="cliente"/>
                             </group>
