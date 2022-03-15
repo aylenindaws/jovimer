@@ -543,7 +543,7 @@
 
 <record id="reclamacionesdocc_jovimer_report" model="ir.actions.report">
     <field name="name">Reclamaciones Documento Contable</field>
-    <field name="model">jovimer_reclamaciones</field>
+    <field name="model">jovimer.reclamaciones</field>
     <field name="report_name">jovimer_reclamacionesdocc.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>

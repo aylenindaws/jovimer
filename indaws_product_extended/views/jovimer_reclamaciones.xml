@@ -74,7 +74,7 @@
     </record>
     <menuitem id="menu_jovimerctavta"
         name="Cuentas de Venta"
-        web_icon="indaws_product_extended,static\src\img\ventas.png"
+        web_icon="static\src\img\ventas.png"
         sequence="10"/>
 
     <menuitem name="Reclamaciones"
