@@ -252,7 +252,10 @@ class ModelSaleOrderLine(models.Model):
 
     @api.depends('cantidadpedido','bultos','kgnetbulto')
     def on_change_km_transporte(self):
-        price_trans = costetrans / (float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto))
+        if self.cantidadpedido and self.bultos and self.kgnetbulto:
+            price_trans = self.costetrans/(float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto))
+        else:
+            price_trans = self.costetrans
         self.price_trans = price_trans
         return price_trans
 

@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+    transport_kg = fields.Float(string='Transporte por KG', copy=True)
     bulge = fields.Float(string='Bultos', store=True, copy=True)
     caliber = fields.Many2one('jovimer.calibre', string="Calibre", store=True, copy=True, ondelete='set null')
     category = fields.Many2one('jovimer.categoria', string="Categoria", store=True, copy=True, ondelete='set null')
@@ -68,10 +69,11 @@ class ProductTemplate(models.Model):
     @api.onchange('confection', 'palet_type')
     def _compute_confeccion(self):
         for item in self:
-            if 'EUR' in item.palet_type.name or 'GREENBOX' in item.palet_type.name:
-                item.bulge = item.confection.bulge_euro_palet
-            if 'Grande' in item.palet_type.name:
-                item.bulge = item.confection.bulge_grand_palet
+            if item.palet_type:
+                if 'EUR' in item.palet_type.name or 'GREENBOX' in item.palet_type.name:
+                    item.bulge = item.confection.bulge_euro_palet
+                if 'Grande' in item.palet_type.name:
+                    item.bulge = item.confection.bulge_grand_palet
             item.kg_net_bulge = item.confection.kg_net_bulge
         return {}
 
