@@ -88,9 +88,9 @@ class StockPickingBatch(models.Model):
     def _compute_exp_picking_ids(self):
         for item in self:
             if item.expediente:
-                item.exp_picking_ids = self.env['stock.picking'].search([('analytic_account_id','in',item.expediente.id)])
+                item.exp_picking_ids = self.env['stock.picking'].search(['|',('analytic_account_id','=',item.expediente.id),('analytic_account_id','=',False)])
             else:
-                item.exp_picking_ids =self.env['stock.picking'].search([('id','>',0)])
+                item.exp_picking_ids =self.env['stock.picking'].search([('id','!=',0)])
 
     def cambiadestinos(self):
         destinoor = self.destinoor
