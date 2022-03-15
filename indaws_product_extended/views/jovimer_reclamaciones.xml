@@ -21,53 +21,51 @@
             <field name="priority">0</field>
             <field name="arch" type="xml">
                 <form string="Viajes">
-                    <header>
-                        <button name="778" string="Imprimir desde Documentos contables" type="action"/>
-                    </header>
-                    <group>
+                    <sheet>
                         <group>
-                            <label for="expediente"/>
-                            <div>
-                                <field name="expediente_serien" string="Exp." readonly="1"/>
-                                <field name="expediente" string="Num."/>
-                            </div>
-                            <field name="cliente"/>
-                        </group>
-                        <group>
-                            <field name="fechasaalta"/>
-                            <field name="fechabaja"/>
-                        </group>
-                    </group>
-                    <group>
-					    <field name="asunto" placeholder="Asunto Reclamación..."/>
-                    </group>
-                    <notebook>
-                        <page string="Detalle">
-	                        <group>
-                                <group>
-                                    <field name="observacionescliente"/>
-                                    <field name="accionescorrectivas"/>
-                                </group>
+                            <group>
+                                <label for="expediente"/>
+                                <div>
+                                    <field name="expediente" readonly="1"/>
+                                </div>
+                                <field name="cliente"/>
                             </group>
-                        </page>
-                        <page string="Fotografias Detalle">
-                            <field name="imagenes">
-                                <tree editable="top">
-                                    <field name="name"/>
-                                    <field name="imagen" widget="image"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Detalle de Documentos Contables">
-                            <field name="detalledocumentoscontables"/>
-                        </page>
-                    </notebook>
+                            <group>
+                                <field name="fechasaalta"/>
+                                <field name="fechabaja"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="asunto" placeholder="Asunto Reclamación..."/>
+                        </group>
+                        <notebook>
+                            <page string="Detalle">
+                                <group>
+                                    <group>
+                                        <field name="observacionescliente"/>
+                                        <field name="accionescorrectivas"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Fotografias Detalle">
+                                <field name="imagenes">
+                                    <tree editable="top">
+                                        <field name="name"/>
+                                        <field name="imagen" widget="image"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Detalle de Documentos Contables">
+                                <field name="detalledocumentoscontables"/>
+                            </page>
+                        </notebook>
+                    </sheet>
 		        </form>
             </field>
         </record>
         <record model="ir.actions.act_window" id="action_jovimer_reclamaciones">
             <field name="name">Reclamaciones</field>
-            <field name="res_model">jovimer_reclamaciones</field>
+            <field name="res_model">jovimer.reclamaciones</field>
             <field name="view_mode">tree,form</field>
             <field name="help">Reclamaciones</field>
             <field name="context"></field>

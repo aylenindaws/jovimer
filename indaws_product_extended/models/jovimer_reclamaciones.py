@@ -39,7 +39,7 @@ class JovimerReclamaciones(models.Model):
 
 class ModelReclamacionesImagenes(models.Model):
     # Tabla Reclamaciones
-    _name = 'jovimer_imagenes_reclamaciones'
+    _name = 'jovimer.imagenes.reclamaciones'
 
     # Campos Pesonalizados en pedidos de Venta
     name = fields.Char(string='Codigo Reclamacion')
