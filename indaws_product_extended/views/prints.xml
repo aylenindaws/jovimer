@@ -194,7 +194,7 @@
 
 <record id="viaje_carga_ctn_jovimer_report" model="ir.actions.report">
     <field name="name">Orden Almacen Carga</field>
-    <field name="model">jovimer_ordencargacabprint</field>
+    <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viaje_carga_ctn.report</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">odt</field>
