@@ -37,6 +37,9 @@ class JovimerReclamaciones(models.Model):
         ('CANCELADA', 'CANCELADA'),
         ('DESESTIMADA', 'DESESTIMADA'),
     ], string='Estado', default='ABIERTA')
+    company_id = fields.Many2one(
+        comodel_name='res.company', string='Company',
+        required=True, default=lambda self: self.env.user.company_id)
 
     def action_claim_send(self):
         ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
