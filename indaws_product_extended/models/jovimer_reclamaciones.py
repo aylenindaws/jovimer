@@ -45,15 +45,24 @@ class JovimerReclamaciones(models.Model):
         ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
         self.ensure_one()
         template = self.env.ref('indaws_product_extended.email_template_reclamation')
-        if template.lang:
-            lang = template._render_lang(self.ids)[self.id]
+        ctx = {
+            'default_model': 'jovimer.reclamaciones',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template.id),
+            'default_template_id': template.id,
+            'default_composition_mode': 'comment',
+            'mark_so_as_sent': True,
+            'proforma': self.env.context.get('proforma', False),
+            'force_email': True,
+        }
         return {
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'res_model': 'mail.compose.message',
             'views': [(False, 'form')],
             'view_id': False,
-            'target': 'new'
+            'target': 'new',
+            'context': ctx,
         }
 
 class ModelReclamacionesImagenes(models.Model):
