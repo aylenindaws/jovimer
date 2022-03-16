@@ -63,6 +63,11 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
 		        </form>
             </field>
         </record>
@@ -76,9 +81,19 @@
             <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_reclamaciones_view_tree')}),(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_reclamaciones_view_form')})]"/>
     </record>
 
+    <menuitem name="Cuentas de Venta"
+        id="menu_jovimer_cuentas_venta_parent"
+        parent="sale.sale_menu_root"
+        sequence="2"
+    />
+    <menuitem name="Cuentas de Venta"
+        id="menu_jovimer_cuentas_venta"
+        parent="menu_jovimer_cuentas_venta_parent"
+        sequence="1"
+        action=""/>
     <menuitem name="Reclamaciones"
         id="menu_jovimer_reclamaciones"
-        parent="sale.sale_menu_root"
+        parent="menu_jovimer_cuentas_venta_parent"
         sequence="2"
         action="action_jovimer_reclamaciones"/>
     </data>
