@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class JovimerReclamaciones(models.Model):
     _name = 'jovimer.reclamaciones'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'jovimer reclamaciones'
 
     name = fields.Char(string='Codigo Reclamacion')
@@ -20,7 +21,7 @@ class JovimerReclamaciones(models.Model):
     fechabaja = fields.Date(string='Fecha de Baja')
     campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
     expediente = fields.Many2one('account.analytic.account', string='Expediente')
-    cliente = fields.Many2one('res.partner', string='Quien Reclama')
+    cliente = fields.Many2one('res.partner', string='Proveedor reclamación')
     lineaspedido = fields.Many2many('sale.order', string='Documentos de Venta Afectados')
     detalledocumentos = fields.Many2many('sale.order.line', string='Lineas de Documentos Afectadas')
     detalledocumentoscompra = fields.Many2many('purchase.order.line', string='Lineas de Documentos de Compra Afectados')

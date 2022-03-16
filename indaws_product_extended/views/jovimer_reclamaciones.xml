@@ -21,6 +21,9 @@
             <field name="priority">0</field>
             <field name="arch" type="xml">
                 <form string="Viajes">
+                    <header>
+                        <field name="status" widget="statusbar" options="{'clickable': '1'}"/>
+                    </header>
                     <sheet>
                         <group>
                             <group>
