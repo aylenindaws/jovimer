@@ -38,6 +38,21 @@ class JovimerReclamaciones(models.Model):
         ('DESESTIMADA', 'DESESTIMADA'),
     ], string='Estado', default='ABIERTA')
 
+    def action_claim_send(self):
+        ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
+        self.ensure_one()
+        template = self.env.ref('indaws_product_extended.email_template_reclamation')
+        if template.lang:
+            lang = template._render_lang(self.ids)[self.id]
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False, 'form')],
+            'view_id': False,
+            'target': 'new'
+        }
+
 class ModelReclamacionesImagenes(models.Model):
     # Tabla Reclamaciones
     _name = 'jovimer.imagenes.reclamaciones'
