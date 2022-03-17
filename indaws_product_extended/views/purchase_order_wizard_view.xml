@@ -14,6 +14,7 @@
                 <field name="calibre" optional="hide" />
                 <field name="marca" optional="hide" />
                 <field name="envase" optional="hide" />
+                <field name="discount" optional="hide" />
                 <field name="account_analytic_id" optional="hide" />
             </xpath>
         </field>

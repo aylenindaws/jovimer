@@ -13,8 +13,7 @@ _logger = logging.getLogger(__name__)
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    analytic_account_id = fields.Many2one('account.analytic.account', string='Expediente',
-                                          related='sale_id.analytic_account_id')
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Expediente')
 
     def action_confirm(self):
         for item in self:
@@ -29,6 +28,35 @@ class StockPicking(models.Model):
                 record.costetrans = record.sale_line_id.costetrans
                 record.analytic_account_id = record.sale_line_id.order_id.analytic_account_id
         res = super(StockPicking, self).action_confirm()
+
+    def compute_analytic_account_id(self):
+        for item in self:
+            if item.sale_id:
+                item.analytic_account_id = item.sale_id.analytic_account_id
+            else:
+                purchase = self.env['purchase.order'].search([('name', 'ilike', '%' + item.origin + '%')])
+                if purchase:
+                    item.analytic_account_id = purchase.account_analytic_id
+                else:
+                    account_analytic = self.env['account.analytic.account'].search(
+                        [('name', 'ilike', '%' + item.origin + '%')])
+                    if account_analytic:
+                        item.analytic_account_id = account_analytic.id
+
+            item.ensure_one()
+
+    @api.model
+    def create(self, vals):
+        result = super(StockPicking, self).create(vals)
+        if not result.analytic_account_id:
+            result.compute_analytic_account_id()
+        return result
+
+    def write(self, vals):
+        result = super(StockPicking, self).write(vals)
+        if not self.analytic_account_id and not 'analytic_account_id' in vals:
+            self.compute_analytic_account_id()
+        return result
 
 
 class StockPickingBatch(models.Model):
@@ -82,15 +110,17 @@ class StockPickingBatch(models.Model):
     # almacenxeresa = fields.Many2many('account.move.line', string='Almacen Xeresa')
     nunlinlinealbcompra = fields.Char(string='Num. Lineas')
     nunlinalmacenxeresa = fields.Char(string='Num. Lineas')
-    exp_picking_ids = fields.One2many('stock.picking', 'batch_id', string='Pickings', compute="_compute_exp_picking_ids")
+    exp_picking_ids = fields.One2many('stock.picking', 'batch_id', string='Pickings',
+                                      compute="_compute_exp_picking_ids")
 
-    @api.depends("picking_ids","expediente")
+    @api.depends("picking_ids", "expediente")
     def _compute_exp_picking_ids(self):
         for item in self:
             if item.expediente:
-                item.exp_picking_ids = self.env['stock.picking'].search(['|',('analytic_account_id','=',item.expediente.id),('analytic_account_id','=',False)])
+                item.exp_picking_ids = self.env['stock.picking'].search(
+                    ['|', ('analytic_account_id', '=', item.expediente.id), ('analytic_account_id', '=', False)])
             else:
-                item.exp_picking_ids =self.env['stock.picking'].search([('id','!=',0)])
+                item.exp_picking_ids = self.env['stock.picking'].search([('id', '!=', 0)])
 
     def cambiadestinos(self):
         destinoor = self.destinoor

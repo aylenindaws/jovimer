@@ -38,6 +38,7 @@
                 <field name="priority" string="Prioridad" widget="priority" class="mr-3"/>
             </xpath>
             <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="att"/>
                 <field name="paisdestino"/>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="before">

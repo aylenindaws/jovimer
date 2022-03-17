@@ -24,7 +24,7 @@ class PurchaseOrder(models.Model):
     obspedido = fields.Text(string='Observaciones PEdido')
     description = fields.Char(string='Desc.')
     estadodesc = fields.Char(string='Estado Desc.')
-    att = fields.Char(string='Attención de:')
+    att = fields.Char(string='Atención de:')
     consignatario = fields.Char(string='Consignatario/Plataforma')
     destino = fields.Boolean(string='Para Almacén')
     destinodonde = fields.Char(string='Donde Está')
@@ -37,6 +37,7 @@ class PurchaseOrder(models.Model):
     estadocrear = fields.Boolean(string='Finalizada Creacion')
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+
 
     @api.model
     def create(self, vals):

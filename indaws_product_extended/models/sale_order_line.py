@@ -238,16 +238,20 @@ class ModelSaleOrderLine(models.Model):
         self.pvpres = self.price_subtotal - self.pvpcoste
         return {}
 
-    def on_change_cantidadpedido_purchase(self):
-        product_uom_qty = 0
-        if self.product_uom.name == 'Bultos':
-            product_uom_qty = float(self.cantidadpedido) * float(self.bultos)
-        if self.product_uom.name == 'Kg':
-            product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.kgnetbulto)
-        if self.product_uom.name == 'Unidades':
-            product_uom_qty = float(self.cantidadpedido) * float(self.bultos) * float(self.unidadesporbultor)
-        if self.product_uom.name == 'Palets':
-            product_uom_qty = float(self.cantidadpedido)
+    def on_change_cantidadpedido_purchase(self, unidad_venta, unidad_compra):
+        product_uom_qty = self.product_uom_qty
+        if unidad_venta == 'Bultos' and unidad_compra == 'Kg':
+            product_uom_qty = float(self.product_uom_qty)*float(self.kgnetbulto)
+        if unidad_venta == 'Bultos' and unidad_compra == 'Unidades':
+            product_uom_qty = float(self.product_uom_qty)*float(self.unidadesporbultor)
+        if unidad_venta == 'Kg' and unidad_compra == 'Unidades':
+            product_uom_qty = (float(self.product_uom_qty)*float(self.kgnetbulto))/float(self.unidadesporbultor)
+        if unidad_venta == 'Kg' and unidad_compra == 'Bultos':
+            product_uom_qty = float(self.product_uom_qty)/float(self.kgnetbulto)
+        if unidad_venta == 'Unidades' and unidad_compra == 'Bultos':
+            product_uom_qty = float(self.product_uom_qty)/float(self.unidadesporbultor)
+        if unidad_venta == 'Unidades' and unidad_compra == 'Kg':
+            product_uom_qty = (float(self.product_uom_qty)*float(self.bultos)) / float(self.kgnetbulto)
         return product_uom_qty
 
     @api.depends('cantidadpedido','bultos','kgnetbulto')
@@ -402,6 +406,9 @@ class ModelSaleOrderLine(models.Model):
         }
         return view
 
-    @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount')
+    @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount','product_uom')
     def onchange_margin(self):
-        self.margin = self.price_unit - self.costetrans - self.purchase_price - (self.discount_supplier*self.price_subtotal) - (self.discount*self.price_subtotal)
+        sale = self.price_unit*self.product_uom_qty*((100-self.discount)/100)
+        transport = self.costetrans*self.on_change_cantidadpedido_purchase(self.product_uom.name,'Kg')
+        purchase = self.purchase_price*self.on_change_cantidadpedido_purchase(self.product_uom.name, self.uom_po_id.name)*((100-self.discount_supplier)/100)
+        self.margin = (sale-transport-purchase)#/self.product_uom_qty
