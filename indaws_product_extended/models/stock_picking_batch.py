@@ -32,13 +32,13 @@ class StockPicking(models.Model):
     @api.model
     def create(self, vals):
         if not 'analytic_account_id' in vals:
-            if 'sale_id' in vals:
-                vals['analytic_account_id'] = self.env['sale.order'].search(
-                    [('id', '=', vals['sale_id'])]).analytic_account_id
+            sale = self.env['sale.order'].search([('name', 'ilike', vals['origin'])])
+            if sale:
+                vals['analytic_account_id'] = sale.analytic_account_id.id
             else:
                 purchase = self.env['purchase.order'].search([('name', 'ilike', vals['origin'])])
                 if purchase:
-                    vals['analytic_account_id'] = purchase.account_analytic_id
+                    vals['analytic_account_id'] = purchase.account_analytic_id.id
                 else:
                     account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', vals['origin'])])
                     if account_analytic:
@@ -49,12 +49,13 @@ class StockPicking(models.Model):
     def write(self, vals):
         result = super(StockPicking, self).write(vals)
         if not self.analytic_account_id and not 'analytic_account_id' in vals:
-            if self.sale_id:
-                vals['analytic_account_id'] = self.sale_id.analytic_account_id
+            sale = self.env['sale.order'].search([('name', 'ilike', self.origin)])
+            if sale:
+                vals['analytic_account_id'] = sale.analytic_account_id.id
             else:
                 purchase = self.env['purchase.order'].search([('name', 'ilike', self.origin)])
                 if purchase:
-                    vals['analytic_account_id'] = purchase.account_analytic_id
+                    vals['analytic_account_id'] = purchase.account_analytic_id.id
                 else:
                     account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', self.origin)])
                     if account_analytic:
