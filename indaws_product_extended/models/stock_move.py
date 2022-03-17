@@ -13,6 +13,9 @@ _logger = logging.getLogger(__name__)
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
+    paleteur = fields.Float(string='Eur')
+    paletgr = fields.Float(string='Gr')
+    totalbultos = fields.Float(string='Total Bultos')
     supplier_id = fields.Many2one('res.partner', string="Proveedor")
     stock_check = fields.Boolean("Stock", default=False)
     client_id = fields.Many2one('res.partner', string='Cliente')

@@ -14,6 +14,9 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     analytic_account_id = fields.Many2one('account.analytic.account', string='Expediente')
+    paleteur = fields.Float(string='Eur')
+    paletgr = fields.Float(string='Gr')
+    totalbultos = fields.Float(string='Total Bultos')
 
     def action_confirm(self):
         for item in self:
