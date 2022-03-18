@@ -90,12 +90,12 @@
     <menuitem name="Cuentas de Venta"
         id="menu_jovimer_cuentas_venta"
         parent="menu_jovimer_cuentas_venta_parent"
-        sequence="1"
-        action=""/>
+        sequence="3"
+        action="purchase.purchase_form_action"/>
     <menuitem name="Reclamaciones"
         id="menu_jovimer_reclamaciones"
         parent="menu_jovimer_cuentas_venta_parent"
-        sequence="2"
+        sequence="5"
         action="action_jovimer_reclamaciones"/>
     </data>
 </odoo>	

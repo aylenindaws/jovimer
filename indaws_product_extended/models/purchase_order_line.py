@@ -22,7 +22,11 @@ class ModelSaleOrderLine(models.Model):
                 palets = rec.cantidadpedido or 0.0
                 totalbultos = palets * bultos
                 rec.totalbultos = totalbultos
-
+    type_state = fields.Selection([
+        ('draft', 'Pendiente de revisar'),
+        ('revised', 'Revisado'),
+        ('grinding', 'Rectificado'),
+    ], string='Estado', default='draft')
     expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
     expedienteo = fields.Many2one('jovimer.expedientes', string='Expediente', related='order_id.expediente')
     expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
@@ -86,7 +90,7 @@ class ModelSaleOrderLine(models.Model):
         ('OK', 'OK'),
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
-    ], string='Estado', default='OK')
+    ], string='Estado de Rectificacion', default='OK')
     discount = fields.Float(
         string='Discount (%)', digits=dp.get_precision('Discount'),
     )
