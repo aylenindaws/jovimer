@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import subprocess
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from odoo.http import request
 import logging
 import odoo.addons.decimal_precision as dp
 
@@ -22,6 +23,7 @@ class ModelSaleOrderLine(models.Model):
                 palets = rec.cantidadpedido or 0.0
                 totalbultos = palets * bultos
                 rec.totalbultos = totalbultos
+
     type_state = fields.Selection([
         ('draft', 'Pendiente de revisar'),
         ('revised', 'Revisado'),
@@ -38,7 +40,8 @@ class ModelSaleOrderLine(models.Model):
     pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
     asignado = fields.Boolean(string='Asignado')
     # idasignacion = fields.Many2one('jovimer.asignaciones', string='ID Asignación')
-    asignacionj = fields.Many2one('sale.order.line', string='Asignación')#, related='idasignacion.saleorderlinedestino', store=True)
+    asignacionj = fields.Many2one('sale.order.line',
+                                  string='Asignación')  # , related='idasignacion.saleorderlinedestino', store=True)
     libreasignada = fields.Float(string='Libres')
     comision = fields.Float(string='Comision')
     bultos = fields.Float(string='Bultos')
@@ -235,3 +238,27 @@ class ModelSaleOrderLine(models.Model):
         if not seller:
             return
         self.discount = seller.discount
+
+    def revised_funtion(self):
+        self.type_state = 'revised'
+
+    def grinding_funtion(self):
+        self.type_state = 'grinding'
+        view_form_id = self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id
+        return {
+            'name': _('Cambios de Cuentas de Ventas'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'views': [[view_form_id, 'form']],
+            'view_id': view_form_id,
+            'res_model': 'purchase.order.line',
+            'res_id': self.id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+
+    def draft_funtion(self):
+        if self:  ##Condicionar a si la linea esta facturada
+            self.type_state = 'draft'
+        else:
+            raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
