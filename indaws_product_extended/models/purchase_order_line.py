@@ -244,16 +244,13 @@ class ModelSaleOrderLine(models.Model):
 
     def grinding_funtion(self):
         self.type_state = 'grinding'
-        view_form_id = self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id
         return {
             'name': _('Cambios de Cuentas de Ventas'),
-            'view_type': 'form',
+            'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'views': [[view_form_id, 'form']],
-            'view_id': view_form_id,
+            'view_id': self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id,
             'res_model': 'purchase.order.line',
             'res_id': self.id,
-            'type': 'ir.actions.act_window',
             'target': 'new',
         }
 
