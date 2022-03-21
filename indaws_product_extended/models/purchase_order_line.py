@@ -251,7 +251,7 @@ class ModelSaleOrderLine(models.Model):
             'view_mode': 'form',
             'view_id': self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id,
             'res_model': 'purchase.order.line.wizard',
-            'target': 'new',
+            'target': 'new'
         }
 
     def draft_funtion(self):

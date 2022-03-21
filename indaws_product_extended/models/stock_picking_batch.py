@@ -14,9 +14,19 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     analytic_account_id = fields.Many2one('account.analytic.account', string='Expediente')
-    paleteur = fields.Float(string='Eur')
-    paletgr = fields.Float(string='Gr')
-    totalbultos = fields.Float(string='Total Bultos')
+    paleteur = fields.Float(string='Eur', compute="_compute_palet_type")
+    paletgr = fields.Float(string='Gr', compute="_compute_palet_type")
+    totalbultos = fields.Float(string='Total Bultos', compute="_compute_palet_type")
+
+    def _compute_palet_type(self):
+        for item in self:
+            item.paleteur = 0
+            item.paletgr = 0
+            item.totalbultos = 0
+            for record in item.move_ids_without_package:
+                item.paleteur += record.paleteur
+                item.paletgr += record.paletgr
+                item.totalbultos += record.totalbultos
 
     def action_confirm(self):
         for item in self:
@@ -71,10 +81,10 @@ class StockPickingBatch(models.Model):
     _inherit = 'stock.picking.batch'
 
     expediente_ids = fields.Many2many('account.analytic.account',
-        relation="stock_picking_account_analytic_rel",
-        column1="stock_picking_batch_id",
-        column2="account_analytic_id",
-        string='Expediente')
+                                      relation="stock_picking_account_analytic_rel",
+                                      column1="stock_picking_batch_id",
+                                      column2="account_analytic_id",
+                                      string='Expediente')
     tipoviaje = fields.Selection([
         ('NACIONAL', 'NACIONAL'), ('INTERNACIONAL', 'INTERNACIONAL')
     ], string='Tipo de Viaje')
@@ -89,8 +99,9 @@ class StockPickingBatch(models.Model):
     tempdoblesimple = fields.Char(string='Doble/Simpel')
     importe = fields.Float('Importe')
     transportista = fields.Many2one('res.partner', string='Transportista')
-    paleteur = fields.Float(string='Eur')
-    paletgr = fields.Float(string='Gr')
+    paleteur = fields.Float(string='Eur', compute="_compute_exp_picking_ids", default=0)
+    paletgr = fields.Float(string='Gr', compute="_compute_exp_picking_ids", default=0)
+    totalbultos = fields.Float(string='Total Bultos', compute="_compute_exp_picking_ids", default=0)
     apilables = fields.Char(string='Apilables')
     combina = fields.Boolean(string='Combina')
     # ctn = fields.Many2many('jovimer_ctn', string='Control Transporte Nacional')
@@ -130,9 +141,16 @@ class StockPickingBatch(models.Model):
         for item in self:
             if item.expediente_ids:
                 item.exp_picking_ids = self.env['stock.picking'].search(
-                        [('analytic_account_id', 'in',item.expediente_ids.ids)])
+                    [('analytic_account_id', 'in', item.expediente_ids.ids)])
             else:
                 item.exp_picking_ids = self.env['stock.picking'].search([('id', '!=', 0)])
+            item.paleteur = 0
+            item.paletgr = 0
+            item.totalbultos = 0
+            for record in item.picking_ids:
+                item.paleteur += record.paleteur
+                item.paletgr += record.paletgr
+                item.totalbultos += record.totalbultos
 
     def cambiadestinos(self):
         destinoor = self.destinoor

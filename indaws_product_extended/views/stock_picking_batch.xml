@@ -35,6 +35,7 @@
                 <field name="contactochofer"/>
                 <field name="matricula"/>
                 <field name="temperatura"/>
+                <field name="totalbultos" invisible="True"/>
                 <label for="paleteur" string="Palets EURO/GRANDE"/>
                 <div>
                     <field name="paleteur" class="oe_inline"/> /
@@ -78,6 +79,5 @@
             </xpath>
         </field>
     </record>
-
 </odoo>
   
