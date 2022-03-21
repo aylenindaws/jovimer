@@ -244,6 +244,7 @@ class ModelSaleOrderLine(models.Model):
 
     def grinding_funtion(self):
         self.type_state = 'grinding'
+        self.ensure_one()
         return {
             'name': _('Cambios de Cuentas de Ventas'),
             'type': 'ir.actions.act_window',
@@ -255,7 +256,7 @@ class ModelSaleOrderLine(models.Model):
         }
 
     def draft_funtion(self):
-        if self:  ##Condicionar a si la linea esta facturada
+        if not self.facturado:
             self.type_state = 'draft'
         else:
             raise ValidationError('Esta linea de pedido ya se encuentra Facturada')

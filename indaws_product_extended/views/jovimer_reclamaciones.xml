@@ -91,7 +91,7 @@
         id="menu_jovimer_cuentas_venta"
         parent="menu_jovimer_cuentas_venta_parent"
         sequence="3"
-        action="purchase.purchase_form_action"/>
+        action="indaws_product_extended.purchase_form_action_indaws"/>
     <menuitem name="Reclamaciones"
         id="menu_jovimer_reclamaciones"
         parent="menu_jovimer_cuentas_venta_parent"

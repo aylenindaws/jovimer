@@ -45,7 +45,7 @@
                     <field name="apilables" class="oe_inline"/> /
                     <field name="combina" class="oe_inline"/>
                 </div>
-                <field name="expediente"/>
+                <field name="expediente_ids" widget="many2many_tags"/>
                 <field name="exp_picking_ids" invisible="1"/>
                 <field name="tipoviaje" invisible="1"/>
                 <field name="destinoor" invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>

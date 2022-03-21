@@ -96,12 +96,13 @@
             <xpath expr="//page[@name='related_purchases']" position="after">
                 <page name='administration_sale_lines' string="GERENCIA">
                     <field name="order_line_admin">
-                        <tree create='false'>
-                            <field name="margin"/>
-                            <field name="purchase_price" string="Precio de compra"/>
-                            <field name="price_unit" string="Precio de Venta"/>
-                            <field name="product_id" string="Producto"/>
-                            <field name="price_trans" string="Precio por KG de Transporte"/>
+                        <tree create='false' editable="botttom">
+                            <field name="margin" readonly="False"/>
+                            <field name="purchase_price" string="Precio de compra" readonly="False"/>
+                            <field name="price_unit" string="Precio de Venta" readonly="False"/>
+                            <field name="product_id" string="Producto" readonly="False"/>
+                            <field name="company_id" string="Compañia" invisible="True"/>
+                            <field name="price_trans" string="Precio por KG de Transporte" readonly="False"/>
                         </tree>
                     </field>
                 </page>

@@ -70,7 +70,11 @@ class StockPicking(models.Model):
 class StockPickingBatch(models.Model):
     _inherit = 'stock.picking.batch'
 
-    expediente = fields.Many2one('account.analytic.account', string='Expediente')
+    expediente_ids = fields.Many2many('account.analytic.account',
+        relation="stock_picking_account_analytic_rel",
+        column1="stock_picking_batch_id",
+        column2="account_analytic_id",
+        string='Expediente')
     tipoviaje = fields.Selection([
         ('NACIONAL', 'NACIONAL'), ('INTERNACIONAL', 'INTERNACIONAL')
     ], string='Tipo de Viaje')
@@ -121,12 +125,12 @@ class StockPickingBatch(models.Model):
     exp_picking_ids = fields.One2many('stock.picking', 'batch_id', string='Pickings',
                                       compute="_compute_exp_picking_ids")
 
-    @api.depends("picking_ids", "expediente")
+    @api.depends("picking_ids", "expediente_ids")
     def _compute_exp_picking_ids(self):
         for item in self:
-            if item.expediente:
+            if item.expediente_ids:
                 item.exp_picking_ids = self.env['stock.picking'].search(
-                    ['|', ('analytic_account_id', '=', item.expediente.id), ('analytic_account_id', '=', False)])
+                        [('analytic_account_id', 'in',item.expediente_ids.ids)])
             else:
                 item.exp_picking_ids = self.env['stock.picking'].search([('id', '!=', 0)])
 
