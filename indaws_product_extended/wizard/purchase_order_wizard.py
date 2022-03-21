@@ -34,18 +34,5 @@ class PurchaseOrderLineWizard(models.TransientModel):
 
     @api.model
     def default_get(self, default_fields):
-        res = super(createpurchaseorder, self).default_get(default_fields)
-        update = []
-        for record in data.order_line:
-            update.append((0, 0, {
-                'product_id': record.product_id.id,
-                'product_uom': record.product_uom.id,
-                'order_id': record.order_id.id,
-                'name': record.name,
-                'product_qty': record.product_uom_qty,
-                'price_unit': record.price_unit,
-                'product_subtotal': record.price_subtotal,
-                'purchase_price': record.purchase_price,
-            }))
-        res.update({'new_order_line_ids': update})
+        res = super(PurchaseOrderLineWizard, self).default_get(default_fields)
         return res

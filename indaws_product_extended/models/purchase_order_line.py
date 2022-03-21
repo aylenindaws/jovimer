@@ -250,8 +250,7 @@ class ModelSaleOrderLine(models.Model):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'view_id': self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id,
-            'res_model': 'purchase.order.line',
-            'res_id': self.id,
+            'res_model': 'purchase.order.line.wizard',
             'target': 'new',
         }
 
