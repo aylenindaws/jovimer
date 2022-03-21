@@ -77,6 +77,56 @@
             <xpath expr="//field[@name='scheduled_date']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
             </xpath>
+            <xpath expr="//page[3]" position='after'>
+                <page name="cmr_page" string="CMR">
+                    <group string="CMR">
+                        <group>
+                            <field name="txt01"/>
+                            <field name="txt02"/>
+                            <field name="txt03"/>
+                            <field name="txt04"/>
+                            <field name="txt05"/>
+                        </group>
+                        <group>
+                            <field name="txt16"/>
+                            <field name="txt17"/>
+                            <field name="txt18"/>
+                        </group>
+                    </group>
+
+                        <group string="Lineas">
+                        <group col="8">
+                          <group string="Marca"><field name="txt06" nolabel="1"/></group>
+                            <group string="Bultos"><field name="txt07" nolabel="1"/></group>
+                            <group string="Envase"><field name="txt08" nolabel="1"/></group>
+                            <group string="Producto"><field name="txt09" nolabel="1"/></group>
+
+                          <group string="Peso"><field name="txt11" nolabel="1"/></group>
+                          <group string="Palets"><field name="txt12" nolabel="1"/></group>
+                                    <group string="N Estad"><field name="txt10" nolabel="1"/></group>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="txt13"/>
+                            <field name="txt21"/>
+                            <field name="txt21b"/>
+                        </group>
+                        <group>
+                            <field name="txt19"/>
+                            <field name="txt15"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="txt22" class="oe_inline"/>
+                            <field name="txt23" class="oe_inline"/>
+                            <field name="txt241" class="oe_inline"/>
+                            <field name="txt242" class="oe_inline"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>
