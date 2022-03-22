@@ -3,7 +3,7 @@
 {
     "name" : "Ajustes de Productos",
     "author" : "Indaws",
-    "version":"14.0.3",
+    "version":"14.0.4",
     "depends" : ['sale', 'base', 'product','stock','bi_convert_purchase_from_sales','purchase_discount','stock_picking_batch'],
     "data": [
         "security/security.xml",

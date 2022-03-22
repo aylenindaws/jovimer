@@ -243,8 +243,8 @@ class ModelSaleOrderLine(models.Model):
         self.type_state = 'revised'
 
     def grinding_funtion(self):
-        context = self.env.context.get('params')
-        purchase_order_id = context.get('id')
+        context_name = self.env.context.get('params')
+        purchase_order_id = context_name.get('id')
         purchase_order = self.env['purchase.order'].sudo().browse(purchase_order_id)
         self.type_state = 'grinding'
         self.ensure_one()
