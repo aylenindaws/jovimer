@@ -3,7 +3,7 @@
 {
     "name" : "Ajustes de Productos",
     "author" : "Indaws",
-    "version":"14.0.1",
+    "version":"14.0.3",
     "depends" : ['sale', 'base', 'product','stock','bi_convert_purchase_from_sales','purchase_discount','stock_picking_batch'],
     "data": [
         "security/security.xml",
@@ -23,11 +23,11 @@
         'views/jovimer_palet.xml',
         'views/jovimer_plataforma.xml',
         'views/jovimer_partner_code.xml',
+        'views/purchase_order.xml',
         'views/jovimer_reclamaciones.xml',
         'views/stock_picking_batch.xml',
         'views/sale_order.xml',
-        'views/purchase_order_wizard_view.xml',
-        'views/purchase_order.xml',
+        'wizard/purchase_order_wizard_views.xml',
         'views/product_template.xml',
         'views/stock_move.xml',
         'views/ir_menus.xml',

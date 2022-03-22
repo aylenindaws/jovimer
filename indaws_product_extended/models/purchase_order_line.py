@@ -243,16 +243,25 @@ class ModelSaleOrderLine(models.Model):
         self.type_state = 'revised'
 
     def grinding_funtion(self):
+        context = self.env.context.get('params')
+        purchase_order_id = context.get('id')
+        purchase_order = self.env['purchase.order'].sudo().browse(purchase_order_id)
         self.type_state = 'grinding'
         self.ensure_one()
-        return {
-            'name': _('Cambios de Cuentas de Ventas'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'view_id': self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id,
-            'res_model': 'purchase.order.line.wizard',
-            'target': 'new'
+
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "indaws_product_extended.purchase_order_line_form_action_indaws")
+        form_view = [(self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id, 'form')]
+        action['views'] = form_view
+
+        action['context'] = {
+            'state': purchase_order.state,
+            'company_id': purchase_order.company_id,
+            'partner_id': purchase_order.partner_id,
         }
+        return action
+
+
 
     def draft_funtion(self):
         if not self.facturado:
