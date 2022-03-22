@@ -1,5 +1,8 @@
 <odoo>
     <data>
+        <menuitem id="transport_menu_root" name="Transporte" web_icon="indaws_product_extended,static/description/icon.png"  sequence="1" active="True">
+            <menuitem action="stock_picking_batch.stock_picking_batch_action" id="transport_stock_picking_batch_menu" name="Nombres" sequence="10"/>
+        </menuitem>
         <menuitem id="jovimer_menu_root_config_submenu" name="Configuraciones Jovimer" parent="stock.menu_stock_root">
             <menuitem id="jovimer_calibre_config_submenu" name="Calibres" action="jovimer_calibre_list_action"/>
             <menuitem id="jovimer_categoria_config_submenu" name="Categorias" action="jovimer_categoria_list_action"/>

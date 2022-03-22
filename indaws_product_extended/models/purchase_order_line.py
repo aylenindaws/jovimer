@@ -163,7 +163,6 @@ class ModelSaleOrderLine(models.Model):
             'order_id': order_id,
             'product_id': product_id,
         }
-        self.env['sale.order.line'].create(vals)
         ## return {'type': 'ir.actions.client', 'tag': 'reload',}
 
     def action_creact(self, default=None):
@@ -260,8 +259,6 @@ class ModelSaleOrderLine(models.Model):
             'partner_id': purchase_order.partner_id,
         }
         return action
-
-
 
     def draft_funtion(self):
         if not self.facturado:

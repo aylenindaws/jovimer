@@ -328,62 +328,6 @@ class SaleOrder(models.Model):
         except:
             self.palets = 0
 
-    def calcpalets(self):
-        order = self.id
-        self.env.cr.execute(""" select sum(numpalets) from jovimer_lineascompra where order_id='%s'""" % (order))
-        result = self.env.cr.fetchone()
-        palets = result[0]
-        self.palets = palets
-        self.env.cr.execute(""" select sum(cantidadpedido) from sale_order_line where order_id='%s'""" % (order))
-        resultv = self.env.cr.fetchone()
-        paletsv = resultv[0]
-        self.paletsv = paletsv
-        try:
-            self.faltanpalets = paletsv - palets or 0
-        except:
-            self.faltanpalets = paletsv
-        if palets != paletsv:
-            self.estadopalets == True
-            self.env.cr.execute(""" update sale_order set estadopalets='t' where id='%s'""" % (order))
-        else:
-            self.env.cr.execute(""" update sale_order set estadopalets='f' where id='%s'""" % (order))
-        for lines in self.order_line:
-            numpalets = 0.0
-            try:
-                lines.paletsc = 0.0
-                for line in lines.multicomp:
-                    numpalets += line.numpalets or 0.0
-                    lines.paletsc = numpalets
-            except:
-                lines.paletsc = 0
-        return {}
-
-    def sale_createline_detalle(self, context=None):
-        parent = self.id
-        partner = self.partner_id.id
-
-        orderline_obj = self.env['sale.order.line']
-        invoice = orderline_obj.create({
-            'order_id': parent,
-            'partner_id': partner,
-            'product_id': 17,
-            'currency_id': 1, })
-        context = {'parent': self.id}
-        context['view_buttons'] = True
-        invoice = int(invoice[0])
-        view = {
-            'name': _('Detalles de la Venta'),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'sale.order.line',
-            'view_id': False,
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'res_id': invoice,
-            'context': context
-        }
-        return view
-
     @api.model
     def create(self, vals_list):
         vals = super(SaleOrder, self).create(vals_list)

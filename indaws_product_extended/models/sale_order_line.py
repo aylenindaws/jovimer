@@ -347,65 +347,6 @@ class ModelSaleOrderLine(models.Model):
             'context': context
         }
 
-    def creaasignacioncomp(self):
-        fechaoperacion = datetime.today()
-        saleorderline = self.id
-        numpalets = self.cantidadpedido
-        unidadpedido = self.unidadpedido.id
-        bultos = self.bultos
-        purchaseorderline = self.asignacionlineac.id
-        pvpcompra = self.asignacionlineac.price_unit
-        tipoprecio = self.asignacionlineac.product_uom.id
-        purchasepartner = self.asignacionlineac.partner_id.id
-        expedienteo = self.asignacionlineac.order_id.expediente.id
-        expediente_serieo = self.asignacionlineac.order_id.expediente.campanya
-        expediente_numo = self.asignacionlineac.order_id.expediente.name
-        expediente = self.order_id.expediente.id
-        expediente_serie = self.order_id.expediente.campanya
-        expediente_num = self.order_id.expediente.name
-        nameasig = "" + str(expediente_serieo) + "/" + str(expediente_numo) + " para " + str(
-            expediente_serie) + "/" + str(expediente_num) + ". LineaVenta: " + str(saleorderline) + "."
-        orderline_obj = self.env['jovimer_asignaciones']
-        invoice = orderline_obj.create({
-            'saleorderlinedestino': saleorderline,
-            'purchaseorderline': purchaseorderline,
-            'fechaoperacion': fechaoperacion,
-            'name': nameasig,
-            'cantidad': numpalets,
-            'unidad': unidadpedido,
-        })
-        invoice = int(invoice[0])
-        self.asignado = True
-        self.idasignacion = invoice
-        linorderline_obj = self.env['jovimer_lineascompra']
-        lincompra = linorderline_obj.create({
-            'orderline': saleorderline,
-            'fechacompra': fechaoperacion,
-            'name': purchasepartner,
-            'asignado': True,
-            'idasignacion': invoice,
-            'comision': 6,
-            'numpalets': numpalets,
-            'bultos': bultos,
-            'pvpcompra': pvpcompra,
-            'unidad': tipoprecio,
-            'asignacion': expedienteo,
-            'asignacionlinea': purchaseorderline,
-        })
-        lincompra = int(lincompra[0])
-        self.asignacionlineac = False
-        view = {
-            'name': _('Asignaciones'),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'jovimer_asignaciones',
-            'view_id': False,
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'res_id': invoice
-        }
-        return view
-
     @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount','product_uom')
     def onchange_margin(self):
         sale = self.price_unit*self.product_uom_qty*((100-self.discount)/100)
