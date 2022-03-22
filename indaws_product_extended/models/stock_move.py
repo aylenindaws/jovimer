@@ -33,10 +33,13 @@ class StockMove(models.Model):
     def _compute_palet_type(self):
         for item in self:
             if item.sale_line_id:
-                if 'EUR' in item.sale_line_id.tipouom.name or 'GREENBOX' in item.sale_line_id.tipouom.name:
-                    item.write({'paleteur': item.sale_line_id.cantidadpedido})
-                    item.write({'paletgr': 0})
-                if 'Grande' in item.sale_line_id.tipouom.name:
-                    item.write({'paletgr': item.sale_line_id.cantidadpedido})
-                    item.write({'paleteur': 0})
-                item.totalbultos = item.sale_line_id.bultos
+                if item.sale_line_id.tipouom:
+                    if 'EUR' in item.sale_line_id.tipouom.name or 'GREENBOX' in item.sale_line_id.tipouom.name:
+                        item.write({'paleteur': item.sale_line_id.cantidadpedido})
+                        item.write({'paletgr': 0})
+                    if 'Grande' in item.sale_line_id.tipouom.name:
+                        item.write({'paletgr': item.sale_line_id.cantidadpedido})
+                        item.write({'paleteur': 0})
+                    item.totalbultos = item.sale_line_id.bultos
+                else:
+                    item.write({'paletgr': 0, 'paleteur': 0, 'totalbultos': 0})
