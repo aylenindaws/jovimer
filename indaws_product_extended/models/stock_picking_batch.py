@@ -24,9 +24,9 @@ class StockPicking(models.Model):
             item.paletgr = 0
             item.totalbultos = 0
             for record in item.move_ids_without_package:
-                item.paleteur += record.paleteur
-                item.paletgr += record.paletgr
-                item.totalbultos += record.totalbultos
+                item.write({'paleteur': record.paleteur})
+                item.write({'paletgr': record.paletgr})
+                item.write({'totalbultos': record.totalbultos})
 
     def action_confirm(self):
         for item in self:

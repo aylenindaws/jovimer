@@ -37,3 +37,7 @@
 	path = OCA/edi
 	url = git@github.com:OCA/edi.git
 	branch = 14.0
+[submodule "OCA/web"]
+	path = OCA/web
+	url = https://github.com/OCA/web.git
+	branch = 14.0

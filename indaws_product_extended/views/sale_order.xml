@@ -97,12 +97,14 @@
                 <page name='administration_sale_lines' string="GERENCIA">
                     <field name="order_line_admin">
                         <tree create='false' editable="botttom">
-                            <field name="margin" readonly="False"/>
+                            <field name="margin" readonly="True"/>
                             <field name="purchase_price" string="Precio de compra" readonly="False"/>
                             <field name="price_unit" string="Precio de Venta" readonly="False"/>
                             <field name="product_id" string="Producto" readonly="False"/>
-                            <field name="company_id" string="Compañia" invisible="True"/>
-                            <field name="price_trans" string="Precio por KG de Transporte" readonly="False"/>
+                            <field name="company_id" string="Compañia" invisible="True" optional="show"/>
+                            <field name="price_trans" string="Precio por KG de Transporte" readonly="False" optional="show"/>
+                            <field name="discount" optional="show" string="Descuento" width="100px"/>
+                            <field name="discount_supplier" optional="show" string="Descuento proveedor (%)" width="100px"/>
                         </tree>
                     </field>
                 </page>
