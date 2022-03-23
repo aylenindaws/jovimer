@@ -40,6 +40,7 @@
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom_qty']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//widget[@name='qty_at_date_widget']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="after">
                 <field name="price_trans" invisible="1" width="100px"/>
                 <field name="cantidadpedido" string="Palets:" optional="show" width="100px"/>
@@ -49,6 +50,7 @@
                 <field name="kgnetbulto" optional="show" width="100px"/>
                 <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="show" width="100px"/>
                 <field name="product_uom" optional="show" string="Ud Venta" width="100px"/>
+                <widget name="qty_at_date_widget" width="20px"/>
                 <field name="price_unit" optional="show" string="Precio de Venta" width="100px"/>
                 <field name="discount" optional="show" string="Descuento" width="100px"/>
                 <field name="supplier_id" optional="show" string="Proveedor" width="100px"/>

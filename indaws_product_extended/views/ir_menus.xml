@@ -1,6 +1,6 @@
 <odoo>
     <data>
-        <menuitem id="transport_menu_root" name="Agrupación de albaranes" web_icon="indaws_product_extended,static/description/icon.png"  sequence="1" active="True">
+        <menuitem id="transport_menu_root" name="Transporte" web_icon="indaws_product_extended,static/description/icon.png"  sequence="1" active="True">
             <menuitem action="stock_picking_batch.stock_picking_batch_action" id="transport_stock_picking_batch_menu" name="Nombres" sequence="10"/>
         </menuitem>
         <menuitem id="jovimer_menu_root_config_submenu" name="Configuraciones Jovimer" parent="stock.menu_stock_root">

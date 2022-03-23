@@ -349,7 +349,10 @@ class ModelSaleOrderLine(models.Model):
 
     @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount','product_uom')
     def onchange_margin(self):
-        sale = self.price_unit*self.product_uom_qty*((100-self.discount)/100)
-        transport = self.costetrans*self.on_change_cantidadpedido_purchase(self.product_uom.name,'Kg')
-        purchase = self.purchase_price*self.on_change_cantidadpedido_purchase(self.product_uom.name, self.uom_po_id.name)*((100-self.discount_supplier)/100)
-        self.margin = (sale-transport-purchase)#/self.product_uom_qty
+        for item in self:
+            sale = item.price_unit*item.product_uom_qty*((100-item.discount)/100)
+            transport = item.costetrans*item.on_change_cantidadpedido_purchase(item.product_uom.name,'Kg')
+            purchase = item.purchase_price*item.on_change_cantidadpedido_purchase(item.product_uom.name, item.uom_po_id.name)*((100-item.discount_supplier)/100)
+            item.margin = sale-transport-purchase
+            item.margin_percent = (item.margin*100)/sale if sale != 0 else (item.margin*100) end
+

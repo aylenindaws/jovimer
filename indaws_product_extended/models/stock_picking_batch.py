@@ -61,19 +61,20 @@ class StockPicking(models.Model):
 
     def write(self, vals):
         result = super(StockPicking, self).write(vals)
-        if not self.analytic_account_id and not 'analytic_account_id' in vals:
-            sale = self.env['sale.order'].search([('name', 'ilike', self.origin)])
-            if sale:
-                vals['analytic_account_id'] = sale.analytic_account_id.id
-            else:
-                purchase = self.env['purchase.order'].search([('name', 'ilike', self.origin)])
-                if purchase:
-                    vals['analytic_account_id'] = purchase.account_analytic_id.id
+        for item in self:
+            if not item.analytic_account_id and not 'analytic_account_id' in vals:
+                sale = self.env['sale.order'].search([('name', 'ilike', item.origin)])
+                if sale:
+                    vals['analytic_account_id'] = sale.analytic_account_id.id
                 else:
-                    account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', self.origin)])
-                    if account_analytic:
-                        vals['analytic_account_id'] = account_analytic.id
-            self.write(vals)
+                    purchase = self.env['purchase.order'].search([('name', 'ilike', item.origin)])
+                    if purchase:
+                        vals['analytic_account_id'] = purchase.account_analytic_id.id
+                    else:
+                        account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', item.origin)])
+                        if account_analytic:
+                            vals['analytic_account_id'] = account_analytic.id
+                item.write(vals)
         return result
 
 
@@ -190,10 +191,10 @@ class StockPickingBatch(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('name', '/') == '/' and vals.get('tipoviaje', 'NACIONAL'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch.ln') or '/'
-        else:
+        if vals.get('name', '/') == '/' and ('tipoviaje' in vals and vals['tipoviaje']=='INTERNACIONAL'):
             vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch') or '/'
+        else:
+            vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch.ln') or '/'
         return super().create(vals)
 
     def _sanity_check(self):
