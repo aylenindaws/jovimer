@@ -34,8 +34,7 @@
         'views/prints.xml',
         'views/purchase_order_wizard_view.xml',
         'data/template_email_claim.xml',
-        #'reports/pedido_venta_template.xml',
-        #'reports/pedido_compra_template.xml',
+        'data/template_email_purchase_claim.xml'
     ],
     "images": ["static/description/background.png",],              
     "application": True,

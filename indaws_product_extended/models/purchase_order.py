@@ -38,7 +38,6 @@ class PurchaseOrder(models.Model):
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
 
-
     @api.model
     def create(self, vals):
         result = super(PurchaseOrder, self).create(vals)
@@ -52,3 +51,27 @@ class PurchaseOrder(models.Model):
             if not result.account_analytic_id:
                 result.account_analytic_id = result.sale_related_id.analytic_account_id
         return result
+
+    def action_claim_send(self):
+        ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
+        self.ensure_one()
+        template = self.env.ref('indaws_product_extended.email_template_cuenta_venta')
+        ctx = {
+            'default_model': 'purchase.order',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template.id),
+            'default_template_id': template.id,
+            'default_composition_mode': 'comment',
+            'mark_so_as_sent': True,
+            'proforma': self.env.context.get('proforma', False),
+            'force_email': True,
+        }
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False, 'form')],
+            'view_id': False,
+            'target': 'new',
+            'context': ctx,
+        }
