@@ -12,27 +12,15 @@ class PurchaseOrderLineWizard(models.TransientModel):
     _name = 'purchase.order.line.wizard'
     _description = "Cuenta de Venta"
 
-    partner_id = fields.Many2one('res.partner', string='Vendor', required=True)
-    product_id = fields.Many2one('product.product', string="Product")
-    state = fields.Selection(selection=[("draft", "Draft"), ("created", "Created")], default="draft", copy=False)
-    display_type = fields.Selection([('line_section', "Section"),('line_note', "Note")], default=False, help="Technical field for UX purpose.")
-    product_uom_category_id = fields.Many2one('uom.category', related='product_id.uom_id.category_id')
-    product_qty = fields.Float(string='Quantity', required=True)
-    date_planned = fields.Datetime(string='Scheduled Date', default=datetime.today())
-    product_uom = fields.Many2one('uom.uom', string='Product Unit of Measure')
-    order_id = fields.Many2one('sale.order', string='Order Reference', ondelete='cascade', index=True)
-    price_unit = fields.Float(string='Unit Price', digits='Product Price')
-    product_subtotal = fields.Float(string="Sub Total", compute='_compute_total')
-    purchase_price = fields.Float(string="Purchase price")
-    qty_received_method = fields.Selection([('manual', 'Manual')], string="Received Qty Method")
-    qty_received = fields.Float(string="Received Qty", digits=dp.get_precision('Product Unit of Measure'), copy=False)
-    qty_invoiced = fields.Float(string="Billed Qty", digits=dp.get_precision('Product Unit of Measure'), store=True)
-    taxes_id = fields.Many2many('account.tax', string='Taxes',domain=['|', ('active', '=', False), ('active', '=', True)])
-    account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
-    analytic_tag_ids = fields.Many2many("account.analytic.tag", string="Etiquetas Analiticas", tracking=True)
-    name = fields.Char(string="Description")
+    order_line_id = fields.Many2one('purchase.order.line', string="Linea de Cuenta de Venta")
+    product_id = fields.Many2one('product.product', string="Producto")
+    price_unit = fields.Float(string='Precio Unitario', digits='Product Price')
+    qty_received = fields.Float(string="Cantidad Recibida", digits=dp.get_precision('Product Unit of Measure'),copy=False)
+    qty_invoiced = fields.Float(string="Cantidad Facturada", digits=dp.get_precision('Product Unit of Measure'),store=True)
+    discount = fields.Float(string='Descuento (%)', digits=dp.get_precision('Discount'))
 
-    @api.model
-    def default_get(self, default_fields):
-        res = super(PurchaseOrderLineWizard, self).default_get(default_fields)
-        return res
+    def save_change(self):
+        for item in self:
+            item.order_line_id.type_state = 'grinding'
+            item.order_line_id.price_unit = item.price_unit
+            item.order_line_id.discount = item.discount

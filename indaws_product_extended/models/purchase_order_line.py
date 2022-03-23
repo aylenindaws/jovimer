@@ -244,19 +244,18 @@ class ModelSaleOrderLine(models.Model):
     def grinding_funtion(self):
         context_name = self.env.context.get('params')
         purchase_order_id = context_name.get('id')
-        purchase_order = self.env['purchase.order'].sudo().browse(purchase_order_id)
-        self.type_state = 'grinding'
         self.ensure_one()
-
         action = self.env["ir.actions.actions"]._for_xml_id(
             "indaws_product_extended.purchase_order_line_form_action_indaws")
         form_view = [(self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id, 'form')]
         action['views'] = form_view
-
         action['context'] = {
-            'state': purchase_order.state,
-            'company_id': purchase_order.company_id,
-            'partner_id': purchase_order.partner_id,
+            'default_order_line_id': self.id,
+            'default_product_id': self.product_id.id,
+            'default_price_unit': self.price_unit,
+            'default_qty_received': self.qty_received,
+            'default_qty_invoiced': self.qty_invoiced,
+            'default_discount': self.discount,
         }
         return action
 

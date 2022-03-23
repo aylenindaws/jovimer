@@ -354,5 +354,5 @@ class ModelSaleOrderLine(models.Model):
             transport = item.costetrans*item.on_change_cantidadpedido_purchase(item.product_uom.name,'Kg')
             purchase = item.purchase_price*item.on_change_cantidadpedido_purchase(item.product_uom.name, item.uom_po_id.name)*((100-item.discount_supplier)/100)
             item.margin = sale-transport-purchase
-            item.margin_percent = (item.margin*100)/sale if sale != 0 else (item.margin*100) end
+            item.margin_percent = (item.margin*100)/sale if sale != 0 else (item.margin*100)
 

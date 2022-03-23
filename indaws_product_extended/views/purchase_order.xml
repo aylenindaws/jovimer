@@ -6,21 +6,7 @@
         <field name="arch" type="xml">
             <form string="Purchase Order" class="o_purchase_order">
             <header>
-                <button name="action_rfq_send" states="draft" string="Send by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
-                <button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
-                <button name="button_confirm" type="object" states="sent" string="Confirm Order" class="oe_highlight" id="bid_confirm"/>
-                <button name="button_approve" type="object" states='to approve' string="Approve Order" class="oe_highlight" groups="purchase.group_purchase_manager"/>
-                <button name="action_create_invoice" string="Create Bill" type="object" class="oe_highlight" context="{'create_bill':True}" attrs="{'invisible': ['|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'in', ('no', 'invoiced'))]}"/>
-                <button name="action_rfq_send" states="sent" string="Re-Send by Email" type="object" context="{'send_rfq':True}"/>
-                <button name="print_quotation" string="Print RFQ" type="object" states="sent" groups="base.group_user"/>
-                <button name="button_confirm" type="object" states="draft" string="Confirm Order" id="draft_confirm"/>
-                <button name="action_rfq_send" states="purchase" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>
-                <button name="confirm_reminder_mail" string="Confirm Receipt Date" type="object" attrs="{'invisible': ['|','|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('date_planned', '=', False)]}" groups="base.group_no_one"/>
-                <button name="action_create_invoice" string="Create Bill" type="object" context="{'create_bill':True}" attrs="{'invisible': ['|', '|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'not in', ('no', 'invoiced')), ('order_line', '=', [])]}"/>
-                <button name="button_draft" states="cancel" string="Set to Draft" type="object" />
-                <button name="button_cancel" states="draft,to approve,sent,purchase" string="Cancel" type="object" />
-                <button name="button_done" type="object" string="Lock" states="purchase"/>
-                <button name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
+                <button name="action_create_invoice" string="Crear Factura" type="object" context="{'create_bill':True}" attrs="{'invisible': ['|', '|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'not in', ('no', 'invoiced')), ('order_line', '=', [])]}"/>
                 <field name="state" widget="statusbar" statusbar_visible="draft,sent,purchase" readonly="1"/>
             </header>
             <sheet>
@@ -123,9 +109,9 @@
                                 <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase'), ('company_id', '=', parent.company_id)]" context="{'default_type_tax_use': 'purchase', 'search_view_ref': 'account.account_tax_view_search'}" options="{'no_create': True}" optional="show" readonly="1"/>
                                 <field name="price_subtotal" widget="monetary" readonly="1"/>
                                 <field name="type_state" readonly="1"/>
-                                <button name="revised_funtion" type="object" string=" " class="fa fa-check oe_edit_only" attrs="{'invisible': [('type_state', '!=', 'draft')]}" help="Revisar"/>
-                                <button name="grinding_funtion" type="object" string=" " class="fa fa-exclamation oe_edit_only" attrs="{'invisible': [('type_state', '!=', 'draft')]}" help="Rectificar"/>
-                                <button name="draft_funtion" type="object" string=" " class="fa fa-spinner oe_edit_only" attrs="{'invisible': [('type_state', '=', 'draft')]}" help="Volver a Borrador"/>
+                                <button name="revised_funtion" type="object" string=" " class="fa fa-check" attrs="{'invisible': [('type_state', '!=', 'draft')]}" help="Revisar"/>
+                                <button name="grinding_funtion" type="object" string=" " class="fa fa-exclamation" attrs="{'invisible': [('type_state', '!=', 'draft')]}" help="Rectificar"/>
+                                <button name="draft_funtion" type="object" string=" " class="fa fa-times" attrs="{'invisible': [('type_state', '=', 'draft')]}" help="Volver a Borrador"/>
                             </tree>
                             <form string="Purchase Order Line">
                                 <field name="state" invisible="1"/>
