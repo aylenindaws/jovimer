@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="sale_stock.qtyAtDate">
+        <t t-jquery="div" t-operation="replace">
+            <div t-att-class="!widget.data.display_qty_widget ? 'invisible' : ''">
+                <t t-if="widget.data.forecasted_issue">
+                    <t t-if="widget.data.comfirm_po_move">
+                        <a tabindex="0" t-attf-class="fa fa-area-chart text-warning"/>
+                    </t>
+                    <t t-else="">
+                        <a tabindex="0" t-attf-class="fa fa-area-chart text-danger"/>
+                    </t>
+                </t>
+                <t t-else="">
+                    <a tabindex="0" t-attf-class="fa fa-area-chart text-primary"/>
+                </t>
+            </div>
+        </t>
+    </t>
+</templates>

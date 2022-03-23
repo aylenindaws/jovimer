@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="stock_assets_backend_inherit" inherit_id="web.assets_backend">
+            <xpath expr="script[last()]" position="after">
+                <script type="text/javascript"
+                        src="/indaws_affinity_so_availability_icon/static/src/js/widget_qty_at_date.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

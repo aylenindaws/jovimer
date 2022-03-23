@@ -188,5 +188,13 @@ class StockPickingBatch(models.Model):
             lineasalbaranes.plataformadestino = destinoor
         return {}
 
+    @api.model
+    def create(self, vals):
+        if vals.get('name', '/') == '/' and vals.get('tipoviaje', 'NACIONAL'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch.ln') or '/'
+        else:
+            vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch') or '/'
+        return super().create(vals)
+
     def _sanity_check(self):
         _logger.error('Pass')
