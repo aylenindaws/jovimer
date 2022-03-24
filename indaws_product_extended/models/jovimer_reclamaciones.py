@@ -24,8 +24,9 @@ class JovimerReclamaciones(models.Model):
     cliente = fields.Many2one('res.partner', string='Proveedor reclamación')
     lineaspedido = fields.Many2many('sale.order', string='Documentos de Venta Afectados')
     detalledocumentos = fields.Many2many('sale.order.line', string='Lineas de Documentos Afectadas')
-    detalledocumentoscompra = fields.Many2many('purchase.order.line', string='Lineas de Documentos de Compra Afectados')
-    detalledocumentoscontables = fields.Many2many('account.move.line',string='Lineas de Documentos Contables Afectados')
+    detalledocumentoscompra = fields.Many2one('purchase.order.line', string='Lineas de Documentos de Compra Afectados')
+    detalledocumentoscontables = fields.Many2many('account.move.line',
+                                                  string='Lineas de Documentos Contables Afectados')
     observacionescliente = fields.Text(string='Observaciones Cliente')
     observacionescliente = fields.Text(string='Observaciones Cliente')
     imagenes = fields.One2many('jovimer.imagenes.reclamaciones', 'reclamacion', string='Imágenes Reclacionadas')
@@ -64,6 +65,19 @@ class JovimerReclamaciones(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    def save_change(self):
+        for item in self:
+            item.detalledocumentoscompra.reclamation = True
+            item.detalledocumentoscompra.reclamacion_id = self.id
+
+    @api.model
+    def create(self, vals):
+        res = super(JovimerReclamaciones, self).create(vals)
+        if not self.name or self.name == '/':
+            self.name = self.env['ir.sequence'].next_by_code('jovimer.reclamacion') or '/'
+        return res
+
 
 class ModelReclamacionesImagenes(models.Model):
     # Tabla Reclamaciones

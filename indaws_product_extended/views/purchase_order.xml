@@ -144,6 +144,7 @@
                                         <field name="account_analytic_id" colspan="2" domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting" readonly="1"/>
                                         <field name="analytic_tag_ids" groups="analytic.group_analytic_tags" domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'color_field': 'color'}" readonly="1"/>
                                         <field name="track" readonly='1'/>
+                                        <field name="reclamacion_id" readonly="1"/>
                                         <field name="reclamation" readonly='1'/>
                                     </group>
                                     <group colspan="12">
@@ -153,9 +154,6 @@
                                         </page>
                                         <page string="Facturas y envíos entrantes" name="invoices_incoming_shiptments">
                                             <field name="invoice_lines" readonly="1"/>
-                                        </page>
-                                        <page string="Reclamaciones" name="reclamaciones_shiptments">
-                                            <field name="reclamacion_ids" readonly="1"/>
                                         </page>
                                     </notebook>
                                     </group>

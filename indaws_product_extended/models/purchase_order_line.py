@@ -73,7 +73,7 @@ class ModelSaleOrderLine(models.Model):
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     saleorderline = fields.Many2one('sale.order.line', string='Lineas de Venta')
     lotecomp = fields.Char(string='Lote', related='saleorderline.order_id.reslote')
-    reclamacion_ids = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
+    reclamacion_id = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     viajedirecto = fields.Boolean(string="Viaje Directo")
     # viajerel = fields.Many2one('jovimer.viajes', string='Viaje')
@@ -264,7 +264,6 @@ class ModelSaleOrderLine(models.Model):
         return action
 
     def create_reclamation_funtion(self):
-        # self.reclamation = True
         form_view = self.env.ref('indaws_product_extended.jovimer_reclamaciones_view_cuenta_venta_form')
         reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)], limit=1)
         return {
@@ -273,13 +272,15 @@ class ModelSaleOrderLine(models.Model):
             'res_id': reclamation_id.id,
             'views': [(form_view.id, 'form'), ],
             'type': 'ir.actions.act_window',
-            'target': 'new
+            'target': 'new',
+            'context': {
+                'default_detalledocumentoscompra': self.id,
+                'default_expediente': self.expediente.id
+            }
         }
 
     def create_reclamation_funtion_old(self):
-        # self.reclamation = True
-        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)],
-                                                                  limit=1).id
+        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)], limit=1).id
         context_name = self.env.context.get('params')
         purchase_order_id = context_name.get('id')
         self.ensure_one()

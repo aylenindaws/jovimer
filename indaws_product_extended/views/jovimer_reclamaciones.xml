@@ -79,7 +79,6 @@
             <field name="arch" type="xml">
                 <form string="Viajes">
                     <header>
-                        <button name="action_claim_send" string="Enviar por Correo" type="object" class="btn-primary"/>
                         <field name="status" widget="statusbar" options="{'clickable': '1'}"/>
                     </header>
                     <sheet>
@@ -90,7 +89,7 @@
                                     <field name="expediente"/>
                                 </div>
                                 <field name="cliente"/>
-                                <field name="detalledocumentoscompra"/>
+                                <field name="detalledocumentoscompra" readonly="1"/>
                             </group>
                             <group>
                                 <field name="fechasaalta"/>
@@ -117,11 +116,12 @@
                                     </tree>
                                 </field>
                             </page>
-                            <!--<page string="Detalle de Documentos Contables">
-                                <field name="detalledocumentoscontables"/>
-                            </page>-->
                         </notebook>
                     </sheet>
+                    <footer>
+                        <button name="save_change" string="Guardar" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
                         <field name="activity_ids" widget="mail_activity"/>
