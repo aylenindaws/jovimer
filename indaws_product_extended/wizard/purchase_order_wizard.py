@@ -15,12 +15,26 @@ class PurchaseOrderLineWizard(models.TransientModel):
     order_line_id = fields.Many2one('purchase.order.line', string="Linea de Cuenta de Venta")
     product_id = fields.Many2one('product.product', string="Producto")
     price_unit = fields.Float(string='Precio Unitario', digits='Product Price')
+    product_qty = fields.Float('Cantidad')
     qty_received = fields.Float(string="Cantidad Recibida", digits=dp.get_precision('Product Unit of Measure'),copy=False)
     qty_invoiced = fields.Float(string="Cantidad Facturada", digits=dp.get_precision('Product Unit of Measure'),store=True)
     discount = fields.Float(string='Descuento (%)', digits=dp.get_precision('Discount'))
+    track = fields.Text('Cambios Realizados')
+
+    @api.onchange('price_unit','discount')
+    def _onchange_track(self):
+        for item in self:
+            if not item.order_line_id.track:
+                item.order_line_id.track = ''
+            item.track = item.order_line_id.track
+            if item.discount != item.order_line_id.discount:
+                item.track = item.track + " - Modificación de Descuento de: " + str(item.order_line_id.discount) + " a " + str(item.discount)
+            if item.price_unit != item.order_line_id.price_unit:
+                item.track = item.track + " - Modificación de Precio Unitario de: " + str(item.order_line_id.price_unit) + " a " + str(item.price_unit)
 
     def save_change(self):
         for item in self:
             item.order_line_id.type_state = 'grinding'
             item.order_line_id.price_unit = item.price_unit
             item.order_line_id.discount = item.discount
+            item.order_line_id.track = item.track

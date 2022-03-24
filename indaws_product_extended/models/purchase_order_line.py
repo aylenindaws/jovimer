@@ -97,6 +97,7 @@ class ModelSaleOrderLine(models.Model):
     discount = fields.Float(
         string='Discount (%)', digits=dp.get_precision('Discount'),
     )
+    track = fields.Text('Cambios Realizados')
 
     @api.onchange('plantilla')
     def on_change_plantilla(self):
@@ -252,10 +253,12 @@ class ModelSaleOrderLine(models.Model):
         action['context'] = {
             'default_order_line_id': self.id,
             'default_product_id': self.product_id.id,
+            'default_product_qty': self.product_qty,
             'default_price_unit': self.price_unit,
             'default_qty_received': self.qty_received,
             'default_qty_invoiced': self.qty_invoiced,
             'default_discount': self.discount,
+            'default_track': self.track
         }
         return action
 

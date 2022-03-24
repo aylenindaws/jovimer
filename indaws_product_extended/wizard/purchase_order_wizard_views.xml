@@ -9,10 +9,12 @@
                     <group>
                         <field name="order_line_id" invisible='1'/>
                         <field name="product_id" readonly='1'/>
+                        <field name="product_qty" readonly='1'/>
                         <field name="qty_received" readonly='1'/>
                         <field name="qty_invoiced" readonly='1'/>
                         <field name="price_unit"/>
                         <field name="discount"/>
+                        <field name="track" readonly='1' force_save="1"/>
                     </group>
                 </group>
                 <footer>
