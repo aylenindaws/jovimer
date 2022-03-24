@@ -73,10 +73,9 @@ class JovimerReclamaciones(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(JovimerReclamaciones, self).create(vals)
-        if not self.name or self.name == '/':
-            self.name = self.env['ir.sequence'].next_by_code('jovimer.reclamacion') or '/'
-        return res
+        if not 'name' in vals:
+            vals['name'] = self.env['ir.sequence'].next_by_code('jovimer.reclamacion') or '/'
+        return super(JovimerReclamaciones, self).create(vals)
 
 
 class ModelReclamacionesImagenes(models.Model):
