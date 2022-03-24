@@ -59,9 +59,67 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Detalle de Documentos Contables">
+                            <!--<page string="Detalle de Documentos Contables">
                                 <field name="detalledocumentoscontables"/>
+                            </page>-->
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+		        </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="jovimer_reclamaciones_view_cuenta_venta_form">
+            <field name="name">JOVIMER - Reclamaciones</field>
+            <field name="model">jovimer.reclamaciones</field>
+            <field name="priority">5</field>
+            <field name="arch" type="xml">
+                <form string="Viajes">
+                    <header>
+                        <button name="action_claim_send" string="Enviar por Correo" type="object" class="btn-primary"/>
+                        <field name="status" widget="statusbar" options="{'clickable': '1'}"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <label for="expediente"/>
+                                <div>
+                                    <field name="expediente"/>
+                                </div>
+                                <field name="cliente"/>
+                                <field name="detalledocumentoscompra"/>
+                            </group>
+                            <group>
+                                <field name="fechasaalta"/>
+                                <field name="fechabaja"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="asunto" placeholder="Asunto Reclamación..."/>
+                        </group>
+                        <notebook>
+                            <page string="Detalle">
+                                <group>
+                                    <group>
+                                        <field name="observacionescliente"/>
+                                        <field name="accionescorrectivas"/>
+                                    </group>
+                                </group>
                             </page>
+                            <page string="Fotografias Detalle">
+                                <field name="imagenes">
+                                    <tree editable="top">
+                                        <field name="name"/>
+                                        <field name="imagen" widget="image"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!--<page string="Detalle de Documentos Contables">
+                                <field name="detalledocumentoscontables"/>
+                            </page>-->
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
@@ -80,22 +138,6 @@
             <field name="context"></field>
             <field name="domain"></field>
             <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_reclamaciones_view_tree')}),(0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_reclamaciones_view_form')})]"/>
-    </record>
-
-    <menuitem name="Cuentas de Venta"
-        id="menu_jovimer_cuentas_venta_parent"
-        parent="sale.sale_menu_root"
-        sequence="2"
-    />
-    <menuitem name="Cuentas de Venta"
-        id="menu_jovimer_cuentas_venta"
-        parent="menu_jovimer_cuentas_venta_parent"
-        sequence="3"
-        action="indaws_product_extended.purchase_form_action_indaws"/>
-    <menuitem name="Reclamaciones"
-        id="menu_jovimer_reclamaciones"
-        parent="menu_jovimer_cuentas_venta_parent"
-        sequence="5"
-        action="action_jovimer_reclamaciones"/>
+        </record>
     </data>
 </odoo>	

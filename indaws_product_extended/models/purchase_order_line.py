@@ -73,7 +73,7 @@ class ModelSaleOrderLine(models.Model):
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     saleorderline = fields.Many2one('sale.order.line', string='Lineas de Venta')
     lotecomp = fields.Char(string='Lote', related='saleorderline.order_id.reslote')
-    # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
+    reclamacion_ids = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     viajedirecto = fields.Boolean(string="Viaje Directo")
     # viajerel = fields.Many2one('jovimer.viajes', string='Viaje')
@@ -98,6 +98,7 @@ class ModelSaleOrderLine(models.Model):
         string='Discount (%)', digits=dp.get_precision('Discount'),
     )
     track = fields.Text('Cambios Realizados')
+    reclamation = fields.Boolean(string='Reclamacion Creada')
 
     @api.onchange('plantilla')
     def on_change_plantilla(self):
@@ -260,6 +261,33 @@ class ModelSaleOrderLine(models.Model):
             'default_discount': self.discount,
             'default_track': self.track
         }
+        return action
+
+    def create_reclamation_funtion(self):
+        # self.reclamation = True
+        form_view = self.env.ref('indaws_product_extended.jovimer_reclamaciones_view_cuenta_venta_form')
+        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)], limit=1)
+        return {
+            'name': _('Reclamacion'),
+            'res_model': 'jovimer.reclamaciones',
+            'res_id': reclamation_id.id,
+            'views': [(form_view.id, 'form'), ],
+            'type': 'ir.actions.act_window',
+            'target': 'new
+        }
+
+    def create_reclamation_funtion_old(self):
+        # self.reclamation = True
+        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)],
+                                                                  limit=1).id
+        context_name = self.env.context.get('params')
+        purchase_order_id = context_name.get('id')
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "indaws_product_extended.purchase_reclamation_form_action_indaws")
+        form_view = [(self.env.ref('indaws_product_extended.jovimer_reclamaciones_view_form').id, 'form')]
+        action['views'] = form_view
+        action['res_id'] = reclamation_id
         return action
 
     def draft_funtion(self):

@@ -18,5 +18,8 @@
             <menuitem id="jovimer_palet_config_submenu" name="Palets" action="jovimer_palet_list_action"/>
             <menuitem id="jovimer_plataforma_config_submenu" name="Plataformas" action="jovimer_plataforma_list_action"/>
         </menuitem>
+        <menuitem name="Cuentas de Venta" id="menu_jovimer_cuentas_venta_parent" parent="purchase.menu_purchase_root" sequence="2" />
+        <menuitem name="Cuentas de Venta" id="menu_jovimer_cuentas_venta" parent="menu_jovimer_cuentas_venta_parent" sequence="3" action="indaws_product_extended.purchase_form_action_indaws"/>
+        <menuitem name="Reclamaciones" id="menu_jovimer_reclamaciones" parent="menu_jovimer_cuentas_venta_parent" sequence="5" action="action_jovimer_reclamaciones"/>
     </data>
 </odoo>
