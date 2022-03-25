@@ -275,24 +275,20 @@ class ModelSaleOrderLine(models.Model):
             'target': 'new',
             'context': {
                 'default_detalledocumentoscompra': self.id,
-                'default_expediente': self.expediente.id
+                'default_expediente': self.account_analytic_id.id,
+                'default_cliente': self.partner_id.id
             }
         }
-
-    def create_reclamation_funtion_old(self):
-        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)], limit=1).id
-        context_name = self.env.context.get('params')
-        purchase_order_id = context_name.get('id')
-        self.ensure_one()
-        action = self.env["ir.actions.actions"]._for_xml_id(
-            "indaws_product_extended.purchase_reclamation_form_action_indaws")
-        form_view = [(self.env.ref('indaws_product_extended.jovimer_reclamaciones_view_form').id, 'form')]
-        action['views'] = form_view
-        action['res_id'] = reclamation_id
-        return action
 
     def draft_funtion(self):
         if not self.facturado:
             self.type_state = 'draft'
         else:
             raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
+
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    cost_real = fields.Float(string='Coste Real')
+    cost_real_total = fields.Float(string='Total Cost Real', compute='calculate_cost_real_total')

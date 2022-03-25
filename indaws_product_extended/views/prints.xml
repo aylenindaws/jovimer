@@ -131,7 +131,7 @@
 
 
 <record id="orcaragr_jovimer_report" model="ir.actions.report">
-    <field name="name">Orden de Carga Agrupado</field>
+    <field name="name">Orden de Carga Internacional</field>
     <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viajes.orcaragr.jovimer</field>
     <field name="report_type">py3o</field>
@@ -193,7 +193,7 @@
 </record>
 
 <record id="viaje_carga_ctn_jovimer_report" model="ir.actions.report">
-    <field name="name">Orden Almacen Carga</field>
+    <field name="name">Orden de Carga Nacional</field>
     <field name="model">stock.picking.batch</field>
     <field name="report_name">jovimer_viaje_carga_ctn.report</field>
     <field name="report_type">py3o</field>
