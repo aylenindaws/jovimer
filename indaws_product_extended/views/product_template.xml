@@ -1,54 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="product_template_jovimer_form_view_inherit" model="ir.ui.view">
-        <field name="name">product.template.jovimer.form.view.inherit</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view"/>
+    <record id="jovimer_purchase_order_line_view_form" model="ir.ui.view">
+        <field name="name">lineas.de.cuenta.de.venta</field>
+        <field name="model">purchase.order.line.wizard</field>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='purchase']" position="after">
-                <page string="Codigo Cliente" name="jovimer_partner_code">
-                    <group name="template_client">
-                        <field name="partner_code" nolabel="1">
-                            <tree name="partner_code">
-                                <field name="partner_id"/>
-                                <field name="name"/>
-                                <field name="label_templates"/>
-                            </tree>
-                        </field>
+            <form string="Lineas de Cuenta de Venta">
+                <group>
+                    <group>
+                        <field name="order_line_id" invisible='1'/>
+                        <field name="product_id" readonly='1'/>
+                        <field name="product_qty"/>
+                        <field name="qty_received" readonly='1'/>
+                        <field name="qty_invoiced" readonly='1'/>
+                        <field name="price_unit"/>
+                        <field name="discount"/>
+                        <field name="track" readonly='1' force_save="1"/>
                     </group>
-                </page>
-            </xpath>
-            <xpath expr="//page[@name='inventory']" position="after">
-                <page string="Plantillas de Jovimer" name="jovimer_template">
-                    <group name="template">
-                        <group name="template_left">
-                            <field name="name"/>
-                            <field name="bulge"/>
-                            <field name="palet_type" options="{'no_quick_create': True, 'no_create': True}"/>
-                            <field name="uom_invoice"/>
-                        </group>
-                        <group name="template_right">
-                            <field name="variety"/>
-                            <field name="confection"/>
-                            <field name="kg_net_bulge"/>
-                            <field name="brand"/>
-                            <field name="caliber"/>
-                            <field name="category"/>
-                            <field name="container"/>
-                        </group>
-                        <!--<notebook>
-                            <page string="Precios" name="jovimer_price">
-                                <group name="template_right">
-                                    <field name="week"/>
-                                    <field name="sale"/>
-                                    <field name="pvp_type"/>
-                                </group>
-                            </page>
-                        </notebook>-->
-                    </group>
-                </page>
-            </xpath>
+                </group>
+                <footer>
+                    <button name="save_change" string="Guardar" type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancelar" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
         </field>
     </record>
+
+        <record id="purchase_order_line_form_action_indaws" model="ir.actions.act_window">
+            <field name="name">Correccion lineas de Cuentas de Ventas</field>
+            <field name="res_model">purchase.order.line.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No purchase order found. Let's create one!
+                </p><p>
+                    Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
+                </p>
+            </field>
+        </record>
 </odoo>
-  

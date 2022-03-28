@@ -245,7 +245,6 @@ class ModelSaleOrderLine(models.Model):
 
     def grinding_funtion(self):
         context_name = self.env.context.get('params')
-        purchase_order_id = context_name.get('id')
         self.ensure_one()
         action = self.env["ir.actions.actions"]._for_xml_id(
             "indaws_product_extended.purchase_order_line_form_action_indaws")

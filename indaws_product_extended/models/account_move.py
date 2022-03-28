@@ -1,0 +1,287 @@
+# -*- coding: utf-8 -*-
+import base64
+import os.path
+
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError, UserError
+from datetime import datetime, date, time, timedelta
+import subprocess
+import logging
+import datetime
+
+_logger = logging.getLogger(__name__)
+
+
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    fechasalida = fields.Date(string='Fecha de Salida')
+    fechallegada = fields.Date(string='Fecha de Llegada')
+    horallegada = fields.Char(string='Hora de Llegada', help='Permite caracteres Alfanuméricos')
+    campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
+    expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
+    expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
+    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
+    expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
+    mododecobro = fields.Many2one('payment.acquirer', string='Modo de Cobros')
+    conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE', store=True)
+    reslote = fields.Char(string='Lote')
+    obspedido = fields.Text(string='Observaciones PEdido')
+    description = fields.Char(string='Desc.')
+    palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
+    paletsv = fields.Float(string='C. Venta')
+    refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
+    plataforma = fields.Many2one('jovimer.plataforma',string='Plataforma')
+    estadopalets = fields.Boolean(string='Estado Palets')
+    faltanpalets = fields.Float(string='Faltan')
+    pedcompra = fields.Many2many('purchase.order', string='Pedidos de Compra')
+    regcalidad = fields.Text(string='Registro de Calidad')
+    costetrans = fields.Float(string='Transporte')
+    coste = fields.Float(string='Compra', compute='_compute_total_coste')
+    resultado = fields.Float(string='Resultado')
+    pedidocerrado = fields.Boolean(string='Pedido Cerrado')
+    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
+    numexpnuevo = fields.Integer(string="Número Expediente")
+    edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
+    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
+
+    def update_edi_file(self, default=None):
+        for item in self:
+            count = 0
+            aux_txt = base64.b64decode(item.edi_file.datas).decode('ascii', 'ignore').split('\n')
+            item.order_line.unlink()
+            for linea in aux_txt:
+                count += 1
+                if count == 1:
+                    if '96AORDERSP' in linea:
+                        _logger.info('Fichero EDI Valido para su procesamiento')
+                        id_edi_jovimer = linea[3:16]
+                    else:
+                        _logger.info('Fichero EDI NO Valido para su procesamiento')
+                        break
+                elif count == 2:
+                    id_edi_cliente = linea[26:39]
+                    fecha_pedido = linea[17:25]
+                    fecha_llegada = linea[111:119]
+                else:
+                    if 'L' == linea[0:1]:
+                        if not self.partner_id:
+                            raise ValidationError('Ingrese un valor valido para cliente, para poder continuar con la importación')
+                        template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id.id)], limit=1)
+                        if not template:
+                            raise ValidationError(("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
+                        product_id = template.product_id
+                        und = linea[72:75]
+                        product_description = linea[75:125]
+                        if 'CT' in und:
+                            id_und = 24
+                        elif 'PCE' in und:
+                            id_und = 1
+                        elif 'KGM' in und:
+                            id_und = 27
+                        else:
+                            id_und = 1
+                        if linea[65:71].replace(' ', '') is '' or linea[65:71].replace(' ', '') is False:
+                            quantity = 0
+                        else:
+                            quantity = float(linea[65:71].replace(' ', ''))
+                        item.order_line.create(
+                            {
+                                "order_id": item.id,
+                                "product_id": product_id.id,
+                                "product_uom_qty": quantity,
+                                "name": product_description,
+                                "price_unit": product_id.lst_price if product_id.lst_price is not False else 0,
+                                'currency_id': 1,
+                            }
+                        )
+        return
+
+    @api.onchange('edi_file_binary')
+    def _onchange_field_edi(self):
+        for record in self:
+            if record.edi_file_binary:
+                record.edi_file = self.env['ir.attachment'].create({
+                    'name': ("EDI IMPORT " + str(record.id)),
+                    'type': 'binary',
+                    'datas': record.edi_file_binary,
+                    'res_model': record._name,
+                    'res_id': record.id
+                })
+
+    @api.onchange('conformalote', 'commitment_date', 'fechasalida')
+    def onchange_conformalote(self):
+        self.ensure_one()
+        confname = str(self.conformalote.name)
+        fechallegada = str(self.commitment_date.date()) if self.commitment_date else False
+        fechasalida = str(self.fechasalida)
+
+        if confname == "LO PONE EL CLIENTE":
+            self.reslote = ' '
+
+        if confname == "SEMANA/DIA LLEGADA":
+            try:
+                weekday = self.commitment_date.date().strftime("%w")
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
+
+                year = fechallegada.split('-')[0]
+                month = fechallegada.split('-')[1]
+                day = fechallegada.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                self.reslote = str(wk) + '/' + str(weekday.zfill(2))
+            except:
+                self.reslote = 'Faltan datos'
+        if confname == "SEMANA/DIA SALIDA":
+            try:
+                weekday = self.fechasalida.strftime("%w")
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
+
+                year = fechasalida.split('-')[0]
+                month = fechasalida.split('-')[1]
+                day = fechasalida.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                self.reslote = str(wk) + '/' + str(weekday.zfill(2))
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "SEMANA/AÑO LLEGADA":
+            try:
+                year = fechallegada.split('-')[0]
+                month = fechallegada.split('-')[1]
+                day = fechallegada.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                self.reslote = str(wk) + '/' + str(year)
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "SEMANA/DIA LLEGADA-3":
+            try:
+                diaresto = 3
+                ahora = datetime.datetime.strptime(fechallegada, '%Y-%m-%d')
+                hace3diastime = str(ahora - timedelta(days=diaresto))
+                hace3diastime2 = ahora - timedelta(days=diaresto)
+                hace3dias = hace3diastime.split(' ')[0]
+                weekday = hace3diastime2.strftime("%w")
+                year = hace3dias.split('-')[0]
+                month = hace3dias.split('-')[1]
+                day = hace3dias.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
+                resultado = str(weekday.zfill(2))
+                if resultado == '00':
+                    resultado = '07'
+                self.reslote = str(wk) + '/' + str(resultado)
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "SEMANA/DIA LLEGADA-1":
+            try:
+                diaresto = 1
+                ahora = datetime.datetime.strptime(fechallegada, '%Y-%m-%d')
+                hace3diastime = str(ahora - timedelta(days=diaresto))
+                hace3diastime2 = ahora - timedelta(days=diaresto)
+                hace3dias = hace3diastime.split(' ')[0]
+                weekday = hace3diastime2.strftime("%w")
+                year = hace3dias.split('-')[0]
+                month = hace3dias.split('-')[1]
+                day = hace3dias.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
+                self.reslote = str(wk) + '/' + str(weekday.zfill(2))
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "DIA/MES/AÑO LLEGADA":
+            try:
+                year = fechallegada.split('-')[0]
+                month = fechallegada.split('-')[1]
+                day = fechallegada.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                self.reslote = str(day) + '/' + str(month) + '/' + str(year)
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "FECHA LLEGADA -4 DIAS":
+            try:
+                ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
+                hace4 = ahora - timedelta(days=4)
+                dt_string = hace4.strftime("%d/%m/%Y")
+                self.reslote = str(dt_string)
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "DIA/MES/AÑO SALIDA":
+            try:
+                ahora = datetime.strptime(fechasalida, '%Y-%m-%d')
+                dt_string = ahora.strftime("%d/%m/%Y")
+                self.reslote = str(dt_string)
+            except:
+                self.reslote = 'Faltan datos'
+
+        if confname == "SEMANA/DIA LLEGADA +1":
+            try:
+                ahora = datetime.strptime(fechallegada, '%Y-%m-%d')
+                hace4 = ahora + timedelta(days=1)
+                weekday = hace4.strftime("%w")
+                if str(weekday) == "0":
+                    weekday = "7"
+                else:
+                    weekday = str(weekday)
+                year = fechallegada.split('-')[0]
+                month = fechallegada.split('-')[1]
+                day = fechallegada.split('-')[2]
+                dt = date(int(year), int(month), int(day))
+                wk = dt.isocalendar()[1]
+                self.reslote = str(wk) + '/' + str(weekday.zfill(2))
+            except:
+                self.reslote = 'Faltan datos'
+        return {}
+
+    def _compute_paletsc(self):
+        numpalets = 0.0
+        try:
+            for line in self.order_line.multicomp:
+                numpalets += line.numpalets or 0.0
+            self.palets = numpalets
+        except:
+            self.palets = 0
+        numpaletsv = 0.0
+        try:
+            for linev in self.order_line:
+                numpaletsv += linev.cantidadpedido or 0.0
+            self.paletsv = numpaletsv
+        except:
+            self.palets = 0
+
+    @api.model
+    def create(self, vals_list):
+        vals = super(SaleOrder, self).create(vals_list)
+        if not vals.analytic_account_id:
+            vals.analytic_account_id = self.env['account.analytic.account'].create(
+                {'name': 'J' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
+        return vals
+
+    def action_post(self):
+        for item in self:
+            for line in item:
+                if line.purchase_line_id:
+                    if line.price_unit > line.purchase_line_id.price_unit+0.01 or line.price_unit < line.purchase_line_id.price_unit-0.01:
+                        raise ValidationError('El precio Facturado para la linea de producto '+str(line.product_id.name)+' con id '+str(line.id)+'\n tiene una diferencia de '+str(abs(line.price_unit-line.purchase_line_id.price_unit)))+' saliendose del margen de 0,01'

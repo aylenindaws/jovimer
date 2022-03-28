@@ -138,6 +138,7 @@ class ModelSaleOrderLine(models.Model):
         self.product_uom = self.product_id.uom_type
         self.plantillaetiqueta = label if label else False
         if self.product_id:
+            self.costetrans = product_id.transport_cost
             purchase_line = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
             supplier = purchase_line.name
             if supplier:
@@ -145,13 +146,13 @@ class ModelSaleOrderLine(models.Model):
                 self.purchase_price = purchase_line.price
                 self.discount_supplier = purchase_line.discount
                 self.supplier_id = supplier
-                self.costetrans = supplier.transport_cost
             else:
                 self.uom_po_id = False
                 self.purchase_price = False
                 self.discount_supplier = False
                 self.supplier_id = False
-                self.costetrans = False
+        else:
+            self.costetrans = False
         return {}
 
     @api.onchange('product_id')

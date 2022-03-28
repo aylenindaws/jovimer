@@ -38,6 +38,12 @@ class PurchaseOrder(models.Model):
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
 
+    def action_create_invoice(self):
+        for item in self:
+            for line in item.order_line:
+                if line.type_state == 'draft':
+                    raise ValidationError('La linea con id: '+str(line.id)+' No se encuentra Validada\n se requiere una Validacion completa de la orden')
+            super(PurchaseOrder, item).action_create_invoice()
     @api.model
     def create(self, vals):
         result = super(PurchaseOrder, self).create(vals)

@@ -16,4 +16,4 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     trasnportista = fields.Boolean(string='Transportista')
-    transport_cost = fields.Float('Transport / kg cost')
+    #transport_cost = fields.Float('Transport / kg cost')
