@@ -27,7 +27,7 @@
         'views/jovimer_reclamaciones.xml',
         'views/stock_picking_batch.xml',
         'views/sale_order.xml',
-        #'wizard/purchase_order_wizard_views.xml',
+        'wizard/purchase_order_wizard_views.xml',
         'views/product_template.xml',
         'views/stock_move.xml',
         'views/ir_menus.xml',
