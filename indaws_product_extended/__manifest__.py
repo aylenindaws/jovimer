@@ -23,7 +23,7 @@
         'views/jovimer_palet.xml',
         'views/jovimer_plataforma.xml',
         'views/jovimer_partner_code.xml',
-        'views/purchase_order.xml',
+        #'views/purchase_order.xml',
         'views/jovimer_reclamaciones.xml',
         'views/stock_picking_batch.xml',
         'views/sale_order.xml',
