@@ -88,9 +88,7 @@ class ModelSaleOrderLine(models.Model):
     # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     paletsc = fields.Float(string='Compra', compute='_calc_palets', store=True)
-    provisionales = fields.Many2many('purchase.order.line', string='Provisionales',
-                                     domain=[('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])],
-                                     limit=2)
+    provisionales = fields.Many2many('purchase.order.line', string='Provisionales', domain=[('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])], limit=2)
     provisionaleso2m = fields.One2many('purchase.order.line', 'asignacionj', string="Provisionales")
     viajedirecto = fields.Boolean(string="Viaje Directo")
     plantillaetiqueta = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla Etiqueta')
@@ -109,8 +107,7 @@ class ModelSaleOrderLine(models.Model):
     ], string='Estado', default='OK')
     not_active = fields.Boolean('NO Activo', related='product_id.not_active')
     costetrans = fields.Float(string='Transporte')
-    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True,
-                                help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
+    uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True, help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
 
     def recalculalinea(self):
         variedad = self.product_id.variety
@@ -121,7 +118,7 @@ class ModelSaleOrderLine(models.Model):
         marca = self.product_id.brand
         bultos = self.product_id.bulge
         label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.id), (
-        'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
+            'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
@@ -138,8 +135,9 @@ class ModelSaleOrderLine(models.Model):
         self.product_uom = self.product_id.uom_type
         self.plantillaetiqueta = label if label else False
         if self.product_id:
-            self.costetrans = product_id.transport_cost
-            purchase_line = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
+            self.costetrans = self.product_id.transport_kg
+            purchase_line = self.env['product.supplierinfo'].search(
+                [('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
             supplier = purchase_line.name
             if supplier:
                 self.uom_po_id = purchase_line.product_uom.id
@@ -165,7 +163,7 @@ class ModelSaleOrderLine(models.Model):
         marca = self.product_id.brand
         bultos = self.product_id.bulge
         label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.id), (
-        'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
+            'partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
@@ -181,16 +179,17 @@ class ModelSaleOrderLine(models.Model):
         self.unidadesporbulto = self.product_id.confection.uom_for_bulge
         self.product_uom = self.product_id.uom_type
         self.plantillaetiqueta = label if label else False
-        #supplier_list = self.env['getsale.orderdata'].search([('order_id','=',self.id)]).mapped('partner_id')
+        # supplier_list = self.env['getsale.orderdata'].search([('order_id','=',self.id)]).mapped('partner_id')
         if self.product_id:
-            purchase_line = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
+            purchase_line = self.env['product.supplierinfo'].search(
+                [('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
             supplier = purchase_line.name
+            self.costetrans = self.product_id.transport_kg
             if supplier:
                 self.uom_po_id = purchase_line.product_uom.id
                 self.purchase_price = purchase_line.price
                 self.discount_supplier = supplier.default_supplierinfo_discount
                 self.supplier_id = supplier
-                self.costetrans = supplier.transport_cost
             else:
                 self.uom_po_id = False
                 self.purchase_price = False
@@ -204,9 +203,15 @@ class ModelSaleOrderLine(models.Model):
         for item in self:
             if item.supplier_id:
                 item.discount_supplier = item.supplier_id.default_supplierinfo_discount
-                item.costetrans = item.supplier_id.transport_cost
             else:
                 item.discount_supplier = False
+
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        for item in self:
+            if item.product_id:
+                item.costetrans = item.product_id.transport_kg
+            else:
                 item.costetrans = False
 
     def buscaprovisionales(self):
@@ -242,24 +247,24 @@ class ModelSaleOrderLine(models.Model):
     def on_change_cantidadpedido_purchase(self, unidad_venta, unidad_compra):
         product_uom_qty = self.product_uom_qty
         if unidad_venta == 'Bultos' and unidad_compra == 'Kg':
-            product_uom_qty = float(self.product_uom_qty)*float(self.kgnetbulto)
+            product_uom_qty = float(self.product_uom_qty) * float(self.kgnetbulto)
         if unidad_venta == 'Bultos' and unidad_compra == 'Unidades':
-            product_uom_qty = float(self.product_uom_qty)*float(self.unidadesporbultor)
+            product_uom_qty = float(self.product_uom_qty) * float(self.unidadesporbultor)
         if unidad_venta == 'Kg' and unidad_compra == 'Unidades':
-            product_uom_qty = (float(self.product_uom_qty)*float(self.kgnetbulto))/float(self.unidadesporbultor)
+            product_uom_qty = (float(self.product_uom_qty) * float(self.kgnetbulto)) / float(self.unidadesporbultor)
         if unidad_venta == 'Kg' and unidad_compra == 'Bultos':
-            product_uom_qty = float(self.product_uom_qty)/float(self.kgnetbulto)
+            product_uom_qty = float(self.product_uom_qty) / float(self.kgnetbulto)
         if unidad_venta == 'Unidades' and unidad_compra == 'Bultos':
-            product_uom_qty = float(self.product_uom_qty)/float(self.unidadesporbultor)
+            product_uom_qty = float(self.product_uom_qty) / float(self.unidadesporbultor)
         if unidad_venta == 'Unidades' and unidad_compra == 'Kg':
-            product_uom_qty = (float(self.product_uom_qty)*float(self.bultos)) / float(self.kgnetbulto)
+            product_uom_qty = (float(self.product_uom_qty) * float(self.bultos)) / float(self.kgnetbulto)
         return product_uom_qty
 
-    @api.depends('cantidadpedido','bultos','kgnetbulto')
+    @api.depends('cantidadpedido', 'bultos', 'kgnetbulto')
     def on_change_km_transporte(self):
         for item in self:
             if item.cantidadpedido and item.bultos and item.kgnetbulto:
-                price_trans = item.costetrans/(float(item.cantidadpedido) * float(item.bultos) * float(item.kgnetbulto))
+                price_trans = item.costetrans / (float(item.cantidadpedido) * float(item.bultos) * float(item.kgnetbulto))
             else:
                 price_trans = item.costetrans
             item.price_trans = price_trans
@@ -280,8 +285,7 @@ class ModelSaleOrderLine(models.Model):
         if str(unidabulto.id) == "24":
             cantidadtotal = float(cantidadpedido) * float(bultos)
             if float(cantidadtotal) < float(cantidad):
-                raise AccessError(
-                    "Has sobrepasado la cantidad de Bultos por palet en cantidad. Debes corregirlo en Numero de Palets o Numero de Bultos por palet")
+                raise AccessError("Has sobrepasado la cantidad de Bultos por palet en cantidad. Debes corregirlo en Numero de Palets o Numero de Bultos por palet")
                 self.product_uom_qty = 0
 
     def calcula_cantidad(self):
@@ -348,12 +352,12 @@ class ModelSaleOrderLine(models.Model):
             'context': context
         }
 
-    @api.onchange('price_unit','costetrans','purchase_price','discount_supplier','price_subtotal','discount','product_uom')
+    @api.onchange('price_unit', 'costetrans', 'purchase_price', 'discount_supplier', 'price_subtotal', 'discount','product_uom')
     def onchange_margin(self):
         for item in self:
-            sale = item.price_unit*item.product_uom_qty*((100-item.discount)/100)
-            transport = item.costetrans*item.on_change_cantidadpedido_purchase(item.product_uom.name,'Kg')
-            purchase = item.purchase_price*item.on_change_cantidadpedido_purchase(item.product_uom.name, item.uom_po_id.name)*((100-item.discount_supplier)/100)
-            item.margin = sale-transport-purchase
-            item.margin_percent = (item.margin*100)/sale if sale != 0 else (item.margin*100)
+            sale = item.price_unit * item.product_uom_qty * ((100 - item.discount) / 100)
+            transport = item.costetrans * item.on_change_cantidadpedido_purchase(item.product_uom.name, 'Kg')
+            purchase = item.purchase_price * item.on_change_cantidadpedido_purchase(item.product_uom.name,item.uom_po_id.name) * ((100 - item.discount_supplier) / 100)
+            item.margin = sale - transport - purchase
+            item.margin_percent = (item.margin * 100) / sale if sale != 0 else (item.margin * 100)
 

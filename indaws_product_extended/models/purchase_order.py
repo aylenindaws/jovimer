@@ -37,13 +37,24 @@ class PurchaseOrder(models.Model):
     estadocrear = fields.Boolean(string='Finalizada Creacion')
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+    validate_line = fields.Boolean(string='Revisado', compute="_compute_validate_line", store="True")
+
+    @api.depends("order_line.type_state")
+    def _compute_validate_line(self):
+        for item in self:
+            item.validate_line = True
+            for line in item.order_line:
+                if line.type_state == 'draft':
+                    item.validate_line = False
 
     def action_create_invoice(self):
         for item in self:
             for line in item.order_line:
                 if line.type_state == 'draft':
-                    raise ValidationError('La linea con id: '+str(line.id)+' No se encuentra Validada\n se requiere una Validacion completa de la orden')
+                    raise ValidationError('La linea con id: ' + str(
+                        line.id) + ' No se encuentra Validada\n se requiere una Validacion completa de la orden')
             super(PurchaseOrder, item).action_create_invoice()
+
     @api.model
     def create(self, vals):
         result = super(PurchaseOrder, self).create(vals)

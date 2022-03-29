@@ -31,10 +31,13 @@ class PurchaseOrderLineWizard(models.TransientModel):
                 item.track = item.track + " - Modificación de Descuento de: " + str(item.order_line_id.discount) + " a " + str(item.discount)
             if item.price_unit != item.order_line_id.price_unit:
                 item.track = item.track + " - Modificación de Precio Unitario de: " + str(item.order_line_id.price_unit) + " a " + str(item.price_unit)
+            if item.product_qty != item.order_line_id.product_qty:
+                item.track = item.track + " - Modificación de Cantidad de: " + str(item.order_line_id.product_qty) + " a " + str(item.product_qty)
 
     def save_change(self):
         for item in self:
             item.order_line_id.type_state = 'grinding'
             item.order_line_id.price_unit = item.price_unit
             item.order_line_id.discount = item.discount
+            item.order_line_id.product_qty = item.product_qty
             item.order_line_id.track = item.track
