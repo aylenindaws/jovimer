@@ -99,6 +99,13 @@ class ModelSaleOrderLine(models.Model):
     )
     track = fields.Text('Cambios Realizados')
     reclamation = fields.Boolean(string='Reclamacion Creada')
+    product_qty = fields.Float('Cantidad', compute='_compute_product_qty',
+                               digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
+
+    @api.depends('product_uom_qty')
+    def _compute_product_qty(self):
+        for item in self:
+            item.product_qty = item.product_uom_qty
 
     @api.onchange('plantilla')
     def on_change_plantilla(self):
@@ -285,9 +292,3 @@ class ModelSaleOrderLine(models.Model):
         else:
             raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
 
-
-class AccountMoveLine(models.Model):
-    _inherit = "account.move.line"
-
-    cost_real = fields.Float(string='Coste Real')
-    cost_real_total = fields.Float(string='Total Cost Real', compute='calculate_cost_real_total')

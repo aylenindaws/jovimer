@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import odoo.addons.decimal_precision as dp
 import logging
 import json
 import os
@@ -43,3 +44,15 @@ class StockMove(models.Model):
                     item.totalbultos = item.sale_line_id.bultos
                 else:
                     item.write({'paletgr': 0, 'paleteur': 0, 'totalbultos': 0})
+
+    def _set_product_qty(self):
+        raise ValiadationError('Entro al Move')
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move.line'
+
+    product_qty = fields.Float('Cantidad', digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
+
+    def _set_product_qty(self):
+        raise ValiadationError('Entro al Move line')
