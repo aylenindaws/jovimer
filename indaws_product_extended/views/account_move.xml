@@ -122,30 +122,30 @@
                                     </div>
                                     <field name="lineacabalbarancompra" readonly="1"/>
                                 </group>
-                            <notebook>
-
-                    <page string="Linea de Compra">
-                    <group><group>
-                    <field name="algovamal"/>
-                    <field name="lineaalbarancompra" readonly="1"/>
-                    <field name="lineacompra" readonly="1"/>
-                    <field name="asignado"/>
-                    <field name="lineaventa" readonly="1"/>
-                    <field name="lineaventaud"/>
-                    </group>
-                    <group>
-                    <field name="bultostotalesalbarancompra" readonly="1"/>
-                    <field name="bultostotalespedidocompra" readonly="1"/>
-
-
-                    <field name="precioplantilla" readonly="1"/>
-                    <field name="precioudplantilla" readonly="1"/>
-
-
-                    </group>
-
-                    </group>
-                    </page>
+                                <notebook>
+                                    <page string="Linea de Compra">
+                                        <group>
+                                            <group>
+                                                <field name="algovamal"/>
+                                                <field name="lineaalbarancompra" readonly="1"/>
+                                                <field name="lineacompra" readonly="1"/>
+                                                <field name="asignado"/>
+                                                <field name="lineaventa" readonly="1"/>
+                                                <field name="lineaventaud"/>
+                                                </group>
+                                                <group>
+                                                <field name="bultostotalesalbarancompra" readonly="1"/>
+                                                <field name="bultostotalespedidocompra" readonly="1"/>
+                                                <field name="precioplantilla" readonly="1"/>
+                                                <field name="precioudplantilla" readonly="1"/>
+                                            </group>
+                                        </group>
+                                    </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>

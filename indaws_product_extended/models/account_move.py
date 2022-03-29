@@ -291,14 +291,6 @@ class AccountMove(models.Model):
         except:
             self.palets = 0
 
-    @api.model
-    def create(self, vals_list):
-        vals = super(SaleOrder, self).create(vals_list)
-        if not vals.analytic_account_id:
-            vals.analytic_account_id = self.env['account.analytic.account'].create(
-                {'name': 'J' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
-        return vals
-
     def action_post(self):
         for item in self:
             for line in item.invoice_line_ids:
@@ -385,6 +377,7 @@ class AccountMove(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
+    expediente = fields.Many2one('account.analytic.account', string='Expediente')
     # expediente = fields.Many2one('account.analytic.accoun', string='Expediente', domain=[('serie','in',(1,3,4,12))])
     # expediente_origen = fields.Integer(string='Número', help='Número Expediente', related='invoice_id.expediente.name')
     # expediente_serie = fields.Selection('jovimer_expedientes', related='expediente.campanya')
