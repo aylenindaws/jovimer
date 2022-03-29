@@ -46,7 +46,7 @@ class StockMove(models.Model):
                     item.write({'paletgr': 0, 'paleteur': 0, 'totalbultos': 0})
 
     def _set_product_qty(self):
-        raise ValiadationError('Entro al Move')
+        raise ValiadationError('Inverse de product_qty para stock.move')
 
 
 class StockMove(models.Model):
@@ -55,4 +55,4 @@ class StockMove(models.Model):
     product_qty = fields.Float('Cantidad', digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
 
     def _set_product_qty(self):
-        raise ValiadationError('Entro al Move line')
+        raise ValiadationError('Inverse de product_qty para stock.move.line')
