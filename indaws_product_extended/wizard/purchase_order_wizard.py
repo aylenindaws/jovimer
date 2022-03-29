@@ -36,10 +36,10 @@ class PurchaseOrderLineWizard(models.TransientModel):
 
     def save_change(self):
         for item in self:
-            item.order_line_id.write{
+            item.order_line_id.write({
                 'type_state': 'grinding',
                 'price_unit': item.price_unit,
                 'discount': item.discount,
                 'product_qty': item.product_qty,
                 'track': item.track
-            }
+            })
