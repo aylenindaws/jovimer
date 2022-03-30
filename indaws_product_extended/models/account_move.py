@@ -6,6 +6,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, date, time, timedelta
 from odoo.tools import float_compare, float_is_zero, float_repr, float_round, float_split, float_split_str
+from odoo.tools import date_utils
 import json
 import subprocess
 import logging
@@ -66,10 +67,7 @@ class AccountMove(models.Model):
 
     @api.depends('payment_move_line_ids.amount_residual')
     def _get_payment_info_JSON(self):
-        self.payments_widget = json.dumps(False)
-        if self.payment_move_line_ids:
-            info = {'title': _('Less Payment'), 'outstanding': False, 'content': self._get_payments_vals()}
-            self.payments_widget = json.dumps(info, default=date_utils.json_default)
+        self.payments_widget = False
 
     relpartnerfiscal = fields.Char(string='Nombre Fiscal', related='partner_id.nomfiscal')
     relpartnercta = fields.Char(string='Cta VTA', related='partner_id.cta')
@@ -640,3 +638,12 @@ class AccountMoveLine(models.Model):
             'res_id': invoice,
             'target': 'new',
         }
+
+    cost_real = fields.Float(string='Coste Real', digits='Discount')
+    cost_real_total = fields.Float(string='Total Cost Real', compute="sub_total")
+
+    @api.depends('cost_real', 'quantity')
+    def sub_total(self):
+        ''' calculate cost real total from cost real amount and qty of product'''
+        for rec in self:
+            rec.cost_real_total = rec.cost_real * rec.quantity
