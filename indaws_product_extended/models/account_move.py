@@ -6,6 +6,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, date, time, timedelta
 from odoo.tools import float_compare, float_is_zero, float_repr, float_round, float_split, float_split_str
+import json
 import subprocess
 import logging
 import datetime
@@ -44,6 +45,32 @@ class AccountMove(models.Model):
                     totalkgbr += line.totalkglinbr or 0.0
             rec.totalkgbr = totalkgbr
 
+    def _get_total_bultoskg(self):
+        for rec in self:
+            try:
+                order = rec.id
+                rec.env.cr.execute(""" select sum(totalbultos) from account_move_line where move_id='%s'""" % (order))
+                resultv = rec.env.cr.fetchone()
+                rec.totalbltkg = resultv[0]
+            except:
+                print("rec.totalbltkg = 0")
+        return {}
+
+    @api.depends('line_ids.amount_residual')
+    def _compute_payments(self):
+        payment_lines = set()
+        for line in self.line_ids.filtered(lambda l: l.account_id.id):
+            payment_lines.update(line.mapped('matched_credit_ids.credit_move_id.id'))
+            payment_lines.update(line.mapped('matched_debit_ids.debit_move_id.id'))
+        self.payment_move_line_ids = self.env['account.move.line'].browse(list(payment_lines)).sorted()
+
+    @api.depends('payment_move_line_ids.amount_residual')
+    def _get_payment_info_JSON(self):
+        self.payments_widget = json.dumps(False)
+        if self.payment_move_line_ids:
+            info = {'title': _('Less Payment'), 'outstanding': False, 'content': self._get_payments_vals()}
+            self.payments_widget = json.dumps(info, default=date_utils.json_default)
+
     relpartnerfiscal = fields.Char(string='Nombre Fiscal', related='partner_id.nomfiscal')
     relpartnercta = fields.Char(string='Cta VTA', related='partner_id.cta')
     relpartnerctap = fields.Char(string='Cta COMP', related='partner_id.ctap')
@@ -64,6 +91,11 @@ class AccountMove(models.Model):
     obspedido = fields.Text(string='Observaciones Pedido')
     totalkg = fields.Float(string='Kg. Neto', compute='_compute_total_weightnet')
     totalkgbr = fields.Float(string='Kg. Bruto', compute='_compute_total_weight')
+    totalbltkg = fields.Float(string='Total Bultos', compute='_get_total_bultoskg')
+    totaleurodollar = fields.Float(string='Total Eur (€)')
+    payment_move_line_ids = fields.Many2many('account.move.line', string='Payment Move Lines',
+                                             compute='_compute_payments', store=True)
+    payments_widget = fields.Text(compute='_get_payment_info_JSON', groups="account.group_account_invoice")
     description = fields.Char(string='Desc.')
     palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')

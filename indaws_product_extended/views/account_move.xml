@@ -5,183 +5,133 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_date']" position="before">
+            <xpath expr="//field[@name='invoice_line_ids']//tree" position="attributes">
+                <attribute name="editable"></attribute>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="before">
                 <field name="id"/>
                 <field name="expediente"/>
                 <field name="quierebr"/>
                 <field name="noimprimepal"/>
             </xpath>
-            <xpath expr="//page[@id='invoice_tab']" position="replace">
-                <page id="invoice_tab" string="Lineas de Factura" attrs="{'invisible': [('move_type', '=', 'entry')]}">
-                    <!--<group>
-                        <button type="object" string="Importar Lineas Proveedores" name="importarlineasventa" attrs="{'invisible': [('journal_id','!=',10)]}"/>
-                        <button type="object" string="Importar Lineas Almacén" name="importarlineasalmacen" attrs="{'invisible': [('journal_id','!=',10)]}"/>
-                        <button type="object" string="Importar Lineas Albaranes" name="importarlineasalbaran" attrs="{'invisible': [('journal_id','=',10)]}"/>
-                    </group>-->
-                    <group>
-                        <field name="invoice_origin" string="ALbarán ORIGEN"/>
-                    </group>
-                    <field name="move_type" invisible="1"/>
-                    <field name="invoice_line_ids" widget="section_and_note_one2many" mode="tree,kanban" context="{'default_move_type': context.get('default_move_type'), 'journal_id': journal_id, 'default_partner_id': commercial_partner_id, 'default_currency_id': currency_id or company_currency_id}">
-                        <tree string="Bill lines">
-                            <field name="algovamal" invisible="1"/>
-                            <field name="company_id" invisible="1"/>
-                            <field name="sequence" widget="handle"/>
-                            <field name="ocultaimpresion" string="No Imp"/>
-                            <field name="expediente" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="codproducto" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="product_id" invisible="1" context="{'partner_id': parent.partner_id}" domain="[('purchase_ok','=',True)]"/>
-                            <field name="variedad" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="variedadeng"  options="{'bg_color': 'yellow:algovamal== True'}" attrs="{'invisible': [('parent.journal_id', '!=', '10')]}"/>
-                            <field name="name" invisible="1"/>
-                            <field name="confeccion" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="marca" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="envase" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="categoria" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="calibre" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="company_id" invisible="1"/>
-                            <field name="account_id" groups="account.group_account_user" domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other'), ('deprecated', '=', False)]"/>
-                            <field name="expediente" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
-                            <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                            <field name="cantidadpedido" string="Pl" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="unidadpedido" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="unidadesporbulto" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="bultos" string="BxP" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="totalbultos" string="Bultos" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="kgnetbulto" invisible="1"/>
-                            <field name="totalkglin" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="totalkglinbr" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="envasecod" invisible="1"/>
-                            <!--<button name="facturaifcos" string="Fact. IFCO" type="object"   attrs="{'invisible': [('envasecod', '!=', 'IFCO')]}"/>-->
-                            <field name="product_uom_category_id" invisible="1"/>
-                            <field name="product_uom_id" groups="product.group_uom"/>
-                            <field name="price_unit" string="Precio" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="quantity" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="unidabulto" string="Ud" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="udfacturacion" string="U.Fact" readonly="1"/>
-                            <field name="discount"  options="{'bg_color': 'yellow:algovamal== True'}" string="Dto %" attrs="{'invisible': [('parent.journal_id', '=', '10')]}"/>
-                            <field name="diariofactura" invisible="1"/>
-                            <field name="tax_ids" widget="many2many_tags" attrs="{'invisible': [('parent.journal_id', '=', '10')]}" options="{'bg_color': 'yellow:algovamal== True'}" domain="[('type_tax_use','=','purchase'),('company_id', '=', parent.company_id)]"/>
-                            <field name="price_subtotal" string="SubTotal" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="asignado" options="{'bg_color': 'yellow:algovamal== True'}"/>
-                        </tree>
-                        <form>
-                            <sheet>
-                                <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('algovamal','=',False)]}">
-                                    <center><bold><h2>Hay algún problema con la Compra y/o diferencias entre COMPRAS y VENTAS</h2></bold> 					</center>
-                                </div>
-                                <group>
-                                    <group>
-                                        <field name="diariofactura" invisible="1"/>
-                                        <field name="codproducto"/>
-                                        <field name="company_id" invisible="1"/>
-                                        <field name="product_id" options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="variedad"  required="1" options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="calibre"  options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="categoria"  options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="confeccion"  options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="envase"  options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="marca"  options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="bultos" widget="integer" />
-                                        <field name="kgnetbulto"/>
-                                        <field name="totalbultos"/>
-                                        <field name="obsbultos"/>
-                                    </group>
-                                    <group>
-                                        <field name="id"/>
-                                        <field name="expediente" options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="cantidadpedido" widget="integer" />
-                                        <field name="unidadpedido" options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <label for="unidabulto"/>
-                                        <div>
-                                            <field name="unidabulto" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/>
-                                            <!--<button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline"/>-->
-                                        </div>
-                                        <field name="udfacturacion" string="Ud.Facturación" readonly="1"/>
-                                        <field name="quantity"/>
-                                        <field name="product_uom_category_id" invisible="1"/>
-                                        <field name="product_uom_id" options="{'no_create': True, 'no_create_edit':True}"/>
-                                        <field name="account_id" groups="account.group_account_user" domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other'), ('deprecated', '=', False)]"/>
-                                        <field name="expediente" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
-                                        <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                                        <field name="price_unit"/>
-                                        <field name="discount"/>
-                                        <field name="tax_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id', '=', parent.company_id)]"/>
-                                        <field name="price_subtotal"/>
-                                        <field name="ocultaimpresion"/>
-                                        <field name="totalkglin"/>
-                                        <field name="totalkglinbr"/>
-                                        <field name="currency_id" invisible="1"/>
-                                    </group>
+            <xpath expr="//field[@name='invoice_line_ids']" position="before">
+                <group>
+                    <field name="invoice_origin" string="ALbarán ORIGEN"/>
+                </group>
+                <field name="move_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='product_id']" position="after">
+                <field name="algovamal" invisible="1" width="100px"/>
+                <field name="sequence" widget="handle" width="100px"/>
+                <field name="ocultaimpresion" string="No Imp" width="100px"/>
+                <field name="expediente" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="codproducto" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="variedad" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="variedadeng"  options="{'bg_color': 'yellow:algovamal== True'}" attrs="{'invisible': [('parent.journal_id', '!=', '10')]}" width="100px"/>
+                <field name="confeccion" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="marca" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="envase" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="categoria" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="calibre" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="cantidadpedido" string="Pl" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="unidadpedido" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="unidadesporbulto" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="bultos" string="BxP" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="totalbultos" string="Bultos" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="kgnetbulto" invisible="1" width="100px"/>
+                <field name="totalkglin" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="totalkglinbr" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="envasecod" invisible="1" width="100px"/>
+                <field name="unidabulto" string="Ud" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="udfacturacion" string="U.Fact" readonly="1" width="100px"/>
+                <field name="diariofactura" invisible="1" width="100px"/>
+                <field name="asignado" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='product_uom_category_id']" position="after">
+                <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('algovamal','=',False)]}">
+                    <center><bold><h2>Hay algún problema con la Compra y/o diferencias entre COMPRAS y VENTAS</h2></bold></center>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='currency_id']" position="after">
+                <field name="diariofactura" invisible="1"/>
+                <field name="codproducto"/>
+                <field name="company_id" invisible="1"/>
+                <field name="variedad"  required="1" options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="calibre"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="categoria"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="confeccion"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="envase"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="marca"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="bultos" widget="integer" />
+                <field name="kgnetbulto"/>
+                <field name="totalbultos"/>
+                <field name="obsbultos"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='analytic_tag_ids']" position="before">
+                <field name="id"/>
+                <field name="cantidadpedido" widget="integer" />
+                <field name="unidadpedido" options="{'no_create': True, 'no_create_edit':True}"/>
+                <label for="unidabulto"/>
+                <div>
+                    <field name="unidabulto" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/>
+                    <!--<button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline"/>-->
+                </div>
+                <field name="udfacturacion" string="Ud.Facturación" readonly="1"/>
+                <field name="expediente" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
+                <field name="ocultaimpresion"/>
+                <field name="totalkglin"/>
+                <field name="totalkglinbr"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='name']" position="before">
+                <label for="lineacompracalidadpartner"/>
+                <div>
+                    <field name="lineacompracalidadpartner" class="oe_inline"/>
+                    <label for="cabeceraalbarancompra" class="oe_inline" string=" "/>
+                    <field name="cabeceraalbarancompra" class="oe_inline"/>
+                </div>
+                <field name="lineacabalbarancompra" readonly="1"/>
+                <notebook>
+                    <page string="Linea de Compra">
+                        <group>
+                            <group>
+                                <field name="algovamal"/>
+                                <field name="lineaalbarancompra" readonly="1"/>
+                                <field name="purchase_line_id" readonly="1"/>
+                                <field name="asignado"/>
+                                <field name="lineaventa" readonly="1"/>
+                                <field name="lineaventaud"/>
                                 </group>
                                 <group>
-                                    <field name="name"/>
-                                    <label for="lineacompracalidadpartner"/>
-                                    <div>
-                                        <field name="lineacompracalidadpartner" class="oe_inline"/>
-                                        <label for="cabeceraalbarancompra" class="oe_inline" string=" "/>
-                                        <field name="cabeceraalbarancompra" class="oe_inline"/>
-                                    </div>
-                                    <field name="lineacabalbarancompra" readonly="1"/>
-                                </group>
-                                <notebook>
-                                    <page string="Linea de Compra">
-                                        <group>
-                                            <group>
-                                                <field name="algovamal"/>
-                                                <field name="lineaalbarancompra" readonly="1"/>
-                                                <field name="purchase_line_id" readonly="1"/>
-                                                <field name="asignado"/>
-                                                <field name="lineaventa" readonly="1"/>
-                                                <field name="lineaventaud"/>
-                                                </group>
-                                                <group>
-                                                <field name="bultostotalesalbarancompra" readonly="1"/>
-                                                <field name="bultostotalespedidocompra" readonly="1"/>
-                                                <field name="precioplantilla" readonly="1"/>
-                                                <field name="precioudplantilla" readonly="1"/>
-                                            </group>
-                                        </group>
-                                    </page>
-                                    <page string="Reclamaciones">
-                                        <field name="statusrecla" invisible="1"/>
-                                        <!--<button name="action_crearreclamacionacc" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> -->
-                                        <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/>
-                                        <br/>
-                                        <field name="reclamaciones"/>
-                                    </page>
-                                    <page string="Devoluciones" attrs="{'invisible': [('diariofactura', '!=', 10)]}" >
-                                        <div attrs="{'invisible': [('devoluvtar', '!=', False)]}">
-                                            <button name="devoluclialb" string="Realiza Devolución" type="object"  attrs="{'invisible': [('devoluvtar', '!=', False)]}"/>
-                                        </div>
-                                        <br/>
-                                        <field name="devoluvtar" readonly="1"/>
-                                    </page>
-                                </notebook>
-                            </sheet>
-                        </form>
-                    </field>
-                    <group>
-                        <group class="oe_subtotal_footer oe_right">
-                            <field name="totalpalets"/>
-                            <field name="totalkg" string="Kg. Neto"/>
-                            <field name="totalkgbr" string="Kg. Bruto"/>
-                            <field name="totalbltkg"/>
-                            <field name="amount_untaxed"/>
-                            <field name="amount_tax"/>
-                            <field name="amount_total" class="oe_subtotal_footer_separator"/>
-                            <field name="totaleurodollar" attrs="{'invisible': [('currency_id', '!=', 2)]}" class="oe_subtotal_footer_separator"/>
-                            <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
-                            <field name="residual" class="oe_subtotal_footer_separator" attrs="{'invisible': [('state', '=', 'draft')]}"/>
-                            <field name="reconciled" invisible="1"/>
-                            <field invisible="1" name="outstanding_credits_debits_widget" colspan="2" nolabel="1" widget="payment" attrs="{'invisible': [('state', 'not in', 'open')]}"/>
+                                <field name="bultostotalesalbarancompra" readonly="1"/>
+                                <field name="bultostotalespedidocompra" readonly="1"/>
+                                <field name="precioplantilla" readonly="1"/>
+                                <field name="precioudplantilla" readonly="1"/>
+                            </group>
                         </group>
-                    </group>
-                    <div>
-                        <field name="comment" placeholder="Notas Adicionales..."/>
-                    </div>
-                </page>
+                    </page>
+                    <page string="Reclamaciones">
+                        <field name="statusrecla" invisible="1"/>
+                        <!--<button name="action_crearreclamacionacc" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> -->
+                        <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/>
+                        <br/>
+                        <field name="reclamaciones"/>
+                    </page>
+                    <page string="Devoluciones">
+                        <div attrs="{'invisible': [('devoluvtar', '!=', False)]}">
+                            <button name="devoluclialb" string="Realiza Devolución" type="object"  attrs="{'invisible': [('devoluvtar', '!=', False)]}"/>
+                        </div>
+                        <br/>
+                        <field name="devoluvtar" readonly="1"/>
+                    </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//field[@name='amount_tax']" position="before">
+                <field name="totalpalets"/>
+                <field name="totalkg" string="Kg. Neto"/>
+                <field name="totalkgbr" string="Kg. Bruto"/>
+                <field name="totalbltkg"/>
+                <field name="totaleurodollar" attrs="{'invisible': [('currency_id', '!=', 2)]}" class="oe_subtotal_footer_separator"/>
+                <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
             </xpath>
         </field>
     </record>
