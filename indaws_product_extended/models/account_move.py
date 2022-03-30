@@ -24,6 +24,26 @@ class AccountMove(models.Model):
                     totalkg += line.totalkglin or 0.0
             rec.totalkg = totalkg
 
+    def _get_total_palets(self):
+        for rec in self:
+            try:
+                order = rec.id
+                rec.env.cr.execute(
+                    """ select sum(cantidadpedido) from account_move_line where move_id='%s'""" % (order))
+                resultv = rec.env.cr.fetchone()
+                rec.totalpalets = resultv[0]
+            except:
+                print("rec.totalpalets = 0")
+        return {}
+
+    def _compute_total_weight(self):
+        for rec in self:
+            totalkgbr = 0
+            for line in rec.invoice_line_ids:
+                if line.product_id:
+                    totalkgbr += line.totalkglinbr or 0.0
+            rec.totalkgbr = totalkgbr
+
     relpartnerfiscal = fields.Char(string='Nombre Fiscal', related='partner_id.nomfiscal')
     relpartnercta = fields.Char(string='Cta VTA', related='partner_id.cta')
     relpartnerctap = fields.Char(string='Cta COMP', related='partner_id.ctap')
@@ -43,6 +63,7 @@ class AccountMove(models.Model):
     reslote = fields.Char(string='Lote')
     obspedido = fields.Text(string='Observaciones Pedido')
     totalkg = fields.Float(string='Kg. Neto', compute='_compute_total_weightnet')
+    totalkgbr = fields.Float(string='Kg. Bruto', compute='_compute_total_weight')
     description = fields.Char(string='Desc.')
     palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')
@@ -56,11 +77,13 @@ class AccountMove(models.Model):
     coste = fields.Float(string='Compra', compute='_compute_total_coste')
     resultado = fields.Float(string='Resultado')
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
-    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
+    # serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
                                domain="[('mimetype','=','text/plain')]")
+    ##############################################
+    totalpalets = fields.Float(string='Total Palets', compute='_get_total_palets')
 
     def update_edi_file(self, default=None):
         for item in self:
@@ -340,7 +363,7 @@ class AccountMove(models.Model):
                 try:
                     self.env.cr.execute(
                         """ select sum(price_subtotalas) from account_invoice_line where invoice_id='%s' and asignarmadre='%s' """ % (
-                        invoice_id, asignarmadre))
+                            invoice_id, asignarmadre))
                     result = self.env.cr.fetchone()
                     subtotalasignado = result[0] or 0.0
                 except:
@@ -386,6 +409,7 @@ class AccountMoveLine(models.Model):
     # fechallegada= fields.Date('jovimer_expedientes', related='expediente.fechallegada')
     # clientefinal= fields.Many2one('res.partner', related='expediente.cliente')
     cantidadpedido = fields.Float(string='Palets')
+    codproducto = fields.Char(string='Codigo Cliente', Store=True)
     unidadpedido = fields.Many2one('uom.uom', string='Tipo', domain=[('invisiblecp', '=', 'SI')])
     bultos = fields.Float(string='Bultos')
     unidabulto = fields.Many2one('uom.uom', string='Ud. NO FUN')
@@ -412,6 +436,7 @@ class AccountMoveLine(models.Model):
     unidadesporbulto = fields.Float(string='Unidad por Bulto')
     partner = fields.Many2one('res.partner', string='Cliente')
     ## plantillaeti
+    udfacturacion = fields.Many2one('uom.uom', string='Ud Albaran/Factura')
     pvpcoste = fields.Float(string='Coste')
     pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo')
     pvptrans = fields.Float(string='Transporte')
@@ -427,14 +452,16 @@ class AccountMoveLine(models.Model):
     # ordendecargaint = fields.Many2many('jovimer_cti', string='Orden de Carga Internacional')
     # lineacompra = fields.Many2one('purchase.order.line', string='Linea de Compra')
     fechallegadanac = fields.Date(string='Fecha LLegada Nacional')
-    # lineacompracalidadpartner = fields.Many2one('res.partner', string='Proveedor', related='lineacompra.partner_id')
+    lineacompracalidadpartner = fields.Many2one('res.partner', string='Proveedor')
     nobioline = fields.Boolean(string='NO BIO L')
     nobioexp = fields.Boolean(string='NO BIO EXP')
-    ### lineacompracalidadpartnerbio = fields.Boolean(string='Entidad NO BIO', related='lineacompracalidadpartner.nobio')
+    ##lineacompracalidadpartnerbio = fields.Boolean(string='Entidad NO BIO')
     lineaventa = fields.Many2one('sale.order.line', string='Linea de Venta')
     precioscompra = fields.Text(string='Datos de la Compra', related='lineaventa.precioscompra')
     pvpcoste = fields.Float(string='Coste', related='lineaventa.pvpcoste')
     resultadoresto = fields.Float(string='Resultado')
+    precioplantilla = fields.Float(string='Precio Plantilla')
+    precioudplantilla = fields.Many2one('uom.uom', string='Ud Plantilla')
     ## resultadorestocalc = fields.Float(string='Resultado'store=True, readonly=True, compute='_compute_resultadoresto')
     lineaventaud = fields.Many2one('uom.uom', string='Unidad Pedido Cliente', related='lineaventa.unidabulto')
     descctavta = fields.Char(string='Motivo')
@@ -477,7 +504,7 @@ class AccountMoveLine(models.Model):
     albvtadestino = fields.Many2one('account.move', string='Albarán Destino')
     albvtadestinolin = fields.Many2one('account.move.line', string='Linea Albarán Destino')
     devoluvta = fields.Boolean(string='Devolución')
-    # devoluvtar = fields.Many2one('jovimer_devalbaranv', string='Devolución')
+    devoluvtar = fields.Many2one('account.move', string='Devolución')
     factcompradestino = fields.Many2one('account.move', string='Factura Destino')
     docqueorigina = fields.Many2one('account.move', string='Documento Origen')
     buscaasignacion = fields.Many2one('purchase.order.line', string='Busca Asignacion',
@@ -553,3 +580,31 @@ class AccountMoveLine(models.Model):
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
+
+    def action_cerrarreclamacion(self, default=None):
+        self.write({'statusrecla': 'OK'})
+        return {}
+
+    def devoluclialb(self):
+        id = self.id
+        totalbultos = self.totalbultos
+        cantidad = self.quantity
+        today = date.today()
+        d1hoy = today.strftime("%Y-%m-%d")
+        observaciones = 'Cantidad Original: ' + str(totalbultos) + '. Cantidad Facturable: ' + str(cantidad) + '.'
+        orderdevolu_obj = self.env['jovimer_devalbaranv']
+        invoice = orderdevolu_obj.create({
+            'name': id,
+            'observaciones': observaciones,
+            'cantidad': totalbultos,
+            'fecha': d1hoy, })
+        invoice = int(invoice[0])
+        return {
+            'name': ("Devoluciones"),
+            'type': 'ir.actions.act_window',
+            'res_model': 'jovimer_devalbaranv',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'res_id': invoice,
+            'target': 'new',
+        }

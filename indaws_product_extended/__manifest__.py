@@ -30,6 +30,7 @@
         'wizard/purchase_order_wizard_views.xml',
         'views/product_template.xml',
         'views/stock_move.xml',
+        'views/account_move.xml',
         'views/ir_menus.xml',
         'views/prints.xml',
         'views/purchase_order_wizard_view.xml',
