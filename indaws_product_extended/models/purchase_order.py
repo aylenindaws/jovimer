@@ -24,7 +24,7 @@ class PurchaseOrder(models.Model):
     obspedido = fields.Text(string='Observaciones PEdido')
     description = fields.Char(string='Desc.')
     estadodesc = fields.Char(string='Estado Desc.')
-    att = fields.Char(string='Attención de:')
+    att = fields.Char(string='Atención de:')
     consignatario = fields.Char(string='Consignatario/Plataforma')
     destino = fields.Boolean(string='Para Almacén')
     destinodonde = fields.Char(string='Donde Está')
@@ -37,6 +37,23 @@ class PurchaseOrder(models.Model):
     estadocrear = fields.Boolean(string='Finalizada Creacion')
     paisdestino = fields.Many2one('res.country', string='Pais Destino')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+    validate_line = fields.Boolean(string='Revisado', compute="_compute_validate_line", store="True")
+
+    @api.depends("order_line.type_state")
+    def _compute_validate_line(self):
+        for item in self:
+            item.validate_line = True
+            for line in item.order_line:
+                if line.type_state == 'draft':
+                    item.validate_line = False
+
+    def action_create_invoice(self):
+        for item in self:
+            for line in item.order_line:
+                if line.type_state == 'draft':
+                    raise ValidationError('La linea con id: ' + str(
+                        line.id) + ' No se encuentra Validada\n se requiere una Validacion completa de la orden')
+            super(PurchaseOrder, item).action_create_invoice()
 
     @api.model
     def create(self, vals):
@@ -51,3 +68,27 @@ class PurchaseOrder(models.Model):
             if not result.account_analytic_id:
                 result.account_analytic_id = result.sale_related_id.analytic_account_id
         return result
+
+    def action_claim_send(self):
+        ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
+        self.ensure_one()
+        template = self.env.ref('indaws_product_extended.email_template_cuenta_venta')
+        ctx = {
+            'default_model': 'purchase.order',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template.id),
+            'default_template_id': template.id,
+            'default_composition_mode': 'comment',
+            'mark_so_as_sent': True,
+            'proforma': self.env.context.get('proforma', False),
+            'force_email': True,
+        }
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False, 'form')],
+            'view_id': False,
+            'target': 'new',
+            'context': ctx,
+        }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="create_purchaseorder_data_form_inherit" model="ir.ui.view">
+        <field name="name">transient.form.inherit</field>
+        <field name="model">create.purchaseorder</field>
+        <field name="inherit_id" ref="bi_convert_purchase_from_sales.view_transientmodel_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='new_order_line_ids']//tree//field[@name='product_qty']" position='after'>
+                <field name="cantidadpedido" optional="hide" />
+                <field name="tipouom" optional="hide" />
+                <field name="bultos" optional="hide" />
+                <field name="variedad" optional="hide" />
+                <field name="confeccion" optional="hide" />
+                <field name="calibre" optional="hide" />
+                <field name="marca" optional="hide" />
+                <field name="envase" optional="hide" />
+                <field name="discount" optional="hide" />
+                <field name="account_analytic_id" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
+  

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="indaws_account_move_extended_view_order_form_inherit_1" model="ir.ui.view">
+        <field name="name">indaws.account.move.extended.view.order.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']//tree" position="attributes">
+                <attribute name="editable"></attribute>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="before">
+                <field name="id"/>
+                <field name="expediente"/>
+                <field name="quierebr"/>
+                <field name="noimprimepal"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']" position="before">
+                <group>
+                    <field name="invoice_origin" string="ALbarán ORIGEN"/>
+                </group>
+                <field name="move_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='product_id']" position="after">
+                <field name="algovamal" invisible="1" width="100px"/>
+                <field name="sequence" widget="handle" width="100px"/>
+                <field name="ocultaimpresion" string="No Imp" width="100px"/>
+                <field name="expediente" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="codproducto" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="variedad" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="variedadeng"  options="{'bg_color': 'yellow:algovamal== True'}" attrs="{'invisible': [('parent.journal_id', '!=', '10')]}" width="100px"/>
+                <field name="confeccion" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="marca" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="envase" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="categoria" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="calibre" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="cantidadpedido" string="Pl" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="unidadpedido" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="unidadesporbulto" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="bultos" string="BxP" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="totalbultos" string="Bultos" widget="integer"  options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="kgnetbulto" invisible="1" width="100px"/>
+                <field name="totalkglin" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="totalkglinbr" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="envasecod" invisible="1" width="100px"/>
+                <field name="unidabulto" string="Ud" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+                <field name="udfacturacion" string="U.Fact" readonly="1" width="100px"/>
+                <field name="diariofactura" invisible="1" width="100px"/>
+                <field name="asignado" options="{'bg_color': 'yellow:algovamal== True'}" width="100px"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='product_uom_category_id']" position="after">
+                <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('algovamal','=',False)]}">
+                    <center><bold><h2>Hay algún problema con la Compra y/o diferencias entre COMPRAS y VENTAS</h2></bold></center>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='currency_id']" position="after">
+                <field name="diariofactura" invisible="1"/>
+                <field name="codproducto"/>
+                <field name="company_id" invisible="1"/>
+                <field name="variedad"  required="1" options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="calibre"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="categoria"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="confeccion"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="envase"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="marca"  options="{'no_create': True, 'no_create_edit':True}"/>
+                <field name="bultos" widget="integer" />
+                <field name="kgnetbulto"/>
+                <field name="totalbultos"/>
+                <field name="obsbultos"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='analytic_tag_ids']" position="before">
+                <field name="id"/>
+                <field name="cantidadpedido" widget="integer" />
+                <field name="unidadpedido" options="{'no_create': True, 'no_create_edit':True}"/>
+                <label for="unidabulto"/>
+                <div>
+                    <field name="unidabulto" class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/>
+                    <!--<button name="calcula_cantidad" icon="fa-spinner" type="object" string="" class="oe-inline"/>-->
+                </div>
+                <field name="udfacturacion" string="Ud.Facturación" readonly="1"/>
+                <field name="expediente" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" context="{'default_partner_id': parent.partner_id}"/>
+                <field name="ocultaimpresion"/>
+                <field name="totalkglin"/>
+                <field name="totalkglinbr"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='name']" position="before">
+                <label for="lineacompracalidadpartner"/>
+                <div>
+                    <field name="lineacompracalidadpartner" class="oe_inline"/>
+                    <label for="cabeceraalbarancompra" class="oe_inline" string=" "/>
+                    <field name="cabeceraalbarancompra" class="oe_inline"/>
+                </div>
+                <field name="lineacabalbarancompra" readonly="1"/>
+                <notebook>
+                    <page string="Linea de Compra">
+                        <group>
+                            <group>
+                                <field name="algovamal"/>
+                                <field name="lineaalbarancompra" readonly="1"/>
+                                <field name="purchase_line_id" readonly="1"/>
+                                <field name="asignado"/>
+                                <field name="lineaventa" readonly="1"/>
+                                <field name="lineaventaud"/>
+                                </group>
+                                <group>
+                                <field name="bultostotalesalbarancompra" readonly="1"/>
+                                <field name="bultostotalespedidocompra" readonly="1"/>
+                                <field name="precioplantilla" readonly="1"/>
+                                <field name="precioudplantilla" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Reclamaciones">
+                        <field name="statusrecla" invisible="1"/>
+                        <!--<button name="action_crearreclamacionacc" string="Abrir Reclamación"  attrs="{'invisible': [('statusrecla', '!=', 'OK')]}" type="object" confirm="Esta accion detendrá el Flujo del Presente Documento. ¿Estás Seguro?"/> -->
+                        <button name="action_cerrarreclamacion" string="Cerrar Reclamación"  attrs="{'invisible': [('statusrecla', '=', 'OK')]}" type="object" confirm="Esta accion cerrará la Reclamación. ¿Estás Seguro?"/>
+                        <br/>
+                        <field name="reclamaciones"/>
+                    </page>
+                    <page string="Devoluciones">
+                        <div attrs="{'invisible': [('devoluvtar', '!=', False)]}">
+                            <button name="devoluclialb" string="Realiza Devolución" type="object"  attrs="{'invisible': [('devoluvtar', '!=', False)]}"/>
+                        </div>
+                        <br/>
+                        <field name="devoluvtar" readonly="1"/>
+                    </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//field[@name='amount_tax']" position="before">
+                <field name="totalpalets"/>
+                <field name="totalkg" string="Kg. Neto"/>
+                <field name="totalkgbr" string="Kg. Bruto"/>
+                <field name="totalbltkg"/>
+                <field name="totaleurodollar" attrs="{'invisible': [('currency_id', '!=', 2)]}" class="oe_subtotal_footer_separator"/>
+                <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
