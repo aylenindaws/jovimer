@@ -51,7 +51,6 @@ class createpurchaseorder(models.TransientModel):
                     'name': order_line.name,
                     'product_qty': order_line.product_qty,
                     'order_id': order_line.order_id.id,
-                    'sale_line_id': order_line.id,
                     'product_uom': order_line.product_uom.id,
                     'taxes_id': order_line.product_id.supplier_taxes_id.ids,
                     'date_planned': order_line.date_planned,

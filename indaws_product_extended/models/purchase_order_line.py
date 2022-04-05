@@ -292,3 +292,8 @@ class ModelSaleOrderLine(models.Model):
         else:
             raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
 
+    def _prepare_stock_move_vals(self, picking, price_unit, product_uom_qty, product_uom):
+        vals = super(ModelSaleOrderLine, self)._prepare_stock_move_vals(picking, price_unit, product_uom_qty, product_uom)
+        sale_line_id = self.env['sale_order_line'].search([('product_id', '=', vals['product_id']),('name','=',vals['name']),('price_unit','=',vals['price_unit'])])
+        vals['product_uom_qty'] = sale_line_id.product_uom_qty
+        return vals
