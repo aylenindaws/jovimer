@@ -22,9 +22,10 @@ class createpurchaseorder(models.TransientModel):
                 'product_uom': record.uom_po_id.id,
                 'order_id': record.order_id.id,
                 'name': record.name,
-                'product_qty': record.product_uom_qty,
+                'product_qty': record.on_change_cantidadpedido_purchase(record.product_uom.name, record.uom_po_id.name),
                 'price_unit': record.price_unit,
                 'product_subtotal': record.price_subtotal,
+                'discount': record.discount_supplier,
                 'purchase_price': record.purchase_price,
                 'cantidadpedido': record.cantidadpedido,
                 'tipouom': record.tipouom.id,
@@ -67,6 +68,7 @@ class createpurchaseorder(models.TransientModel):
                     'calibre': order_line.calibre.id,
                     'marca': order_line.marca.id,
                     'envase': order_line.envase.id,
+                    'discount': order_line.discount,
                     'account_analytic_id': order_line.account_analytic_id.id,
                 }])
             res.create({
@@ -74,6 +76,7 @@ class createpurchaseorder(models.TransientModel):
                 'date_order': str(self.date_order),
                 'order_line': value,
                 'origin': sale_order_name,
+                'fechallegada':so.commitment_date,
                 'sale_related_id': so.id,
                 'partner_ref': sale_order_name,
                 'fiscal_position_id': supplier.property_account_position_id.id if supplier.property_account_position_id else False
@@ -92,3 +95,4 @@ class Getsaleorderdata(models.TransientModel):
     marca = fields.Many2one('jovimer.marca', string='Marca')
     envase = fields.Many2one('jovimer.envase', string='Envase')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
+    discount = fields.Float(string="Descuento", digits="Discount")

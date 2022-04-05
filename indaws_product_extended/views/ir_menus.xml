@@ -1,5 +1,8 @@
 <odoo>
     <data>
+        <menuitem id="transport_menu_root" name="Transporte" web_icon="indaws_product_extended,static/description/icon.png"  sequence="1" active="True">
+            <menuitem action="stock_picking_batch.stock_picking_batch_action" id="transport_stock_picking_batch_menu" name="Nombres" sequence="10"/>
+        </menuitem>
         <menuitem id="jovimer_menu_root_config_submenu" name="Configuraciones Jovimer" parent="stock.menu_stock_root">
             <menuitem id="jovimer_calibre_config_submenu" name="Calibres" action="jovimer_calibre_list_action"/>
             <menuitem id="jovimer_categoria_config_submenu" name="Categorias" action="jovimer_categoria_list_action"/>
@@ -15,5 +18,8 @@
             <menuitem id="jovimer_palet_config_submenu" name="Palets" action="jovimer_palet_list_action"/>
             <menuitem id="jovimer_plataforma_config_submenu" name="Plataformas" action="jovimer_plataforma_list_action"/>
         </menuitem>
+        <menuitem name="Cuentas de Venta" id="menu_jovimer_cuentas_venta_parent" parent="purchase.menu_purchase_root" sequence="2" />
+        <menuitem name="Cuentas de Venta" id="menu_jovimer_cuentas_venta" parent="menu_jovimer_cuentas_venta_parent" sequence="3" action="indaws_product_extended.purchase_form_action_indaws"/>
+        <menuitem name="Reclamaciones" id="menu_jovimer_reclamaciones" parent="menu_jovimer_cuentas_venta_parent" sequence="5" action="action_jovimer_reclamaciones"/>
     </data>
 </odoo>

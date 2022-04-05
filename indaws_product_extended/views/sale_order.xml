@@ -22,6 +22,7 @@
             <xpath expr="//field[@name='order_line']//label[@for='qty_delivered']" position="replace"/>
             <xpath expr="//field[@name='order_line']//label[@for='qty_invoiced']" position="replace"/>
             <xpath expr="//field[@name='order_line']//div[@name='ordered_qty']" position="replace"/>
+            <xpath expr="//group[@name='sale_shipping']" position="replace"/>
             <xpath expr="//field[@name='order_line']//div[@name='delivered_qty']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
             </xpath>
@@ -34,24 +35,48 @@
                 <attribute name='invisible'>1</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="replace"/>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace">
-                <field name="supplier_id" optional="hide" string="Proveedor"/>
-                <field name="uom_po_id" optional="hide" string="Ud Compra"/>
-                <field name="purchase_price" optional="hide" string="Precio de compra"/>
-                <field name="costetrans" optional="hide" string="Transporte "/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='supplier_id']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom_qty']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//widget[@name='qty_at_date_widget']" position="replace"/>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="after">
+                <field name="price_trans" invisible="1" width="100px"/>
+                <field name="cantidadpedido" string="Palets:" optional="show" width="100px"/>
+                <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}" optional="show" width="100px"/>
+                <field name="bultos" optional="show" width="100px"/>
+                <field name="unidadesporbultor" readonly="False" optional="show" width="100px"/>
+                <field name="kgnetbulto" optional="show" width="100px"/>
+                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="show" width="100px"/>
+                <field name="product_uom" optional="show" string="Ud Venta" width="100px"/>
+                <widget name="qty_at_date_widget" width="20px"/>
+                <field name="price_unit" optional="show" string="Precio de Venta" width="100px"/>
+                <field name="discount" optional="show" string="Descuento" width="100px"/>
+                <field name="supplier_id" optional="show" string="Proveedor" width="100px"/>
+                <field name="uom_po_id" optional="show" string="Ud Compra" width="100px"/>
+                <field name="purchase_price" optional="show" string="Precio de compra" width="100px"/>
+                <field name="discount_supplier" optional="show" string="Descuento proveedor (%)" width="100px"/>
+                <field name="costetrans" optional="show" string="Transporte" width="100px"/>
+                <field name="variedad" optional="show" width="100px"/>
+                <field name="calibre" optional="show" width="100px"/>
+                <field name="categoria" optional="show" width="100px"/>
+                <field name="confeccion" optional="show" width="100px"/>
+                <field name="envase" optional="show" width="100px"/>
+                <field name="marca" optional="show" width="100px"/>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='price_unit']" position="attributes">
-                <attribute name="string">Precio de venta</attribute>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="attributes">
+                <attribute name="width">100px</attribute>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_uom']" position="attributes">
-                <attribute name="string">Ud Venta</attribute>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='product_id']" position="attributes">
+                <attribute name="width">100px</attribute>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='discount']" position="attributes">
-                <attribute name="string">Descuento proveedor (%)</attribute>
+            <xpath expr="//page[@name='order_lines']//field//tree//field[@name='tax_id']" position="attributes">
+                <attribute name="width">100px</attribute>
             </xpath>
-            <xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
+            <!--<xpath expr="//page[@name='order_lines']//field//tree" position="attributes">
                 <attribute name="editable"/>
-            </xpath>
+            </xpath>-->
             <xpath expr="//page[@name='related_purchases']//field[@name='purchase_related_ids']" position="replace">
                 <field name="purchase_related_ids">
                     <tree create='false'>
@@ -69,6 +94,22 @@
                         <field name="invoice_status" optional="hide"/>
                     </tree>
                 </field>
+            </xpath>
+            <xpath expr="//page[@name='related_purchases']" position="after">
+                <page name='administration_sale_lines' string="GERENCIA">
+                    <field name="order_line_admin">
+                        <tree create='false' editable="botttom">
+                            <field name="margin" readonly="True"/>
+                            <field name="purchase_price" string="Precio de compra" readonly="False"/>
+                            <field name="price_unit" string="Precio de Venta" readonly="False"/>
+                            <field name="product_id" string="Producto" readonly="False"/>
+                            <field name="company_id" string="Compañia" invisible="True" optional="show"/>
+                            <field name="price_trans" string="Precio por KG de Transporte" readonly="False" optional="show"/>
+                            <field name="discount" optional="show" string="Descuento" width="100px"/>
+                            <field name="discount_supplier" optional="show" string="Descuento proveedor (%)" width="100px"/>
+                        </tree>
+                    </field>
+                </page>
             </xpath>
             <xpath expr="//field[@name='order_line']//field[@name='analytic_tag_ids']" position="after">
                 <field name="price_unit" string="Precio de Venta"/>
@@ -106,7 +147,7 @@
                             <field name="product_uom" force_save="1" groups="uom.group_uom" class="oe_no_button" attrs="{'readonly': [('product_uom_readonly', '=', True)],'required': [('display_type', '=', False)]}"/>
                         </div>
                     </group>
-                </group>    
+                </group>
             </xpath>
             <xpath expr="//field[@name='analytic_account_id']" position="replace">
                 <field name="company_id" invisible='1'/>
@@ -147,7 +188,11 @@
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="fechasalida"/>
-                <field name="fechallegada"/>
+                <label for="commitment_date" string="Fecha de llegada"/>
+                <div name="commitment_date_div" class="o_row">
+                    <field name="commitment_date"/>
+                    <span name="expected_date_span" class="text-muted">Expected: <field name="expected_date" widget="date"/></span>
+                </div>
                 <field name="horallegada"/>
                 <field name="conformalote" force_save="1"/>
                 <label for="reslote"/>
@@ -160,9 +205,6 @@
                     </div>-->
                 </div>
                 <field name="pedidocerrado"/>
-            </xpath>
-            <xpath expr="//field[@name='order_line']" position="attributes">
-                <attribute name="attrs">{'editable':'top'}</attribute>
             </xpath>
         </field>
     </record>
