@@ -32,8 +32,8 @@
                                 <field name="template_id" nolabel="True">
                                     <tree name="partner_code" editable="botttom">
                                         <field name="partner_id"/>
+                                        <field name="template_id"/>
                                         <field name="name"/>
-                                        <field name="product_tmlp_id" required="1" force_save="1"/>
                                     </tree>
                                 </field>
                             </page>

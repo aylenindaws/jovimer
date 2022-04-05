@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 import logging
 import json
 import os
@@ -16,5 +16,5 @@ class JovimerPartnerCode(models.Model):
 
     name = fields.Char('Codigo de Cliente')
     partner_id = fields.Many2one('res.partner', string='Cliente')
-    product_tmlp_id = fields.Many2one('product.template', string='Producto', store=True, copy=True, ondelete='set null')
+    template_id = fields.Many2one('product.template', string='Producto', store=True)
     label_templates = fields.Many2one('jovimer.etiquetas.plantilla', string='P. Etiquetas', store=True, copy=True, ondelete='set null')

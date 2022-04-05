@@ -8,7 +8,7 @@
                 <tree string="partner_codes">
                     <field name="name"/>                   
                     <field name="partner_id"/>
-                    <field name="product_tmlp_id"/>
+                    <field name="template_id"/>
                     <field name="label_templates"/>
                 </tree>
             </field>
@@ -24,7 +24,7 @@
                             <group name="partner_code">
                                 <field name="name"/>
                                 <field name="partner_id"/>
-                                <field name="product_tmlp_id"/>
+                                <field name="template_id"/>
                                 <field name="label_templates"/>
                             </group>
                         </group>
