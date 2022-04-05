@@ -117,7 +117,7 @@ class ModelSaleOrderLine(models.Model):
         envase = self.product_id.container
         marca = self.product_id.brand
         bultos = self.product_id.bulge
-        label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
+        label = self.env['jovimer.partner.code'].search([('template_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
@@ -161,7 +161,7 @@ class ModelSaleOrderLine(models.Model):
         envase = self.product_id.container
         marca = self.product_id.brand
         bultos = self.product_id.bulge
-        label = self.env['jovimer.partner.code'].search([('product_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
+        label = self.env['jovimer.partner.code'].search([('template_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
         self.tipouom = self.product_id.palet_type
         self.product_id = self.product_id.id
         self.variedad = variedad
