@@ -12,7 +12,7 @@
                 <header>
                     <field name="purchase_related_ids" invisible='1'/>
                     <field name="check_purchase" invisible='1'/>
-                    <button name="%(action_transientmodel_wizard)d" string="Create Purchase Order" type="action" class="btn-primary" attrs="{'invisible':['|',('state','in',['done','cancel']),('check_purchase','=',True)]}"/>
+                    <button name="%(action_transientmodel_wizard)d" string="Crear Orden de Compra" type="action" class="btn-primary" attrs="{'invisible':['|',('state','in',['done','cancel']),('check_purchase','=',True)]}"/>
                 </header>   
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
                     <field name="supplier_id"/>
@@ -21,7 +21,7 @@
                 </xpath>
                 
                 <xpath expr="//page/field[@name='order_line']/.." position="after">
-                    <page string="Related purchases" name="related_purchases">
+                    <page string="Ordenes de Compras" name="related_purchases">
                         <field name="purchase_related_ids" />
                     </page>
                 </xpath>

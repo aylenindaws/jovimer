@@ -37,6 +37,7 @@ class StockPicking(models.Model):
                 record.confeccion = record.sale_line_id.confeccion
                 record.envase = record.sale_line_id.envase
                 record.cantidadpedido = record.sale_line_id.cantidadpedido
+                record.product_uom_qty = record.sale_line_id.product_uom_qty
                 record.tipouom = record.sale_line_id.tipouom
                 record.costetrans = record.sale_line_id.costetrans
                 record.analytic_account_id = record.sale_line_id.order_id.analytic_account_id

@@ -30,6 +30,15 @@ class StockMove(models.Model):
     fechasalida = fields.Date(string='Fecha de Carga')
     fechallegada = fields.Date(string='Fecha de Descarga')
 
+    @api.model
+    def create(self, vals):
+        if 'purchase_line_id' in vals:
+            purchase_line_id = self.env['purchase.order.line'].search([('id', '=', vals['purchase_line_id'])])
+            if purchase_line_id.sale_line_id:
+                vals['product_uom_qty'] = purchase_line_id.sale_line_id.product_uom_qty
+        result = super(StockMove, self).create(vals)
+        return result
+
     @api.depends('sale_line_id')
     def _compute_palet_type(self):
         for item in self:
@@ -46,13 +55,13 @@ class StockMove(models.Model):
                     item.write({'paletgr': 0, 'paleteur': 0, 'totalbultos': 0})
 
     def _set_product_qty(self):
-        raise ValiadationError('Inverse de product_qty para stock.move')
+        raise ValidationError('Inverse de product_qty para stock.move')
 
 
-class StockMove(models.Model):
+class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
     product_qty = fields.Float('Cantidad', digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
 
     def _set_product_qty(self):
-        raise ValiadationError('Inverse de product_qty para stock.move.line')
+        raise ValidationError('Inverse de product_qty para stock.move.line')

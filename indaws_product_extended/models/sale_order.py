@@ -61,7 +61,7 @@ class SaleOrder(models.Model):
     numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
-    order_line_admin = fields.One2many('sale.order.line', 'order_id', string='Order Lines', copy=True, store=True, readonly=False)
+    order_line_admin = fields.One2many('sale.order.line', 'order_id', string='Order Lines', copy=True, readonly=False)
 
     def update_edi_file(self, default=None):
         for item in self:
@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
                         template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id.id)], limit=1)
                         if not template:
                             raise ValidationError(("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
-                        product_id = template.product_id
+                        product_id = self.env['product.product'].search([('product_tmpl_id', '=', template.template_id)], limit=1)
                         und = linea[72:75]
                         product_description = linea[75:125]
                         if 'CT' in und:
