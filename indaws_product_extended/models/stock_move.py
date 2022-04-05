@@ -34,8 +34,8 @@ class StockMove(models.Model):
     def create(self, vals):
         if 'purchase_line_id' in vals:
             purchase_line_id = self.env['purchase.order.line'].search([('id', '=', vals['purchase_line_id'])])
-            if purchase_line_id.saleorderline:
-                vals['product_uom_qty'] = purchase_line_id.saleorderline.product_uom_qty
+            if purchase_line_id.sale_line_id:
+                vals['product_uom_qty'] = purchase_line_id.sale_line_id.product_uom_qty
         result = super(StockMove, self).create(vals)
         return result
 
