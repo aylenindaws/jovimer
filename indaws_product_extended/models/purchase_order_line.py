@@ -294,6 +294,6 @@ class ModelSaleOrderLine(models.Model):
 
     def _prepare_stock_move_vals(self, picking, price_unit, product_uom_qty, product_uom):
         vals = super(ModelSaleOrderLine, self)._prepare_stock_move_vals(picking, price_unit, product_uom_qty, product_uom)
-        sale_line_id = self.env['sale.order.line'].search([('product_id', '=', vals['product_id']),('name','=',vals['name']),('price_unit','=',vals['price_unit'])])
+        sale_line_id = self.env['sale.order.line'].search([('product_id', '=', vals['product_id']),('name','=',vals['name']),('price_unit','=',vals['price_unit']),('order_id','=',self.order_id.sale_related_id.id)], limit=1)
         vals['product_uom_qty'] = sale_line_id.product_uom_qty
         return vals
