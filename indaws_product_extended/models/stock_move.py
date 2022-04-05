@@ -58,7 +58,7 @@ class StockMove(models.Model):
         raise ValidationError('Inverse de product_qty para stock.move')
 
 
-class StockMove(models.Model):
+class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
     product_qty = fields.Float('Cantidad', digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
