@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
                         template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id.id)], limit=1)
                         if not template:
                             raise ValidationError(("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
-                        product_id = template.product_id
+                        product_id = self.env['product.product'].search([('product_tmpl_id', '=', template.template_id)], limit=1)
                         und = linea[72:75]
                         product_description = linea[75:125]
                         if 'CT' in und:
