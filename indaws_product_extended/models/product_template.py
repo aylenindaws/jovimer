@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+    transport_kg = fields.Float(string='Transporte por KG', copy=True)
     bulge = fields.Float(string='Bultos', store=True, copy=True)
     caliber = fields.Many2one('jovimer.calibre', string="Calibre", store=True, copy=True, ondelete='set null')
     category = fields.Many2one('jovimer.categoria', string="Categoria", store=True, copy=True, ondelete='set null')
@@ -45,7 +46,7 @@ class ProductTemplate(models.Model):
     uom_invoice = fields.Many2one('uom.uom', string='Ud Albaran/Factura', store=True, copy=True, ondelete='set null',
                                   domain=[('invisibleudvta', '=', 'SI')])
     variety = fields.Many2one('jovimer.variedad', string='Variedad', store=True, copy=True, ondelete='set null')
-    partner_code = fields.One2many('jovimer.partner.code', 'product_id', string='Codigo Cliente')
+    partner_code = fields.One2many('jovimer.partner.code', 'product_tmlp_id', string='Codigo Cliente')
 
     @api.onchange('confection.bulge_euro_palet')
     def _compute_bulge_euro_palet(self):
@@ -62,6 +63,17 @@ class ProductTemplate(models.Model):
     @api.onchange('confection.kg_net_bulge')
     def _compute_kg_net_bulge(self):
         for item in self:
+            item.kg_net_bulge = item.confection.kg_net_bulge
+        return {}
+
+    @api.onchange('confection', 'palet_type')
+    def _compute_confeccion(self):
+        for item in self:
+            if item.palet_type:
+                if 'EUR' in item.palet_type.name or 'GREENBOX' in item.palet_type.name:
+                    item.bulge = item.confection.bulge_euro_palet
+                if 'Grande' in item.palet_type.name:
+                    item.bulge = item.confection.bulge_grand_palet
             item.kg_net_bulge = item.confection.kg_net_bulge
         return {}
 
