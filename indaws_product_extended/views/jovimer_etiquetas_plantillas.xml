@@ -29,7 +29,13 @@
                         </group>
                         <notebook>
                             <page string="Productos" name="jovimer_product">
-                                <field name="template_id" nolabel="True"/>
+                                <field name="template_id" nolabel="True">
+                                    <tree name="partner_code" editable="botttom">
+                                        <field name="partner_id"/>
+                                        <field name="template_id"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Etiquetas" name="jovimer_label">
                                 <field name="label_id" nolabel="True"/>

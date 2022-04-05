@@ -38,6 +38,16 @@
 	url = git@github.com:OCA/edi.git
 	branch = 14.0
 
+[submodule "OCA/web"]
+	path = OCA/web
+	url = https://github.com/OCA/web.git
+	branch = 14.0
+
+[submodule "OCA/server-ux"]
+	path = OCA/server-ux
+	url = git@github.com:OCA/server-ux.git
+	branch = 14.0
+
 [submodule "OCA/account-payment"]
 	path = OCA/account-payment
 	url = git@github.com:OCA/account-payment.git

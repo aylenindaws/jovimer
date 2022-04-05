@@ -8,11 +8,11 @@
             <xpath expr="//page[@name='purchase']" position="after">
                 <page string="Codigo Cliente" name="jovimer_partner_code">
                     <group name="template_client">
-                        <field name="partner_code" nolabel="1">
-                            <tree name="partner_code">
+                        <field name="partner_code_ids" nolabel="1">
+                            <tree name="partner_code" editable="botttom">
                                 <field name="partner_id"/>
                                 <field name="name"/>
-                                <field name="label_templates"/>
+                                <field name="label_templates" required="1"/>
                             </tree>
                         </field>
                     </group>
@@ -51,4 +51,3 @@
         </field>
     </record>
 </odoo>
-  

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import subprocess
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from odoo.http import request
 import logging
 import odoo.addons.decimal_precision as dp
 
@@ -23,6 +24,11 @@ class ModelSaleOrderLine(models.Model):
                 totalbultos = palets * bultos
                 rec.totalbultos = totalbultos
 
+    type_state = fields.Selection([
+        ('draft', 'Pendiente de revisar'),
+        ('revised', 'Revisado'),
+        ('grinding', 'Rectificado'),
+    ], string='Estado', default='draft')
     expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
     expedienteo = fields.Many2one('jovimer.expedientes', string='Expediente', related='order_id.expediente')
     expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
@@ -34,7 +40,8 @@ class ModelSaleOrderLine(models.Model):
     pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
     asignado = fields.Boolean(string='Asignado')
     # idasignacion = fields.Many2one('jovimer.asignaciones', string='ID Asignación')
-    asignacionj = fields.Many2one('sale.order.line', string='Asignación')#, related='idasignacion.saleorderlinedestino', store=True)
+    asignacionj = fields.Many2one('sale.order.line',
+                                  string='Asignación')  # , related='idasignacion.saleorderlinedestino', store=True)
     libreasignada = fields.Float(string='Libres')
     comision = fields.Float(string='Comision')
     bultos = fields.Float(string='Bultos')
@@ -62,11 +69,11 @@ class ModelSaleOrderLine(models.Model):
     pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo')
     pvptrans = fields.Float(string='Transporte')
     pvpvta = fields.Float(string='Venta')
-    tipouom = fields.Many2one('uom.uom', string='Tipo Medida')
+    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     saleorderline = fields.Many2one('sale.order.line', string='Lineas de Venta')
     lotecomp = fields.Char(string='Lote', related='saleorderline.order_id.reslote')
-    # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
+    reclamacion_id = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
     viajedirecto = fields.Boolean(string="Viaje Directo")
     # viajerel = fields.Many2one('jovimer.viajes', string='Viaje')
@@ -86,10 +93,19 @@ class ModelSaleOrderLine(models.Model):
         ('OK', 'OK'),
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
-    ], string='Estado', default='OK')
+    ], string='Estado de Rectificacion', default='OK')
     discount = fields.Float(
         string='Discount (%)', digits=dp.get_precision('Discount'),
     )
+    track = fields.Text('Cambios Realizados')
+    reclamation = fields.Boolean(string='Reclamacion Creada')
+    product_qty = fields.Float('Cantidad', compute='_compute_product_qty',
+                               digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
+
+    @api.depends('product_uom_qty')
+    def _compute_product_qty(self):
+        for item in self:
+            item.product_qty = item.product_uom_qty
 
     @api.onchange('plantilla')
     def on_change_plantilla(self):
@@ -156,7 +172,6 @@ class ModelSaleOrderLine(models.Model):
             'order_id': order_id,
             'product_id': product_id,
         }
-        self.env['sale.order.line'].create(vals)
         ## return {'type': 'ir.actions.client', 'tag': 'reload',}
 
     def action_creact(self, default=None):
@@ -231,3 +246,49 @@ class ModelSaleOrderLine(models.Model):
         if not seller:
             return
         self.discount = seller.discount
+
+    def revised_funtion(self):
+        self.type_state = 'revised'
+
+    def grinding_funtion(self):
+        context_name = self.env.context.get('params')
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "indaws_product_extended.purchase_order_line_form_action_indaws")
+        form_view = [(self.env.ref('indaws_product_extended.jovimer_purchase_order_line_view_form').id, 'form')]
+        action['views'] = form_view
+        action['context'] = {
+            'default_order_line_id': self.id,
+            'default_product_id': self.product_id.id,
+            'default_product_qty': self.product_qty,
+            'default_price_unit': self.price_unit,
+            'default_qty_received': self.qty_received,
+            'default_qty_invoiced': self.qty_invoiced,
+            'default_discount': self.discount,
+            'default_track': self.track
+        }
+        return action
+
+    def create_reclamation_funtion(self):
+        form_view = self.env.ref('indaws_product_extended.jovimer_reclamaciones_view_cuenta_venta_form')
+        reclamation_id = self.env['jovimer.reclamaciones'].search([("detalledocumentoscompra", "=", self.id)], limit=1)
+        return {
+            'name': _('Reclamacion'),
+            'res_model': 'jovimer.reclamaciones',
+            'res_id': reclamation_id.id,
+            'views': [(form_view.id, 'form'), ],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+                'default_detalledocumentoscompra': self.id,
+                'default_expediente': self.account_analytic_id.id,
+                'default_cliente': self.partner_id.id
+            }
+        }
+
+    def draft_funtion(self):
+        if not self.facturado:
+            self.type_state = 'draft'
+        else:
+            raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
+

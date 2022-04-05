@@ -14,6 +14,7 @@ from . import jovimer_variedad
 from . import uom_uom
 from . import jovimer_palet
 from . import jovimer_plataforma
+from . import jovimer_reclamaciones
 from . import res_partner
 from . import stock_picking_batch
 from . import product_template
@@ -22,3 +23,6 @@ from . import sale_order_line
 from . import purchase_order
 from . import purchase_order_line
 from . import jovimer_conflote
+from . import stock_move
+from . import account_move
+from . import purchase_order_wizard
