@@ -31,7 +31,7 @@
                     </group>
                    
                     <footer>
-                        <button name="action_create_purchase_order" string="Create Purchase Order" type="object" class="btn-primary"/>
+                        <button name="action_create_purchase_order" string="Crear Orden de Compra" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>

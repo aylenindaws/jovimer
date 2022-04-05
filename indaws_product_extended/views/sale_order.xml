@@ -95,7 +95,7 @@
                     </tree>
                 </field>
             </xpath>
-            <xpath expr="//page[@name='related_purchases']" position="after">
+            <xpath expr="//page[@name='Orden de Compra']" position="after">
                 <page name='administration_sale_lines' string="GERENCIA">
                     <field name="order_line_admin">
                         <tree create='false' editable="botttom">
