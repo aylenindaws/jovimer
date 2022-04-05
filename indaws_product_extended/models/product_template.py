@@ -19,19 +19,16 @@ class ProductTemplate(models.Model):
     caliber = fields.Many2one('jovimer.calibre', string="Calibre", store=True, copy=True, ondelete='set null')
     category = fields.Many2one('jovimer.categoria', string="Categoria", store=True, copy=True, ondelete='set null')
     confection = fields.Many2one('jovimer.confeccion', string='Confección', store=True, copy=True, ondelete='set null')
-    display_name = fields.Char(string='Display Name', readonly=True)
     container = fields.Many2one('jovimer.envase', string='Envase', store=True, copy=True, ondelete='set null')
     invoice_id = fields.Many2one('account.move', string='ALB/FACT', store=True, copy=True, ondelete='set null')
     invoice_line_id = fields.Many2one('account.move.line', string='Lin ALB/FACT', store=True, copy=True,
                                       ondelete='set null')
     kg_net_bulge = fields.Float(string='KG/NET Confección', store=True, copy=True)
     brand = fields.Many2one('jovimer.marca', string='Marca', store=True, copy=True, ondelete='set null')
-    name = fields.Char(string='Nombre', store=True, copy=True, required=False)
     not_active = fields.Boolean('NO Activo', store=True, copy=True, tracking=True)
     not_calculate_lumps = fields.Boolean('No Calcula Bultos', store=True, copy=True, tracking=True)
     week_price = fields.Integer(string='Semana', store=True, copy=True, ondelete='set null',
                                 help='Semana a la que se aplica el precio atendiendo a la fecha de llegada del Pedido')
-    product_id = fields.Many2one('product.product', string='Producto', store=True, copy=True, ondelete='set null')
     cost = fields.Float(string='Coste', store=True, copy=True)
     pvp_type = fields.Many2one('uom.uom', string='PVP/Tipo', store=True, copy=True, ondelete='set null',
                                domain=[('invisible', '=', 'NO')])
