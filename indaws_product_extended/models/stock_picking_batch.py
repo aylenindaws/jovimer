@@ -190,10 +190,9 @@ class StockPickingBatch(models.Model):
             lineasalbaranes.plataformadestino = destinoor
         return {}
 
-
     @api.model
     def create(self, vals):
-        if vals.get('name', '/') == '/' and ('tipoviaje' in vals and vals['tipoviaje']=='INTERNACIONAL'):
+        if vals.get('name', '/') == '/' and ('tipoviaje' in vals and vals['tipoviaje'] == 'INTERNACIONAL'):
             vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch') or '/'
         else:
             vals['name'] = self.env['ir.sequence'].next_by_code('picking.batch.ln') or '/'
@@ -201,3 +200,27 @@ class StockPickingBatch(models.Model):
 
     def _sanity_check(self):
         _logger.error('Pass')
+
+    def action_indaws_send(self):
+        ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
+        self.ensure_one()
+        template = self.env.ref('indaws_product_extended.email_template_picking')
+        ctx = {
+            'default_model': 'stock.picking.batch',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template.id),
+            'default_template_id': template.id,
+            'default_composition_mode': 'comment',
+            'mark_so_as_sent': True,
+            'proforma': self.env.context.get('proforma', False),
+            'force_email': True,
+        }
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False, 'form')],
+            'view_id': False,
+            'target': 'new',
+            'context': ctx,
+        }

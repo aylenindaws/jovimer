@@ -35,6 +35,7 @@
         'views/prints.xml',
         'views/purchase_order_wizard_view.xml',
         'data/template_email_claim.xml',
+        'data/template_email_picking_claim.xml',
         'data/template_email_purchase_claim.xml'
     ],
     "images": ["static/description/background.png",],              

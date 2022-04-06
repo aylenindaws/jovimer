@@ -438,7 +438,7 @@ class AccountMoveLine(models.Model):
     # clientefinal= fields.Many2one('res.partner', related='expediente.cliente')
     cantidadpedido = fields.Float(string='Palets')
     codproducto = fields.Char(string='Codigo Cliente', Store=True)
-    unidadpedido = fields.Many2one('uom.uom', string='Tipo', domain=[('invisiblecp', '=', 'SI')])
+    unidadpedido = fields.Many2one('jovimer.palet', string='Tipo', domain=[('invisiblecp', '=', 'SI')])
     bultos = fields.Float(string='Bultos')
     unidabulto = fields.Many2one('uom.uom', string='Ud. NO FUN')
     variedad = fields.Many2one('jovimer.variedad', string='Variedad')
@@ -475,7 +475,7 @@ class AccountMoveLine(models.Model):
     relalbvta = fields.Char(string='Relacion Albarán de Venta')
     # multicomp = fields.One2many('jovimer_lineascompra', 'orderline', string='Lineas de Compra')
     reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
-    reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
+    reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones') ### Hasta aqui
     # ordendecarganac = fields.Many2many('jovimer_ctn', string='Orden de Carga Nacional')
     # ordendecargaint = fields.Many2many('jovimer_cti', string='Orden de Carga Internacional')
     # lineacompra = fields.Many2one('purchase.order.line', string='Linea de Compra')

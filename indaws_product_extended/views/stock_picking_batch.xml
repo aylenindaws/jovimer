@@ -27,6 +27,9 @@
         <field name="model">stock.picking.batch</field>
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//header" position='inside'>
+                <button name="action_indaws_send" string="Enviar por Correo" type="object" class="btn-primary"/>
+            </xpath>
             <xpath expr="//field[@name='picking_ids']//tree//field[@name='name']" position='after'>
                 <field name='picking_type_id'/>
             </xpath>
@@ -52,7 +55,7 @@
                 <field name="destinoor" invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
             </xpath>
             <xpath expr="//field[@name='picking_ids']" position="attributes">
-                <attribute name="domain">[('id', 'in', exp_picking_ids)]</attribute>
+                <attribute name="domain">[('id', 'in', exp_picking_ids),('state','!=','done')]</attribute>
             </xpath>
             <xpath expr="//field[@name='user_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>

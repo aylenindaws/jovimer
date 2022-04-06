@@ -359,3 +359,30 @@ class ModelSaleOrderLine(models.Model):
             item.margin = sale - transport - purchase
             item.margin_percent = (item.margin * 100) / sale if sale != 0 else (item.margin * 100)
 
+
+    def _prepare_invoice_line(self, **optional_values):
+        res = super(ModelSaleOrderLine, self)._prepare_invoice_line(**optional_values)
+        self.ensure_one()
+        res['expediente'] = self.order_id.analytic_account_id.id
+        res['cantidadpedido'] = self.cantidadpedido
+        res['unidadpedido'] = self.tipouom.id
+        res['udfacturacion'] = self.product_uom.id
+        res['unidabulto'] = self.product_uom.id
+        res['bultos'] = self.bultos
+        res['variedad'] = self.variedad.id
+        res['calibre'] = self.calibre.id
+        res['categoria'] = self.categoria.id
+        res['confeccion'] = self.confeccion.id
+        res['envase'] = self.envase.id
+        res['marca'] = self.marca.id
+        res['nocalcbultos'] = self.nocalcbultos
+        res['kgnetbulto'] = self.kgnetbulto
+        res['totalbultos'] = self.totalbultos
+        res['unidadesporbulto'] = self.unidadesporbultor
+        res['pvpcoste'] = self.pvpcoste
+        res['pvptipo'] = self.pvptipo
+        res['pvptrans'] = self.pvptrans
+        res['pvpvta'] = self.pvpvta
+        res['lineaventa'] = self.id
+        res['lineaventaud'] = self.product_uom.id
+        return res
