@@ -361,22 +361,30 @@ class ModelSaleOrderLine(models.Model):
 
 
     def _prepare_invoice_line(self, **optional_values):
-        res = super(ModelSaleOrderLine, self)._prepare_invoice_line(optional_values)
+        res = super(ModelSaleOrderLine, self)._prepare_invoice_line(**optional_values)
         self.ensure_one()
-        raise ValidationError('Entra al Generador de lineas')
-        res[''] = {
-            'display_type': self.display_type,
-            'sequence': self.sequence,
-            'name': self.name,
-            'product_id': self.product_id.id,
-            'product_uom_id': self.product_uom.id,
-            'quantity': self.qty_to_invoice,
-            'discount': self.discount,
-            'price_unit': self.price_unit,
-            'tax_ids': [(6, 0, self.tax_id.ids)],
-            'analytic_account_id': self.order_id.analytic_account_id.id,
-            'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
-            'sale_line_ids': [(4, self.id)],
-        }
+        res['expediente'] = self.order_id.analytic_account_id.id
+        res['cantidadpedido'] = self.cantidadpedido
+        res['unidadpedido'] = self.unidadpedido
+        res['bultos'] = self.bultos
+        res['unidabulto'] = self.unidabulto.id
+        res['variedad'] = self.variedad.id
+        res['calibre'] = self.calibre.id
+        res['categoria'] = self.categoria.id
+        res['confeccion'] = self.confeccion.id
+        res['envase'] = self.envase.id
+        res['marca'] = self.marca.id
+        res['nocalcbultos'] = self.nocalcbultos
+        res['unidabulto'] = self.unidabulto.id
+        res['kgnetbulto'] = self.kgnetbulto
+        res['totalbultos'] = self.totalbultos
+        res['unidadesporbulto'] = self.unidadesporbulto
+        res['udfacturacion'] = self.udfacturacion.id
+        res['pvpcoste'] = self.pvpcoste
+        res['pvptipo'] = self.pvptipo
+        res['pvptrans'] = self.pvptrans
+        res['pvpvta'] = self.pvpvta
+        res['tipouom'] = self.tipouom.id
+        res['lineaventa'] = self.id
+        res['lineaventaud'] = self.product_uom.id
         return res
-
