@@ -52,7 +52,7 @@
                 <field name="destinoor" invisible="1" options="{'no_create': True, 'no_create_edit':True}"/>
             </xpath>
             <xpath expr="//field[@name='picking_ids']" position="attributes">
-                <attribute name="domain">[('id', 'in', exp_picking_ids)]</attribute>
+                <attribute name="domain">[('id', 'in', exp_picking_ids),('state','!=','done')]</attribute>
             </xpath>
             <xpath expr="//field[@name='user_id']" position='attributes'>
                 <attribute name='invisible'>1</attribute>
