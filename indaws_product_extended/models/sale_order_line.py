@@ -365,7 +365,9 @@ class ModelSaleOrderLine(models.Model):
         self.ensure_one()
         res['expediente'] = self.order_id.analytic_account_id.id
         res['cantidadpedido'] = self.cantidadpedido
-        res['unidadpedido'] = self.unidadpedido
+        res['unidadpedido'] = self.tipouom.id
+        res['udfacturacion'] = self.product_uom.id
+        res['unidadbulto'] = self.product_uom.id
         res['bultos'] = self.bultos
         res['unidabulto'] = self.unidabulto.id
         res['variedad'] = self.variedad.id
@@ -378,13 +380,12 @@ class ModelSaleOrderLine(models.Model):
         res['unidabulto'] = self.unidabulto.id
         res['kgnetbulto'] = self.kgnetbulto
         res['totalbultos'] = self.totalbultos
-        res['unidadesporbulto'] = self.unidadesporbulto
+        res['unidadesporbulto'] = self.unidadesporbultor
         res['udfacturacion'] = self.udfacturacion.id
         res['pvpcoste'] = self.pvpcoste
         res['pvptipo'] = self.pvptipo
         res['pvptrans'] = self.pvptrans
         res['pvpvta'] = self.pvpvta
-        res['tipouom'] = self.tipouom.id
         res['lineaventa'] = self.id
         res['lineaventaud'] = self.product_uom.id
         return res
