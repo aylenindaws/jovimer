@@ -367,7 +367,7 @@ class ModelSaleOrderLine(models.Model):
         res['cantidadpedido'] = self.cantidadpedido
         res['unidadpedido'] = self.tipouom.id
         res['udfacturacion'] = self.product_uom.id
-        res['unidadbulto'] = self.product_uom.id
+        res['unidabulto'] = self.product_uom.id
         res['bultos'] = self.bultos
         res['unidabulto'] = self.unidabulto.id
         res['variedad'] = self.variedad.id
