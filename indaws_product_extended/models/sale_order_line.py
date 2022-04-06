@@ -369,7 +369,6 @@ class ModelSaleOrderLine(models.Model):
         res['udfacturacion'] = self.product_uom.id
         res['unidabulto'] = self.product_uom.id
         res['bultos'] = self.bultos
-        res['unidabulto'] = self.unidabulto.id
         res['variedad'] = self.variedad.id
         res['calibre'] = self.calibre.id
         res['categoria'] = self.categoria.id
@@ -377,11 +376,9 @@ class ModelSaleOrderLine(models.Model):
         res['envase'] = self.envase.id
         res['marca'] = self.marca.id
         res['nocalcbultos'] = self.nocalcbultos
-        res['unidabulto'] = self.unidabulto.id
         res['kgnetbulto'] = self.kgnetbulto
         res['totalbultos'] = self.totalbultos
         res['unidadesporbulto'] = self.unidadesporbultor
-        res['udfacturacion'] = self.udfacturacion.id
         res['pvpcoste'] = self.pvpcoste
         res['pvptipo'] = self.pvptipo
         res['pvptrans'] = self.pvptrans
