@@ -27,6 +27,9 @@
         <field name="model">stock.picking.batch</field>
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//header" position='inside'>
+                <button name="action_indaws_send" string="Enviar por Correo" type="object" class="btn-primary"/>
+            </xpath>
             <xpath expr="//field[@name='picking_ids']//tree//field[@name='name']" position='after'>
                 <field name='picking_type_id'/>
             </xpath>
