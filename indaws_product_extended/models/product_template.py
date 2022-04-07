@@ -44,6 +44,9 @@ class ProductTemplate(models.Model):
                                   domain=[('invisibleudvta', '=', 'SI')])
     variety = fields.Many2one('jovimer.variedad', string='Variedad', store=True, copy=True, ondelete='set null')
     partner_code_ids = fields.One2many(comodel_name='jovimer.partner.code', inverse_name='template_id', string='Codigo Cliente')
+    prediomediocompra = fields.Float(string='PVP Medio Compra')
+    prediomedioventa = fields.Float(string='PVP Medio Venta')
+    productobio = fields.Boolean(string='Producto BIO')
 
     @api.onchange('confection.bulge_euro_palet')
     def _compute_bulge_euro_palet(self):
@@ -83,7 +86,7 @@ class ProductTemplate(models.Model):
                 return {}
 
 
-class ProductTemplate(models.Model):
+class ProductSupplierInfo(models.Model):
     _inherit = 'product.supplierinfo'
 
     discount = fields.Float(string='Discount (%)', digits=dp.get_precision('Discount'), default=0.0)

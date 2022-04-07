@@ -26,6 +26,9 @@
                             <field name="bulge"/>
                             <field name="palet_type" options="{'no_quick_create': True, 'no_create': True}"/>
                             <field name="uom_invoice"/>
+                            <field name="productobio"/>
+                            <field name="prediomedioventa"/>
+                            <field name="prediomediocompra"/>
                         </group>
                         <group name="template_right">
                             <field name="variety"/>
