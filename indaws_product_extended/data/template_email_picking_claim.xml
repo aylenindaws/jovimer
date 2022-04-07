@@ -27,7 +27,7 @@
                             <tr>
                                 <td style="padding:15px 20px 10px 20px;">
                                     <p>Hola,</p>
-                                    <p>A continuación se Genera la Agrupacion de Albaran "<strong>${object.name}</strong>" que se ha generado a su nombre.</p>
+                                    <p>A continuación se genera la Agrupacion de Albaran "<strong>${object.name}</strong>" que se ha generado a su nombre.</p>
                                 </td>
                             </tr>
                             <tr/>
