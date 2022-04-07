@@ -299,7 +299,7 @@
             <field name="binding_type">report</field>
         </record>
         <record id="factclieng_jovimer_report" model="ir.actions.report">
-            <field name="name">Factura Standard</field>
+            <field name="name">Factura Estandar</field>
             <field name="model">account.move</field>
             <field name="report_name">jovimer_factclieng.report</field>
             <field name="report_type">py3o</field>
