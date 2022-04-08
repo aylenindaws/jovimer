@@ -225,7 +225,6 @@ class StockPickingBatch(models.Model):
             'context': ctx,
         }
 
-    @api.multi
     def action_creacmr(self, default=None):
         for item in self:
             item.id
