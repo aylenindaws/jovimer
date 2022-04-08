@@ -23,7 +23,7 @@ class ResPartner(models.Model):
     gln = fields.Char(string='GLN')
     rgseaa = fields.Char(string='RGSEAA')
     fechabaja = fields.Date(string='Fecha Baja')
-    conformalote = fields.Many2one('jovimer_conflote', string='Conforma LOTE')
+    conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE', store=True)
     comisionvta = fields.Float(string='Comision %')
     plantillaetiquetas = fields.Char(string='Plantilla Etiquetas')
     fechaalta = fields.Date(string='Fecha Alta')
