@@ -338,8 +338,6 @@ class PurchaseOrderLine(models.Model):
                             total -= line.on_change_cantidadpedido_purchase(line.product_uom,move.product_uom)
                         else:
                             total += line.on_change_cantidadpedido_purchase(line.product_uom,move.product_uom)
-                    else:
-                        super(PurchaseOrderLine, line)._compute_qty_received()
                 line._track_qty_received(total)
                 line.qty_received = total
         if line.qty_received == 0:
