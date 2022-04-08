@@ -224,3 +224,63 @@ class StockPickingBatch(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    @api.multi
+    def action_creacmr(self, default=None):
+        for item in self:
+            item.id
+            item.transportista
+            item.transportista.name
+            item.matricula
+            item.temperatura
+            item.name
+            for linea in aux_txt:
+                count += 1
+                if count == 1:
+                    if '96AORDERSP' in linea:
+                        _logger.info('Fichero EDI Valido para su procesamiento')
+                        id_edi_jovimer = linea[3:16]
+                    else:
+                        _logger.info('Fichero EDI NO Valido para su procesamiento')
+                        break
+                elif count == 2:
+                    id_edi_cliente = linea[26:39]
+                    fecha_pedido = linea[17:25]
+                    fecha_llegada = linea[111:119]
+                else:
+                    if 'L' == linea[0:1]:
+                        if not self.partner_id:
+                            raise ValidationError(
+                                'Ingrese un valor valido para cliente, para poder continuar con la importación')
+                        template = self.env['jovimer.partner.code'].search(
+                            [('name', '=', linea[34:41]), ('partner_id', '=', self.partner_id.id)], limit=1)
+                        if not template:
+                            raise ValidationError(
+                                ("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
+                        product_id = self.env['product.product'].search(
+                            [('product_tmpl_id', '=', template.template_id)], limit=1)
+                        und = linea[72:75]
+                        product_description = linea[75:125]
+                        if 'CT' in und:
+                            id_und = 24
+                        elif 'PCE' in und:
+                            id_und = 1
+                        elif 'KGM' in und:
+                            id_und = 27
+                        else:
+                            id_und = 1
+                        if linea[65:71].replace(' ', '') is '' or linea[65:71].replace(' ', '') is False:
+                            quantity = 0
+                        else:
+                            quantity = float(linea[65:71].replace(' ', ''))
+                        item.order_line.create(
+                            {
+                                "order_id": item.id,
+                                "product_id": product_id.id,
+                                "product_uom_qty": quantity,
+                                "name": product_description,
+                                "price_unit": product_id.lst_price if product_id.lst_price is not False else 0,
+                                'currency_id': 1,
+                            }
+                        )
+        return

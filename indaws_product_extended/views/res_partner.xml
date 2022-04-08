@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="trasnportista"/>
-                <!--<field name="transport_cost" attrs="{'invisible':[('trasnportista','=', False)]}"/>-->
+                <field name="conformalote"/>
             </xpath>
         </field>
     </record>

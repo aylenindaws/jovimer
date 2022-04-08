@@ -166,6 +166,10 @@ class SaleOrder(models.Model):
             self.write({'expediente': expedientenuevo.id})
             return {}
 
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        self.conformalote = self.partner_id.conformalote
+
     @api.onchange('conformalote', 'commitment_date', 'fechasalida')
     def onchange_conformalote(self):
         self.ensure_one()
