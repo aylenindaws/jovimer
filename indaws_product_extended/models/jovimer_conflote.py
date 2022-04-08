@@ -12,8 +12,8 @@ _logger = logging.getLogger(__name__)
 class JovimerConflote(models.Model):
     _name = 'jovimer.conflote'
     _description = 'jovimer conflote'
+    _rec_name = 'name'
 
     name = fields.Char('Nombre')
-    display_name = fields.Char(string='Display Name', readonly=True)
     code = fields.Char(string='Código')
     formula = fields.Char(string='Formula')
