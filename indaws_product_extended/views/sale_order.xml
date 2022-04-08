@@ -43,27 +43,30 @@
             <xpath expr="//page[@name='order_lines']//field//tree//widget[@name='qty_at_date_widget']" position="replace"/>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="after">
                 <field name="price_trans" invisible="1" width="100px"/>
-                <field name="cantidadpedido" string="Palets:" optional="show" width="100px"/>
-                <field name="tipouom" options="{'no_quick_create': True, 'no_create': True}" optional="show" width="100px"/>
-                <field name="bultos" optional="show" width="100px"/>
-                <field name="unidadesporbultor" readonly="False" optional="show" width="100px"/>
-                <field name="kgnetbulto" optional="show" width="100px"/>
-                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" optional="show" width="100px"/>
-                <field name="product_uom" optional="show" string="Ud Venta" width="100px"/>
-                <widget name="qty_at_date_widget" width="20px"/>
-                <field name="price_unit" optional="show" string="Precio de Venta" width="100px"/>
+                <field name="cantidadpedido" string="Palets" optional="show" width="100px"/>
+                <field name="tipouom" string="Tipo Medida" options="{'no_quick_create': True, 'no_create': True}" optional="show" width="100px"/>
+
+                <field name="price_unit" optional="show" string="Pr. Venta" width="100px"/>
                 <field name="discount" optional="show" string="Descuento" width="100px"/>
+                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" string="Cantidad" optional="show" width="100px"/>
+                <field name="product_uom" optional="show" string="Unidad Venta" width="100px"/>
+                <widget name="qty_at_date_widget" width="20px"/>
+                <field name="purchase_price" optional="show" string="Pr. compra" width="100px"/>
                 <field name="supplier_id" optional="show" string="Proveedor" width="100px"/>
-                <field name="uom_po_id" optional="show" string="Ud Compra" width="100px"/>
-                <field name="purchase_price" optional="show" string="Precio de compra" width="100px"/>
-                <field name="discount_supplier" optional="show" string="Descuento proveedor (%)" width="100px"/>
+                <field name="discount_supplier" optional="show" string="Descuento proveedor" width="100px"/>
+                <field name="uom_po_id" optional="show" string="Unidad Compra" width="100px"/>
+
+                <field name="variedad" string="Variedad" optional="show" width="100px"/>
+                <field name="calibre" string="Calibre" optional="show" width="100px"/>
+                <field name="confeccion" string="Confección" optional="show" width="100px"/>
+                <field name="categoria" string="Categoria" optional="show" width="100px"/>
+                <field name="envase" string="Envase" optional="show" width="100px"/>
+                <field name="marca" string="Marca" optional="show" width="100px"/>
+
+                <field name="bultos" string="Bultos x palet" optional="show" width="100px"/>
+                <field name="unidadesporbultor" string="Unidades x bulto" readonly="False" optional="show" width="100px"/>
+                <field name="kgnetbulto" string="kg/net bulto" optional="show" width="100px"/>
                 <field name="costetrans" optional="show" string="Transporte" width="100px"/>
-                <field name="variedad" optional="show" width="100px"/>
-                <field name="calibre" optional="show" width="100px"/>
-                <field name="categoria" optional="show" width="100px"/>
-                <field name="confeccion" optional="show" width="100px"/>
-                <field name="envase" optional="show" width="100px"/>
-                <field name="marca" optional="show" width="100px"/>
             </xpath>
             <xpath expr="//page[@name='order_lines']//field//tree//field[@name='name']" position="attributes">
                 <attribute name="width">100px</attribute>
@@ -205,6 +208,16 @@
                     </div>-->
                 </div>
                 <field name="pedidocerrado"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="indaws_sale_purchase_extended_view_order_tree_1_inherit" model="ir.ui.view">
+        <field name="name">indaws.sale.purchase.extended.view.order.tree.1.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_status']" position="after">
+                <field name="analytic_account_id" optional="show" string="Expediente"/>
             </xpath>
         </field>
     </record>
