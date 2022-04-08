@@ -58,8 +58,8 @@
 
                 <field name="variedad" string="Variedad" optional="show" width="100px"/>
                 <field name="calibre" string="Calibre" optional="show" width="100px"/>
-                <field name="confeccion" string="Confección" optional="show" width="100px"/>
                 <field name="categoria" string="Categoria" optional="show" width="100px"/>
+                <field name="confeccion" string="Confección" optional="show" width="100px"/>
                 <field name="envase" string="Envase" optional="show" width="100px"/>
                 <field name="marca" string="Marca" optional="show" width="100px"/>
 
