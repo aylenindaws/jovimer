@@ -10,7 +10,7 @@ import odoo.addons.decimal_precision as dp
 _logger = logging.getLogger(__name__)
 
 
-class ModelSaleOrderLine(models.Model):
+class PurchaseOrderLine(models.Model):
     # Herencia de la tabla de ventas
     _inherit = 'purchase.order.line'
 
@@ -167,7 +167,7 @@ class ModelSaleOrderLine(models.Model):
         asignacion = self.asignacionj
         order_id = self.asignacionj.order_id
         product_id = self.product_id
-        ## raise UserError("Has pinchado para añadir en: " + str(order_id) + "")
+        ## raise ValidationError("Has pinchado para añadir en: " + str(order_id) + "")
         vals = {
             'order_id': order_id,
             'product_id': product_id,
@@ -293,7 +293,54 @@ class ModelSaleOrderLine(models.Model):
             raise ValidationError('Esta linea de pedido ya se encuentra Facturada')
 
     def _prepare_stock_move_vals(self, picking, price_unit, product_uom_qty, product_uom):
-        vals = super(ModelSaleOrderLine, self)._prepare_stock_move_vals(picking, price_unit, product_uom_qty, product_uom)
+        vals = super(PurchaseOrderLine, self)._prepare_stock_move_vals(picking, price_unit, product_uom_qty, product_uom)
         sale_line_id = self.env['sale.order.line'].search([('product_id', '=', vals['product_id']),('name','=',vals['name']),('discount_supplier','=',self.discount),('order_id','=',self.order_id.sale_related_id.id)], limit=1)
         vals['product_uom_qty'] = sale_line_id.product_uom_qty
         return vals
+
+    def on_change_cantidadpedido_purchase(self, unidad_venta, unidad_compra):
+        product_uom_qty = self.product_uom_qty
+        if unidad_venta == 'Bultos' and unidad_compra == 'Kg':
+            product_uom_qty = float(self.product_uom_qty) * float(self.kgnetbulto)
+        if unidad_venta == 'Bultos' and unidad_compra == 'Unidades':
+            product_uom_qty = float(self.product_uom_qty) * float(self.unidadesporbultor)
+        if unidad_venta == 'Kg' and unidad_compra == 'Unidades':
+            product_uom_qty = (float(self.product_uom_qty) * float(self.kgnetbulto)) / float(self.unidadesporbultor)
+        if unidad_venta == 'Kg' and unidad_compra == 'Bultos':
+            product_uom_qty = float(self.product_uom_qty) / float(self.kgnetbulto)
+        if unidad_venta == 'Unidades' and unidad_compra == 'Bultos':
+            product_uom_qty = float(self.product_uom_qty) / float(self.unidadesporbultor)
+        if unidad_venta == 'Unidades' and unidad_compra == 'Kg':
+            product_uom_qty = (float(self.product_uom_qty) * float(self.bultos)) / float(self.kgnetbulto)
+        return product_uom_qty
+
+    @api.depends('move_ids.state', 'move_ids.product_uom_qty', 'move_ids.product_uom')
+    def _compute_qty_received(self):
+        # pre-calculation of quantities for transfer
+        from_stock_lines = self.filtered(lambda order_line: order_line.qty_received_method == 'stock_moves')
+        for line in self:
+            if line.qty_received_method == 'stock_moves':
+                total = 0.0
+                # In case of a BOM in kit, the products delivered do not correspond to the products in
+                # the PO. Therefore, we can skip them since they will be handled later on.
+                for move in line.move_ids.filtered(lambda m: m.product_id == line.product_id):
+                    if move.state == 'done' and line.product_uom.factor==1 and move.product_uom.factor==1:
+                        if move.location_dest_id.usage == "supplier":
+                            if move.to_refund:
+                                total -= line.on_change_cantidadpedido_purchase(line.product_uom,move.product_uom)
+                        elif move.origin_returned_move_id and move.origin_returned_move_id._is_dropshipped() and not move._is_dropshipped_returned():
+                            # Edge case: the dropship is returned to the stock, no to the supplier.
+                            # In this case, the received quantity on the PO is set although we didn't
+                            # receive the product physically in our stock. To avoid counting the
+                            # quantity twice, we do nothing.
+                            pass
+                        elif (move.location_dest_id.usage == "internal" and move.to_refund and move.location_dest_id not in self.env["stock.location"].search([("id", "child_of", move.warehouse_id.view_location_id.id)])):
+                            total -= line.on_change_cantidadpedido_purchase(line.product_uom,move.product_uom)
+                        else:
+                            total += line.on_change_cantidadpedido_purchase(line.product_uom,move.product_uom)
+                    else:
+                        super(PurchaseOrderLine, line)._compute_qty_received()
+                line._track_qty_received(total)
+                line.qty_received = total
+        if line.qty_received == 0:
+            super(PurchaseOrderLine, self)._compute_qty_received()
