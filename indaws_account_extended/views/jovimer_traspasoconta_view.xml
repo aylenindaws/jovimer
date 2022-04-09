@@ -1,0 +1,180 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="jovimer_trasoasoconta_view_tree">
+            <field name="name">JOVIMER - Traspaso Contable</field>
+            <field name="model">jovimer.traspasoconta</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <tree default_order="id desc">
+                    <field name="id"/>
+                    <field name="tipotraspaso"/>
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="generaiva"/>
+                    <field name="generadiario"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_trasoasoconta_view_form">
+            <field name="name">JOVIMER - Traspaso Contable</field>
+            <field name="model">jovimer.traspasoconta</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="id"/>
+                            <field name="name"/>
+                            <field name="fecha"/>
+                            <field name="archivo" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="tipotraspaso" readonly="1"/>
+                            <field name="generaiva"/>
+                            <field name="generadiario"/>
+                        </group>
+                    </group>
+                    <field name="invoices_ids" domain="[('traspasocont', '=', False), ('state', 'not in', ('draft', 'cancel')), ('move_type', 'in', ('out_invoice','out_refund'))]">
+                        <tree>
+                            <field name="state" invisible="1"/>
+                            <field name="traspasocont" invisible="1"/>
+                            <field name="move_type" invisible="1"/>
+                            <field name="relpartnerfiscal"/>
+                            <field name="name"/>
+                            <field name="journal_id"/>
+                            <field name="invoice_date"/>
+                            <field name="partner_id"  options="{'no_quick_create': True}"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Genera Traspaso Contable" name="report_invoices_clients_txt" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_trasoasocontac_view_form">
+            <field name="name">JOVIMER - Traspaso Contable</field>
+            <field name="model">jovimer.traspasoconta</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="id"/>
+                            <field name="name"/>
+                            <field name="fecha" required="1"/>
+                        </group>
+                        <group>
+                            <field name="tipotraspaso" readonly="1"/>
+                            <field name="generaiva" invisible="1"/>
+                            <field name="generadiario" invisible="1"/>
+                        </group>
+<!--                        <group>-->
+<!--                            <button name="abrirfacturas" string="Abrir Facturas Proveedor" type="object" class="oe_highlight"/>-->
+<!--                        </group>-->
+                    </group>
+                    <group string="Facturas Afectadas"></group>
+                    <field name="invoices_ids" domain="[('traspasocont', '=', False), ('state', 'not in', ('draft', 'cancel')), ('move_type', 'in', ('in_invoice', 'in_refund'))]">
+                        <tree>
+                            <field name="state" invisible="1"/>
+                            <field name="traspasocont" invisible="1"/>
+                            <field name="move_type" invisible="1"/>
+                            <field name="relpartnerfiscal"/>
+                            <field name="ref"/>
+                            <field name="name"/>
+<!--                            <field name="dateinv_compra"/>-->
+                            <field name="invoice_date" string="Fecha Contable"/>
+                            <field name="partner_id"  options="{'no_quick_create': True}"/>
+                            <field name="amount_total"/>
+<!--                            <field name="modologocontatrans"/>-->
+<!--                            <field name="modologocontatranssiniva"/>-->
+<!--                            <field name="modologocontasujpa"/>-->
+<!--                            <field name="modologocontamerca"/>-->
+<!--                            <field name="tax_ids" widget="many2many_tags"/>-->
+                        </tree>
+                    </field>
+                    <footer>
+                       <button string="Genera Traspaso Contable Recibidas" name="creatrasoasocontablec" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_trasoasoconta_view_search">
+            <field name="name">JOVIMER - Buscador Traspasos Contables</field>
+            <field name="model">jovimer.traspasoconta</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <search string="Search Invoice">
+                    <field name="fecha"/>
+                    <field name="name" />
+                </search>
+            </field>
+        </record>
+
+        <record id="action_jovimer_traspasoconta" model="ir.actions.act_window">
+            <field name="name">Jovimer - Generar Traspaso Contabilidad</field>
+            <field name="res_model">jovimer.traspasoconta</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context"></field>
+			<field name="search_view_id" ref="jovimer_trasoasoconta_view_search"/>
+     		<field name="view_ids"
+                   eval="[(5, 0, 0),
+                   (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_trasoasoconta_view_tree')}),
+                   (0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_trasoasoconta_view_form')})]"
+            />
+            <field name="domain">[('tipotraspaso','=','EMITIDAS')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Traspasos de Contabilidad Realizados
+                </p>
+            </field>
+        </record>
+
+        <record id="action_jovimer_traspasocontac" model="ir.actions.act_window">
+            <field name="name">Jovimer - Generar Traspaso Contabilidad Compra</field>
+            <field name="res_model">jovimer.traspasoconta</field>
+            <field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="jovimer_trasoasoconta_view_search"/>
+     		<field name="view_ids"
+                   eval="[(5, 0, 0),
+                   (0, 0, {'view_mode': 'tree', 'view_id': ref('jovimer_trasoasoconta_view_tree')}),
+                   (0, 0, {'view_mode': 'form', 'view_id': ref('jovimer_trasoasocontac_view_form')})]"
+            />
+            <field name="domain">[('tipotraspaso','=','RECIBIDAS')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Traspasos de Contabilidad Realizados desde Compra
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_traspasocontable"
+              name="Traspaso Contable"
+			  parent="account_accountant.menu_accounting"
+              sequence="2"
+        />
+
+		 <menuitem name="Traspasos Emitidas"
+              id="menu_jovimer_trasoaso_emit"
+              parent="menu_traspasocontable"
+			  sequence="10"
+			  action="action_jovimer_traspasoconta"
+         />
+
+		 <menuitem name="Traspasos Recibidas"
+              id="menu_jovimer_trasoaso_recib"
+              parent="menu_traspasocontable"
+			  sequence="11"
+			  action="action_jovimer_traspasocontac"
+         />
+
+
+
+    </data>
+</odoo>

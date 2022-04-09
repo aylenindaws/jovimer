@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="jovimer_generar_traspaso_contabilidad" model="ir.cron">
+        <field name="name">Jovimer - Generar Traspaso Contabilidad</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.get_invoices_clients()</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=0)).strftime('%Y-%m-%d 05:20:00')"/>
+    </record>
+
+    <record id="jovimer_generar_traspaso_contabilidad_compra" model="ir.cron">
+        <field name="name">Jovimer - Generar Traspaso Contabilidad Compra</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.get_invoices_supplier()</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=0)).strftime('%Y-%m-%d 05:30:00')"/>
+    </record>
+
+    <record id="jovimer_generar_traspaso_cobros_pagos" model="ir.cron">
+        <field name="name">Jovimer - Generar Traspaso Cobros Y Pagos</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_account_payment"/>
+        <field name="state">code</field>
+        <field name="code">model.get_payments()</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=0)).strftime('%Y-%m-%d 05:40:00')"/>
+    </record>
+</odoo>

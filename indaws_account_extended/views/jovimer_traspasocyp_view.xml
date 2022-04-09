@@ -1,0 +1,91 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="jovimer_trasoasocontacyp_view_tree">
+            <field name="name">JOVIMER - Traspaso Contable</field>
+            <field name="model">jovimer.traspasocyp</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <tree default_order="id desc">
+                    <field name="id"/>
+                    <field name="tipotraspaso"/>
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="generadiario"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_trasoasocontacyp_view_form">
+            <field name="name">JOVIMER - Traspaso Contable</field>
+            <field name="model">jovimer.traspasocyp</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="id"/>
+                            <field name="name"/>
+                            <field name="fecha"/>
+                        </group>
+                        <group>
+                            <field name="tipotraspaso" readonly="1"/>
+                            <field name="generadiario"/>
+                        </group>
+                    </group>
+                    <field name="pagos_ids" domain="[('traspasado','=',False),('state', '=', 'posted')]">
+                        <tree  edit="false">
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="journal_id"/>
+                            <field name="payment_method_id" invisible="1"/>
+                            <field name="partner_id" string="Customer"/>
+                            <field name="amount" sum="Amount" string="Cantidad"/>
+                            <field name="state" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="partner_type" invisible="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Genera Traspaso Contable" name="creatrasoasocontable" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="jovimer_trasoasoconta_view_search">
+            <field name="name">JOVIMER - Buscador Traspasos Contables</field>
+            <field name="model">jovimer.traspasoconta</field>
+            <field name="priority">0</field>
+            <field name="arch" type="xml">
+                <search string="Search Invoice">
+                    <field name="fecha"/>
+                    <field name="name" />
+                </search>
+            </field>
+        </record>
+
+        <record id="action_jovimer_traspasocontacyp" model="ir.actions.act_window">
+            <field name="name">Jovimer - Generar Traspaso Cobros Y Pagos</field>
+            <field name="res_model">jovimer.traspasocyp</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="context"></field>
+			<field name="search_view_id" ref="jovimer_trasoasoconta_view_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Traspasos de Contabilidad Cobros y Pagos
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Traspasos Cobros y Pagos"
+              id="menu_jovimer_trasoaso_cyp"
+              parent="menu_traspasocontable"
+			  sequence="12"
+			  action="action_jovimer_traspasocontacyp"
+        />
+
+    </data>
+</odoo>
+
