@@ -279,6 +279,7 @@
                 sample="1"
                 create="false">
                 <field name="priority" string="Prioridad" optional="show" widget="priority" nolabel="1"/>
+                <field name="analytic_account_id" optional="show" string="Expediente"/>
                 <field name="message_unread" invisible="1"/>
                 <field name="partner_ref" string="Referencia de Proveedor" optional="hide"/>
                 <field name="name" string="Referencia" readonly="1" decoration-bf="1"/>
@@ -379,6 +380,16 @@
             </p><p>
                 Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
             </p>
+        </field>
+    </record>
+    <record id="indaws_purchase_order_extended_view_order_tree_1_inherit" model="ir.ui.view">
+        <field name="name">indaws.purchase.order.extended.view.order.tree.1.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="analytic_account_id" optional="show" string="Expediente"/>
+            </xpath>
         </field>
     </record>
 </odoo>

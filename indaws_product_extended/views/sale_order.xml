@@ -216,7 +216,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_quotation_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_status']" position="after">
+            <xpath expr="//field[@name='name']" position="before">
                 <field name="analytic_account_id" optional="show" string="Expediente"/>
             </xpath>
         </field>

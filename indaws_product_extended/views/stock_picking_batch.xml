@@ -132,5 +132,15 @@
             </xpath>
         </field>
     </record>
+    <record id="indaws_stock_picking_batch_extended_view_order_tree_1_inherit" model="ir.ui.view">
+        <field name="name">indaws.stock.picking.batch.extended.view.order.tree.1.inherit</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="expediente_ids" optional="show" string="Expediente"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
   
