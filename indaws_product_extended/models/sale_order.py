@@ -46,7 +46,7 @@ class SaleOrder(models.Model):
     palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')
     refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
-    plataforma = fields.Many2one('jovimer.plataforma',string='Plataforma')
+    plataforma = fields.Many2one('jovimer.plataforma', string='Plataforma')
     etiquetas = fields.One2many('jovimer.etiquetas', 'order_id', string='Etiquetas del Pedido')
     estadopalets = fields.Boolean(string='Estado Palets')
     faltanpalets = fields.Float(string='Faltan')
@@ -60,7 +60,8 @@ class SaleOrder(models.Model):
     serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
     numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
-    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null', domain="[('mimetype','=','text/plain')]")
+    edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
+                               domain="[('mimetype','=','text/plain')]")
     order_line_admin = fields.One2many('sale.order.line', 'order_id', string='Order Lines', readonly=False)
 
     def update_edi_file(self, default=None):
@@ -84,11 +85,15 @@ class SaleOrder(models.Model):
                 else:
                     if 'L' == linea[0:1]:
                         if not self.partner_id:
-                            raise ValidationError('Ingrese un valor valido para cliente, para poder continuar con la importación')
-                        template = self.env['jovimer.partner.code'].search([('name', '=', linea[34:41]),('partner_id', '=', self.partner_id.id)], limit=1)
+                            raise ValidationError(
+                                'Ingrese un valor valido para cliente, para poder continuar con la importación')
+                        template = self.env['jovimer.partner.code'].search(
+                            [('name', '=', linea[34:41]), ('partner_id', '=', self.partner_id.id)], limit=1)
                         if not template:
-                            raise ValidationError(("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
-                        product_id = self.env['product.product'].search([('product_tmpl_id', '=', template.template_id)], limit=1)
+                            raise ValidationError(
+                                ("Cree el codigo de cliente %s en la tabla de referencia") % linea[34:41])
+                        product_id = self.env['product.product'].search(
+                            [('product_tmpl_id', '=', template.template_id)], limit=1)
                         und = linea[72:75]
                         product_description = linea[75:125]
                         if 'CT' in und:
@@ -339,3 +344,8 @@ class SaleOrder(models.Model):
             vals.analytic_account_id = self.env['account.analytic.account'].create(
                 {'name': 'J' + str(datetime.date.today().year)[2:] + '/' + vals.name[1:]})
         return vals
+
+    def _prepare_invoice(self):
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()
+        invoice_vals['expediente'] = self.analytic_account_id.id
+        return invoice_vals
