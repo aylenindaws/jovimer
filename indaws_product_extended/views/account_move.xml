@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="before">
-                <field name="analytic_account_id" optional="show" string="Expediente"/>
+                <field name="expediente" optional="show" string="Expediente"/>
             </xpath>
         </field>
     </record>
