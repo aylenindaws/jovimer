@@ -279,7 +279,7 @@
                 sample="1"
                 create="false">
                 <field name="priority" string="Prioridad" optional="show" widget="priority" nolabel="1"/>
-                <field name="analytic_account_id" optional="show" string="Expediente"/>
+                <field name="account_analytic_id" optional="show" string="Expediente"/>
                 <field name="message_unread" invisible="1"/>
                 <field name="partner_ref" string="Referencia de Proveedor" optional="hide"/>
                 <field name="name" string="Referencia" readonly="1" decoration-bf="1"/>
@@ -388,7 +388,7 @@
         <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="before">
-                <field name="analytic_account_id" optional="show" string="Expediente"/>
+                <field name="account_analytic_id" optional="show" string="Expediente"/>
             </xpath>
         </field>
     </record>
