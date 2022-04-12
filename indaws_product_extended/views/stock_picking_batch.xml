@@ -138,7 +138,7 @@
         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="before">
-                <field name="expediente_ids" optional="show" string="Expediente"/>
+                <field name="expediente_ids" optional="show" string="Expediente" widget="many2many_tags"/>
             </xpath>
         </field>
     </record>
