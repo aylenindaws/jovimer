@@ -19,6 +19,9 @@
                 <field name='cantidadpedido' optional="hide"/>
                 <field name='tipouom' optional="hide"/>
                 <field name='costetrans' optional="hide"/>
+                <field name='paleteur' optional="hide"/>
+                <field name='paletgr' optional="hide"/>
+                <field name='totalbultos' optional="hide"/>
             </xpath>
         </field>
     </record>
