@@ -54,7 +54,7 @@ class StockMove(models.Model):
                             if 'Grande' in order_line.tipouom.name:
                                 item.write({'paletgr': order_line.cantidadpedido})
                                 item.write({'paleteur': 0})
-                            item.totalbultos = order_line.bultos
+                            item.totalbultos = order_line.bultos * order_line.cantidadpedido
                         else:
                             item.write({'paletgr': 0, 'paleteur': 0, 'totalbultos': 0})
             else:
