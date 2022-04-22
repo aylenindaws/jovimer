@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="indaws_albaran_venta_report">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <style type="text/css">
+                .border_px {
+                    border: 1px solid black;
+                }
+                th {
+                    border: 1px solid black;
+                    padding: 4px;
+                }
+                .no_border{
+                    padding: 4px;
+                    border-bottom: 1px solid black;
+                }
+                </style>
+
+                <div class="row">
+                    <div class="col-3 mt-6">
+                        <img class="ml-4 img" src="/indaws_product_extended/static/img/icon_jovimer.png" style="width: 70% !important; padding-top:0;"/>
+                        <strong>
+                            <span t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["name"], "no_marker": true, "class": "mt-4"}' style="font-size:21px;"/>
+                        </strong>
+                        <span t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "class": "mt-4"}' style="font-size:18px;"/>
+                        <span>Tlf: +34.962890305</span>
+                        <br />
+                        <span>Fax: +34.962890670</span>
+                        <br />
+                        <span>CIF: ESB96674056</span>
+                        <br />
+                    </div>
+                    <div class="col-9">
+                        <table style="width:100%;">
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Reference</td>
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;"><span t-esc="o.analytic_account_id.name" /></td>
+                                <td class="border_px" style="border-left:0px;"><span/></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Picking Number</td>
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;"><span t-esc="o.name" /></td>
+                                <td class="border_px" style="border-left:0px;"><span/></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Ref Customer</td>
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;"><span t-esc="o.origin" /></td>
+                                <td class="border_px" style="border-left:0px;"><span/></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Fecha / Date</td>
+
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;">
+                                    <t t-if="o.date_done">
+                                        <span t-esc="o.date_done.date()" />
+                                    </t>
+                                    <t t-else="">
+                                        <span t-esc="o.scheduled_date.date()"/>
+                                    </t>
+                                </td>
+                                <td class="border_px" style="border-left:0px;"><span/></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Customer</td>
+                                <td class="border_px" style="padding-left:2mm;">
+                                    <span t-esc="o.partner_id.name" /></td>
+                                <td class="border_px">
+                                    <span style="font-size:13px;">Customer No:</span>
+                                    <span t-esc="o.partner_id.ref" style="font-size:13px;"/>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Fiscal Code</td>
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;">
+                                    <span t-esc="o.partner_id.vat" />
+                                </td>
+                                <td class="border_px" style="border-left:0px;"/>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td class="border_px"  style="width:30%; padding-left:2mm;">Unloading Address</td>
+                                <td class="border_px" style="border-right:0px; padding-left:2mm;"><span t-esc="o.partner_id" t-options='{"widget": "contact", "fields": ["name"], "no_marker": true, "class": "mt-4"}'/></td>
+                                <td class="border_px" style="border-left:0px;"/>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <table style="width:100%;font-size:12px;">
+                            <tr>
+                                <th>Palets</th>
+                                <!--<th>Box </th>-->
+                                <th>Product</th>
+                                <th>Cat</th>
+                                <th>Caliber</th>
+                                <th>Packaging</th>
+                                <th>Brand Box</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                            </tr>
+
+                            <t t-foreach="o.move_ids_without_package" t-as="order">
+                                <tr class="mt-2">
+                                    <td class="no_border">
+                                        <span t-esc="order.cantidadpedido"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_id.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_id.category.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_id.caliber.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.confeccion.abrev"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_id.brand.name"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_uom_qty"/>
+                                    </td>
+                                    <td class="no_border">
+                                        <span t-esc="order.product_uom.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-5">
+                        <span style="font-size:12px">(*) Bio Product: controled by ES-ECO-20-CV</span>
+                        <br/>
+                        <span style="font-size:12px">Transport</span>
+                    </div>
+
+                    <div class="col-7">
+                        <table  style="width:100%;">
+                            <t t-set="total_palets" t-value="0" />
+                            <t t-foreach="o.move_ids_without_package" t-as="order">
+                                <t t-set="total_palets" t-value="total_palets + order.cantidadpedido"/>
+                            </t>
+
+                            <tr style="text-align:right;">
+                                <td class="border_px"  style="width:25%;">Pal</td>
+                                <td class="border_px" style="width:25%;">
+                                    <span t-esc="total_palets"/>
+                                </td>
+                                <td class="border_px" style="width:25%;">Net Weight</td>
+                                <td class="border_px" style="width:25%;"><span/></td>
+                            </tr>
+                            <tr style="text-align:right;">
+                                <td class="border_px"  style="width:25%;">Bit Pck Total</td>
+                                <td class="border_px" style="width:25%;"><span /></td>
+                                <td class="border_px" style="width:25%;">Gross Weight</td>
+                                <td class="border_px" style="width:25%;"><span/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </t>
+    </template>
+
+    <template id="albaran_venta_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="indaws_product_extended.indaws_albaran_venta_report" />
+            </t>
+        </t>
+    </template>
+</odoo>
