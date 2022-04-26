@@ -6,6 +6,8 @@ from odoo.exceptions import ValidationError
 from odoo.http import request
 import logging
 import odoo.addons.decimal_precision as dp
+import math
+from odoo.tools.float_utils import float_round
 
 _logger = logging.getLogger(__name__)
 
@@ -29,66 +31,40 @@ class PurchaseOrderLine(models.Model):
         ('revised', 'Revisado'),
         ('grinding', 'Rectificado'),
     ], string='Estado', default='draft')
-    expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
-    expedienteo = fields.Many2one('jovimer.expedientes', string='Expediente', related='order_id.expediente')
-    expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
-    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie', store=True)
-    expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
-    expediente_serieo = fields.Selection('jovimer.expedientes', related='expedienteo.campanya', store=True)
-    expediente_serieno = fields.Many2one('jovimer.expedientes.series', related='expediente.serie', store=True)
-    expediente_numo = fields.Integer('jovimer.expedientes', related='expedienteo.name', store=True)
-    pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
-    asignado = fields.Boolean(string='Asignado')
-    # idasignacion = fields.Many2one('jovimer.asignaciones', string='ID Asignación')
-    asignacionj = fields.Many2one('sale.order.line',
-                                  string='Asignación')  # , related='idasignacion.saleorderlinedestino', store=True)
-    libreasignada = fields.Float(string='Libres')
-    comision = fields.Float(string='Comision')
-    bultos = fields.Float(string='Bultos')
+    # asignado = fields.Boolean(string='Asignado')
+    # libreasignada = fields.Float(string='Libres')
+    # comision = fields.Float(string='Comision')
+
+    # expediente = fields.Many2one('jovimer.expedientes', string='Expediente', related='sale_line_id.expediente')
+    # expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya')
+    # expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
+    # expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name')
+    # pedidocerrado = fields.Boolean(string='Pedido Cerrado', related='expediente.order_close')
+
+    bultos = fields.Float(string='Bultos', related='sale_line_id.bultos')
     totalbultos = fields.Float(string='Total Bultos', compute='_compute_total_weight')
-    unidabulto = fields.Many2one('uom.uom', string='Tipo Medida')
-    plantilla = fields.Many2one('product.template', string='Plantilla de Producto')
-    variedad = fields.Many2one('jovimer.variedad', string='Variedad')
-    calibre = fields.Many2one('jovimer.calibre', string='Calibre')
-    categoria = fields.Many2one('jovimer.categoria', string='Categoria')
-    confeccion = fields.Many2one('jovimer.confeccion', string='Confección')
-    envase = fields.Many2one('jovimer.envase', string='Envase')
-    marca = fields.Many2one('jovimer.marca', string='Marca')
-    name = fields.Char(string='Nombre')
-    nocalcbultos = fields.Boolean(string='No Calcula Bultos')
-    kgnetbulto = fields.Float(string='Kg/Net Bulto')
-    partner = fields.Many2one('res.partner', string='Cliente')
-    cantidadpedido = fields.Float(string='Cantidad Pedido')
-    cantidadasignada = fields.Float(string='Cantidad Original')
-    unidadasignada = fields.Many2one('uom.uom', string='Ud. Asig.')
-    estaasignada = fields.Boolean(string='Asignado')
-    expedienteorigen = fields.Many2one('jovimer.expedientes', string='Expediente Origen')
-    unidadpedido = fields.Many2one('uom.uom', string='Unidad Pedido', domain=[('invisible', '=', 'NO')])
-    product = fields.Many2one('product.product', string='Producto')
-    pvpcoste = fields.Float(string='Coste')
-    pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo')
-    pvptrans = fields.Float(string='Transporte')
-    pvpvta = fields.Float(string='Venta')
-    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
-    # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
-    saleorderline = fields.Many2one('sale.order.line', string='Lineas de Venta')
-    lotecomp = fields.Char(string='Lote', related='saleorderline.order_id.reslote')
+    unidabulto = fields.Many2one('uom.uom', string='Tipo Medida', related='sale_line_id.unidabulto')
+    variedad = fields.Many2one('jovimer.variedad', string='Variedad', related='sale_line_id.variedad')
+    calibre = fields.Many2one('jovimer.calibre', string='Calibre', related='sale_line_id.calibre')
+    categoria = fields.Many2one('jovimer.categoria', string='Categoria', related='sale_line_id.categoria')
+    confeccion = fields.Many2one('jovimer.confeccion', string='Confección', related='sale_line_id.confeccion')
+    envase = fields.Many2one('jovimer.envase', string='Envase', related='sale_line_id.envase')
+    marca = fields.Many2one('jovimer.marca', string='Marca', related='sale_line_id.marca')
+    kgnetbulto = fields.Float(string='Kg/Net Bulto', related='sale_line_id.kgnetbulto')
+    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida', related='sale_line_id.tipouom')
+    # unidadpedido = fields.Many2one('uom.uom', string='Unidad Pedido', domain=[('invisible', '=', 'NO')])
+    # pvpcoste = fields.Float(string='Coste', related='sale_line_id.pvpcoste')
+    # pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo', related='sale_line_id.pvptipo')
+    # pvptrans = fields.Float(string='Transporte', related='sale_line_id.pvptrans')
+    # pvpvta = fields.Float(string='Venta', related='sale_line_id.pvpvta')
+    cantidadpedido = fields.Float(string='Cantidad Pedido', related='sale_line_id.cantidadpedido')
+    lotecomp = fields.Char(string='Lote', related='sale_line_id.order_id.reslote')
+
     reclamacion_id = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
-    # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
-    viajedirecto = fields.Boolean(string="Viaje Directo")
-    # viajerel = fields.Many2one('jovimer.viajes', string='Viaje')
-    destino = fields.Boolean(string='Para Almacén', related='order_id.destino', store=True)
-    destinodonde = fields.Char(string='Donde Está', related='order_id.destinodonde', store=True)
-    fechasalida = fields.Date(string='Fecha Salida', related='order_id.fechasalida')
-    etiquetau = fields.Text(string='Etiqueta Unidad')
-    lineafacturacompra = fields.Many2one('account.move', string='Albarán')
-    lineaalbarancompra = fields.Many2one('account.move.line', string='Linea Albarán')
-    # albarancomprarel = fields.Many2one('account.invoice', string='Albarán Compra', related='lineaalbarancompra.invoice_id')
-    etiquetab = fields.Text(string='Etiqueta BUlto')
+    reclamation = fields.Boolean(string='Reclamacion Creada')
+
     facturado = fields.Boolean(string='Prepara Albaran Factura')
-    plantillaetiquetasc = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla Etiquetas')
-    # idgeneraalbaranes = fields.Many2one('jovimer.generaalbaranes', string='ID Genera Albaranes')
-    # jovimer_lineascompra = fields.Many2one('jovimer.lineascompra', string='Linea Origen Compra')
+
     statusrecla = fields.Selection([
         ('OK', 'OK'),
         ('RECLAMADA', 'RECLAMADA'),
@@ -98,83 +74,69 @@ class PurchaseOrderLine(models.Model):
         string='Discount (%)', digits=dp.get_precision('Discount'),
     )
     track = fields.Text('Cambios Realizados')
-    reclamation = fields.Boolean(string='Reclamacion Creada')
+
     product_qty = fields.Float('Cantidad', compute='_compute_product_qty',
-                               digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
+                                digits=dp.get_precision('Product Unit of Measure'), store=True, copy=False)
+
 
     @api.depends('product_uom_qty')
     def _compute_product_qty(self):
         for item in self:
             item.product_qty = item.product_uom_qty
+    # @api.onchange('plantilla')
+    # def on_change_plantilla(self):
+    #     expediente = self.order_id.expediente.id
+    #     productid = self.plantilla.product.id
+    #     variedad = self.plantilla.variedad
+    #     calibre = self.plantilla.calibre
+    #     categoria = self.plantilla.categoria
+    #     confeccion = self.plantilla.confeccion
+    #     envase = self.plantilla.envase
+    #     marca = self.plantilla.marca
+    #     bultos = self.plantilla.bultos
+    #     unidadpedido = self.plantilla.tipouom.id
+    #     self.plantillaetiquetasc = self.plantilla.plantillaetiquetas
+    #     self.unidadpedido = unidadpedido
+    #     self.product_id = productid
+    #     self.variedad = variedad
+    #     self.calibre = calibre
+    #     self.categoria = categoria
+    #     self.confeccion = confeccion
+    #     self.envase = envase
+    #     self.marca = marca
+    #     self.bultos = bultos
+    #     self.kgnetbulto = self.plantilla.confeccion.kgnetobulto
+    #     self.expediente = expediente
+    #     return {}
 
-    @api.onchange('plantilla')
-    def on_change_plantilla(self):
-        expediente = self.order_id.expediente.id
-        productid = self.plantilla.product.id
-        variedad = self.plantilla.variedad
-        calibre = self.plantilla.calibre
-        categoria = self.plantilla.categoria
-        confeccion = self.plantilla.confeccion
-        envase = self.plantilla.envase
-        marca = self.plantilla.marca
-        bultos = self.plantilla.bultos
-        unidadpedido = self.plantilla.tipouom.id
-        self.plantillaetiquetasc = self.plantilla.plantillaetiquetas
-        self.unidadpedido = unidadpedido
-        self.product_id = productid
-        self.variedad = variedad
-        self.calibre = calibre
-        self.categoria = categoria
-        self.confeccion = confeccion
-        self.envase = envase
-        self.marca = marca
-        self.bultos = bultos
-        self.kgnetbulto = self.plantilla.confeccion.kgnetobulto
-        self.expediente = expediente
-        return {}
+    # def action_crearreclamacioncr(self, default=None):
+    #     ## self.write({'statusrecla': 'RECLAMADA'})
+    #     id = str(self.id)
+    #     args = ["/opt/jovimer12/bin/creareclamacion_compra.bash", id, "&"]
+    #     subprocess.call(args)
+    #     return {}
 
-    def action_crearreclamacioncr(self, default=None):
-        ## self.write({'statusrecla': 'RECLAMADA'})
-        id = str(self.id)
-        args = ["/opt/jovimer12/bin/creareclamacion_compra.bash", id, "&"]
-        subprocess.call(args)
-        return {}
-
-    def cargar_tablet(self, default=None):
-        idmensaje = self.id
-        viewname = "Cargar Linea"
-        self.env.cr.execute(
-            "select id from ir_ui_view where name LIKE '%view_recepcionptabletcarga_form%' and type='form' ORDER BY id DESC LIMIT 1")
-        result = self.env.cr.fetchone()
-        record_id = int(result[0])
-        view = {
-            'name': (viewname),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'purchase.order.line',
-            'view_id': record_id,
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'flags': {'initial_mode': 'view'},
-            'res_id': idmensaje}
-        return view
+    # def cargar_tablet(self, default=None):
+    #     idmensaje = self.id
+    #     viewname = "Cargar Linea"
+    #     self.env.cr.execute(
+    #         "select id from ir_ui_view where name LIKE '%view_recepcionptabletcarga_form%' and type='form' ORDER BY id DESC LIMIT 1")
+    #     result = self.env.cr.fetchone()
+    #     record_id = int(result[0])
+    #     view = {
+    #         'name': (viewname),
+    #         'view_type': 'form',
+    #         'view_mode': 'form',
+    #         'res_model': 'purchase.order.line',
+    #         'view_id': record_id,
+    #         'type': 'ir.actions.act_window',
+    #         'target': 'new',
+    #         'flags': {'initial_mode': 'view'},
+    #         'res_id': idmensaje}
+    #     return view
 
     def action_cerrarreclamacion(self, default=None):
         self.write({'statusrecla': 'OK'})
-        return {}
-
-    def asignaj(self):
-        asignacion = self.asignacionj
-        order_id = self.asignacionj.order_id
-        product_id = self.product_id
-        ## raise ValidationError("Has pinchado para añadir en: " + str(order_id) + "")
-        vals = {
-            'order_id': order_id,
-            'product_id': product_id,
-        }
-        ## return {'type': 'ir.actions.client', 'tag': 'reload',}
-
-    def action_creact(self, default=None):
         return {}
 
     @api.depends('discount')
@@ -294,8 +256,13 @@ class PurchaseOrderLine(models.Model):
 
     def _prepare_stock_move_vals(self, picking, price_unit, product_uom_qty, product_uom):
         vals = super(PurchaseOrderLine, self)._prepare_stock_move_vals(picking, price_unit, product_uom_qty, product_uom)
-        sale_line_id = self.env['sale.order.line'].search([('product_id', '=', vals['product_id']),('name','=',vals['name']),('discount_supplier','=',self.discount),('order_id','=',self.order_id.sale_related_id.id)], limit=1)
-        vals['product_uom_qty'] = sale_line_id.product_uom_qty
+        product_uom_qty = self.product_qty / self.sale_line_id.kgnetbulto
+        if product_uom.rounding == 1:
+            # If rounding of the uom is 1, upper round
+            product_uom_qty = math.ceil(product_uom_qty)
+        else:
+            product_uom_qty = float_round(product_uom_qty, precision_rounding=product_uom.rounding)
+        vals['product_uom_qty'] = product_uom_qty
         return vals
 
     def on_change_cantidadpedido_purchase(self, unidad_venta, unidad_compra):

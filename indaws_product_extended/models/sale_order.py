@@ -14,18 +14,18 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-
-    def _compute_total_coste(self):
-        for rec in self:
-            coste = 0
-            venta = 0
-            trans = 0
-            venta = rec.amount_untaxed
-            for line in rec.order_line:
-                if line.product_id:
-                    coste += line.pvpcoste or 0.0
-            rec.coste = coste
-            rec.resultado = venta - coste
+    #
+    # def _compute_total_coste(self):
+    #     for rec in self:
+    #         coste = 0
+    #         venta = 0
+    #         trans = 0
+    #         venta = rec.amount_untaxed
+    #         for line in rec.order_line:
+    #             if line.product_id:
+    #                 coste += line.pvpcoste or 0.0
+    #         rec.coste = coste
+    #         rec.resultado = venta - coste
 
     purchase_related_ids = fields.One2many('purchase.order', 'sale_related_id', string="Related purchase orders",
                                            readonly=False)
@@ -33,32 +33,28 @@ class SaleOrder(models.Model):
     fechasalida = fields.Date(string='Fecha de Salida')
     fechallegada = fields.Date(string='Fecha de Llegada')
     horallegada = fields.Char(string='Hora de Llegada', help='Permite caracteres Alfanuméricos')
-    campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
-    expediente = fields.Many2one('jovimer.expedientes', string='Expediente')
-    expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
-    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
-    expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
-    mododecobro = fields.Many2one('payment.acquirer', string='Modo de Cobros')
+    # campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
+
+    # mododecobro = fields.Many2one('payment.acquirer', string='Modo de Cobros')
     conformalote = fields.Many2one('jovimer.conflote', string='Conforma LOTE', store=True)
     reslote = fields.Char(string='Lote')
     obspedido = fields.Text(string='Observaciones PEdido')
     description = fields.Char(string='Desc.')
     palets = fields.Float(string='C. Compra', compute='_compute_paletsc')
     paletsv = fields.Float(string='C. Venta')
-    refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
+    # refcliente = fields.Char(string='Referencia Pedido Cliente', help='Referencia Cliente')
     plataforma = fields.Many2one('jovimer.plataforma', string='Plataforma')
     etiquetas = fields.One2many('jovimer.etiquetas', 'order_id', string='Etiquetas del Pedido')
-    estadopalets = fields.Boolean(string='Estado Palets')
-    faltanpalets = fields.Float(string='Faltan')
-    pedcompra = fields.Many2many('purchase.order', string='Pedidos de Compra')
-    regcalidad = fields.Text(string='Registro de Calidad')
-    moneda = fields.Many2one('res.currency', string='Moneda')
-    costetrans = fields.Float(string='Transporte')
-    coste = fields.Float(string='Compra', compute='_compute_total_coste')
-    resultado = fields.Float(string='Resultado')
+    # estadopalets = fields.Boolean(string='Estado Palets')
+    # faltanpalets = fields.Float(string='Faltan')
+    # pedcompra = fields.Many2many('purchase.order', string='Pedidos de Compra')
+    # regcalidad = fields.Text(string='Registro de Calidad')
+    # moneda = fields.Many2one('res.currency', string='Moneda')
+    # costetrans = fields.Float(string='Transporte')
+    # coste = fields.Float(string='Compra', compute='_compute_total_coste')
+    # resultado = fields.Float(string='Resultado')
     pedidocerrado = fields.Boolean(string='Pedido Cerrado')
-    serieexpnuevo = fields.Many2one('jovimer.expedientes.series', string="Serie Expediente")  # , default=12)
-    numexpnuevo = fields.Integer(string="Número Expediente")
+    # numexpnuevo = fields.Integer(string="Número Expediente")
     edi_file_binary = fields.Binary(attachment=False, string="Fichero EDI", store=True, copy=True, ondelete='set null')
     edi_file = fields.Many2one('ir.attachment', string="Fichero EDI", store=True, copy=True, ondelete='set null',
                                domain="[('mimetype','=','text/plain')]")
@@ -133,7 +129,7 @@ class SaleOrder(models.Model):
                 })
 
     def cambiar_expediente(self, default=None):
-        expediente = self.expediente.id
+        expediente = self.analytic_account_id.id
         order_id = self.id
         view = {
             'name': _('Cambio de Expediente en Pedido de Compra'),
@@ -151,28 +147,8 @@ class SaleOrder(models.Model):
             calculo = lines.calcula_cantidad()
         return {}
 
-    def creaexpediente(self, default=None):
-        id = str(self.id)
-        numexpnuevo = self.numexpnuevo
-        serieexpnuevoid = self.serieexpnuevo.id
-        serieexpnuevoname = self.serieexpnuevo.name
-        buscaexp = self.env['jovimer_expedientes'].search_count(
-            [('name', '=', numexpnuevo), ('serie', '=', serieexpnuevoid)])
-        if buscaexp != 0:
-            raise UserError(
-                "El Número de Expediente ya existe o no se puede Usar:" + str(serieexpnuevoname) + "-" + str(
-                    numexpnuevo) + ".")
-            return {}
-        else:
-            expediente_obj = self.env['jovimer_expedientes']
-            expedientenuevo = expediente_obj.create({
-                'serie': serieexpnuevoid,
-                'name': numexpnuevo})
-            self.write({'expediente': expedientenuevo.id})
-            return {}
-
     @api.onchange('partner_id')
-    def onchange_partner_id(self):
+    def onchange_partner_id_conformalote(self):
         self.conformalote = self.partner_id.conformalote
 
     @api.onchange('conformalote', 'commitment_date', 'fechasalida')

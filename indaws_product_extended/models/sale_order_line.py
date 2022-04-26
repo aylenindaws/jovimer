@@ -16,14 +16,14 @@ _logger = logging.getLogger(__name__)
 class ModelSaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    def _calc_palets(self):
-        numpalets = 0.0
-        try:
-            for line in self.multicomp:
-                numpalets += float(line.numpalets)
-                self.paletsc = numpalets
-        except:
-            self.paletsc = 0
+    # def _calc_palets(self):
+    #     numpalets = 0.0
+    #     try:
+    #         for line in self.multicomp:
+    #             numpalets += float(line.numpalets)
+    #             self.paletsc = numpalets
+    #     except:
+    #         self.paletsc = 0
 
     def _calc_compra(self):
         try:
@@ -49,10 +49,11 @@ class ModelSaleOrderLine(models.Model):
         for saleline in self:
             saleline.pvpres2 = saleline.price_subtotal - saleline.pvpcoste - saleline.pvptrans
 
-    expediente = fields.Many2one('jovimer.expedientes', string='Expediente', related='order_id.expediente', store=True)
-    expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
-    expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
-    expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name', store=True)
+    # expediente = fields.Many2one('jovimer.expedientes', string='Expediente', related='order_id.expediente')
+    # expediente_serie = fields.Selection('jovimer.expedientes', related='expediente.campanya', store=True)
+    # expediente_serien = fields.Many2one('jovimer.expedientes.series', related='expediente.serie')
+    # expediente_num = fields.Integer('jovimer.expedientes', related='expediente.name')
+
     bultos = fields.Float(string='Bultos x Palet')
     price_trans = fields.Float(string='Precio por kg de transporte', compute='on_change_km_transporte')
     totalbultos = fields.Float(string='Total Bultos', compute='_compute_totalbultos', store=True)
@@ -68,14 +69,9 @@ class ModelSaleOrderLine(models.Model):
     udfacturacion = fields.Many2one('uom.uom', string='Ud Albaran/Factura')
     envase = fields.Many2one('jovimer.envase', string='Envase')
     marca = fields.Many2one('jovimer.marca', string='Marca')
-    name = fields.Char(string='Nombre')
-    nocalcbultos = fields.Boolean(string='No Calcula Bultos', related='product_id.not_calculate_lumps')
-    partner = fields.Many2one('res.partner', string='Cliente')
-    cantidadpedidoi = fields.Integer(string='Palets')
     cantidadpedido = fields.Float(string='Palets Venta', digits=None, default=0)
-    cantidadpedidoorig = fields.Float(string='Palets Venta')
-    unidadpedido = fields.Many2one('uom.uom', string='Unidad Pedido', domain=[('invisiblecp', '=', 'SI')])
-    product = fields.Many2one('product.product', string='Producto')
+    # unidadpedido = fields.Many2one('uom.uom', string='Unidad Pedido', domain=[('invisiblecp', '=', 'SI')])
+    # product = fields.Many2one('product.product', string='Producto')
     pvpcoste = fields.Float(string='Coste')
     pvptipo = fields.Many2one('uom.uom', string='PVP/Tipo', domain=[('invisible', '=', 'NO')])
     pvptrans = fields.Float(string='Transporte')
@@ -87,98 +83,91 @@ class ModelSaleOrderLine(models.Model):
     # multicomp = fields.One2many('jovimer.lineascompra', 'orderline', string='Lineas de Compra')
     # reclamacion = fields.One2many('jovimer.reclamaciones', 'detalledocumentos', string='Reclamaciones')
     # reclamaciones = fields.Many2one('jovimer.reclamaciones', string='Reclamaciones')
-    paletsc = fields.Float(string='Compra', compute='_calc_palets', store=True)
-    provisionales = fields.Many2many('purchase.order.line', string='Provisionales', domain=[('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])], limit=2)
-    provisionaleso2m = fields.One2many('purchase.order.line', 'asignacionj', string="Provisionales")
-    viajedirecto = fields.Boolean(string="Viaje Directo")
+    # paletsc = fields.Float(string='Compra', compute='_calc_palets', store=True)
+    # provisionales = fields.Many2many('purchase.order.line', string='Provisionales', domain=[('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])], limit=2)
+    # provisionaleso2m = fields.One2many('purchase.order.line', 'sale_line_id', string="Provisionales")
+    # viajedirecto = fields.Boolean(string="Viaje Directo")
     plantillaetiqueta = fields.Many2one('jovimer.etiquetas.plantilla', string='Plantilla Etiqueta')
     etiqueta = fields.Many2one('jovimer.etiquetas', string='Etiqueta')
-    etiquetatxt = fields.Text(string='Etiqueta Resultante Bulto')
-    etiquetatxtu = fields.Text(string='Etiqueta Resultante Unidad')
-    proveedores = fields.Char(string='Proveedores')
-    pvpmediocompra = fields.Char(string='P.Compra')
-    precioscompra = fields.Text(string='Datos de la Compra')
-    asignacionlineac = fields.Many2one('purchase.order.line', string='Linea Para Asignar', limit=1)
-    edideslin = fields.Text(string='Detalles Linea EDI')
+    # etiquetatxt = fields.Text(string='Etiqueta Resultante Bulto')
+    # etiquetatxtu = fields.Text(string='Etiqueta Resultante Unidad')
+    # proveedores = fields.Char(string='Proveedores')
+    # pvpmediocompra = fields.Char(string='P.Compra')
+    # precioscompra = fields.Text(string='Datos de la Compra')
+    # asignacionlineac = fields.Many2one('purchase.order.line', string='Linea Para Asignar', limit=1)
+    # edideslin = fields.Text(string='Detalles Linea EDI')
     statusrecla = fields.Selection([
         ('OK', 'OK'),
         ('RECLAMADA', 'RECLAMADA'),
         ('DEVUELTA', 'DEVUELTA'),
     ], string='Estado', default='OK')
-    not_active = fields.Boolean('NO Activo', related='product_id.not_active')
     costetrans = fields.Float(string='Transporte')
     uom_po_id = fields.Many2one('uom.uom', 'Ud Compra', required=True, help="Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.")
 
-    def recalculalinea(self):
-        variedad = self.product_id.variety
-        calibre = self.product_id.caliber
-        categoria = self.product_id.category
-        confeccion = self.product_id.confection
-        envase = self.product_id.container
-        marca = self.product_id.brand
-        bultos = self.product_id.bulge
-        label = self.env['jovimer.partner.code'].search([('template_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
-        self.tipouom = self.product_id.palet_type
-        self.product_id = self.product_id.id
-        self.variedad = variedad
-        self.calibre = calibre
-        self.categoria = categoria
-        self.confeccion = confeccion
-        self.envase = envase
-        self.marca = marca
-        self.bultos = bultos
-        self.unidadpedido = self.product_id.palet_type
-        self.unidabulto = self.product_id.confection.uom_bulto
-        self.kgnetbulto = self.product_id.confection.kg_net_bulge
-        self.unidadesporbulto = self.product_id.confection.uom_for_bulge
-        self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = label if label else False
-        if self.product_id:
-            self.costetrans = self.product_id.transport_kg
-            purchase_line = self.env['product.supplierinfo'].search(
-                [('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
-            supplier = purchase_line.name
-            if supplier:
-                self.uom_po_id = purchase_line.product_uom.id
-                self.purchase_price = purchase_line.price
-                self.discount_supplier = purchase_line.discount
-                self.supplier_id = supplier
-            else:
-                self.uom_po_id = False
-                self.purchase_price = False
-                self.discount_supplier = False
-                self.supplier_id = False
-        else:
-            self.costetrans = False
-        return {}
+    # def recalculalinea(self):
+    #     variedad = self.product_id.variety
+    #     calibre = self.product_id.caliber
+    #     categoria = self.product_id.category
+    #     confeccion = self.product_id.confection
+    #     envase = self.product_id.container
+    #     marca = self.product_id.brand
+    #     bultos = self.product_id.bulge
+    #     label = self.env['jovimer.partner.code'].search([('template_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
+    #     self.tipouom = self.product_id.palet_type
+    #     self.product_id = self.product_id.id
+    #     self.variedad = variedad
+    #     self.calibre = calibre
+    #     self.categoria = categoria
+    #     self.confeccion = confeccion
+    #     self.envase = envase
+    #     self.marca = marca
+    #     self.bultos = bultos
+    #     # self.unidadpedido = self.product_id.palet_type
+    #     self.unidabulto = self.product_id.confection.uom_bulto
+    #     self.kgnetbulto = self.product_id.confection.kg_net_bulge
+    #     self.unidadesporbulto = self.product_id.confection.uom_for_bulge
+    #     self.product_uom = self.product_id.uom_type
+    #     # self.plantillaetiqueta = label if label else False
+    #     if self.product_id:
+    #         self.costetrans = self.product_id.transport_kg
+    #         purchase_line = self.env['product.supplierinfo'].search(
+    #             [('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
+    #         supplier = purchase_line.name
+    #         if supplier:
+    #             self.uom_po_id = purchase_line.product_uom.id
+    #             self.purchase_price = purchase_line.price
+    #             self.discount_supplier = purchase_line.discount
+    #             self.supplier_id = supplier
+    #         else:
+    #             self.uom_po_id = False
+    #             self.purchase_price = False
+    #             self.discount_supplier = False
+    #             self.supplier_id = False
+    #     else:
+    #         self.costetrans = False
+    #     return {}
 
     @api.onchange('product_id')
     def on_change_plantilla(self):
-        variedad = self.product_id.variety
-        calibre = self.product_id.caliber
-        categoria = self.product_id.category
-        confeccion = self.product_id.confection
-        envase = self.product_id.container
-        marca = self.product_id.brand
-        bultos = self.product_id.bulge
         label = self.env['jovimer.partner.code'].search([('template_id', '=', self.product_id.product_tmpl_id.id), ('partner_id', '=', self.partner_id.id)]) if self.product_id and self.partner_id else False
-        self.tipouom = self.product_id.palet_type
-        self.product_id = self.product_id.id
-        self.variedad = variedad
-        self.calibre = calibre
-        self.categoria = categoria
-        self.confeccion = confeccion
-        self.envase = envase
-        self.marca = marca
-        self.bultos = bultos
-        self.unidadpedido = self.product_id.uom_type
-        self.unidabulto = self.product_id.confection.uom_bulto
-        self.kgnetbulto = self.product_id.confection.kg_net_bulge
-        self.unidadesporbulto = self.product_id.confection.uom_for_bulge
-        self.product_uom = self.product_id.uom_type
-        self.plantillaetiqueta = label if label else False
-        # supplier_list = self.env['getsale.orderdata'].search([('order_id','=',self.id)]).mapped('partner_id')
         if self.product_id:
+            self.tipouom = self.product_id.palet_type
+            self.product_id = self.product_id.id
+            self.variedad = self.product_id.variety
+            self.calibre = self.product_id.caliber
+            self.categoria = self.product_id.category
+            self.confeccion = self.product_id.confection
+            self.envase = self.product_id.container
+            self.marca = self.product_id.brand
+            self.bultos = self.product_id.bulge
+            # self.unidadpedido = self.product_id.uom_type
+            self.unidabulto = self.product_id.confection.uom_bulto
+            self.kgnetbulto = self.product_id.confection.kg_net_bulge
+            self.unidadesporbulto = self.product_id.confection.uom_for_bulge
+            self.product_uom = self.product_id.uom_type
+            # self.plantillaetiqueta = label if label else False
+            # supplier_list = self.env['getsale.orderdata'].search([('order_id','=',self.id)]).mapped('partner_id')
+            self.costetrans = self.product_id.transport_kg
             purchase_line = self.env['product.supplierinfo'].search(
                 [('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], limit=1)
             supplier = purchase_line.name
@@ -194,6 +183,8 @@ class ModelSaleOrderLine(models.Model):
                 self.discount_supplier = False
                 self.supplier_id = False
                 self.costetrans = False
+        else:
+            self.costetrans = False
         return {}
 
     @api.onchange('supplier_id')
@@ -204,25 +195,25 @@ class ModelSaleOrderLine(models.Model):
             else:
                 item.discount_supplier = False
 
-    @api.onchange('product_id')
-    def onchange_product_id(self):
-        for item in self:
-            if item.product_id:
-                item.costetrans = item.product_id.transport_kg
-            else:
-                item.costetrans = False
+    # @api.onchange('product_id')
+    # def onchange_product_id(self):
+    #     for item in self:
+    #         if item.product_id:
+    #
+    #         else:
+    #             item.
 
-    def buscaprovisionales(self):
-        idline = self.id
-        self.provisionaleso2m = False
-        provisionaleso2m = self.provisionaleso2m.search(
-            [('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])])
-        if provisionaleso2m:
-            for line in provisionaleso2m:
-                line.asignacionj = idline
-        else:
-            raise UserError("NADA")
-        return {}
+    # def buscaprovisionales(self):
+    #     idline = self.id
+    #     self.provisionaleso2m = False
+    #     provisionaleso2m = self.provisionaleso2m.search(
+    #         [('expediente_serie', '=', 'PR21'), ('state', 'in', ['done', 'purchase'])])
+    #     if provisionaleso2m:
+    #         for line in provisionaleso2m:
+    #             line.asignacionj = idline
+    #     else:
+    #         raise UserError("NADA")
+    #     return {}
 
     @api.onchange('price_unit')
     def on_change_pvpres(self):
@@ -375,7 +366,6 @@ class ModelSaleOrderLine(models.Model):
         res['confeccion'] = self.confeccion.id
         res['envase'] = self.envase.id
         res['marca'] = self.marca.id
-        res['nocalcbultos'] = self.nocalcbultos
         res['kgnetbulto'] = self.kgnetbulto
         res['totalbultos'] = self.totalbultos
         res['unidadesporbulto'] = self.unidadesporbultor

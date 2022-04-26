@@ -19,7 +19,7 @@ class JovimerReclamaciones(models.Model):
     asunto = fields.Char(string='Tema Reclamacion')
     fechasaalta = fields.Date(string='Fecha de Alta')
     fechabaja = fields.Date(string='Fecha de Baja')
-    campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
+    # campanya = fields.Char(string='Serie / Campaña', help='Número Expediente')
     expediente = fields.Many2one('account.analytic.account', string='Expediente')
     cliente = fields.Many2one('res.partner', string='Proveedor reclamación')
     lineaspedido = fields.Many2many('sale.order', string='Documentos de Venta Afectados')

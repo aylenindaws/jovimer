@@ -18,7 +18,7 @@
                 <field name='envase' optional="hide"/>
                 <field name='cantidadpedido' optional="hide"/>
                 <field name='tipouom' optional="hide"/>
-                <field name='costetrans' optional="hide"/>
+<!--                <field name='costetrans' optional="hide"/>-->
             </xpath>
         </field>
     </record>
@@ -38,7 +38,6 @@
                 <field name="contactochofer"/>
                 <field name="matricula"/>
                 <field name="temperatura"/>
-                <field name="totalbultos" invisible="True"/>
                 <label for="paleteur" string="Palets EURO/GRANDE"/>
                 <div>
                     <field name="paleteur" class="oe_inline"/> /

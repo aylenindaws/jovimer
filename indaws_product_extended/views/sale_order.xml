@@ -158,7 +158,6 @@
             <xpath expr="//div[hasclass('oe_title')]" position="replace">
                 <group name="title">
                     <group name="oe_title">
-                        <field name="expediente" readonly="1" invisible="1"/>
                         <field name="analytic_account_id" readonly="1" force_save="1" string="Expediente"/>
                         <field name="name" string="Numero" readonly="1"/>
                     </group>

@@ -21,8 +21,8 @@
             <xpath expr="//div[@name='journal_div']" position="after">
                 <field name="id"/>
                 <field name="expediente"/>
-                <field name="quierebr"/>
-                <field name="noimprimepal"/>
+<!--                <field name="quierebr"/>-->
+<!--                <field name="noimprimepal"/>-->
             </xpath>
             <xpath expr="//field[@name='invoice_line_ids']" position="before">
                 <group>

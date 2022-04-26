@@ -23,20 +23,12 @@ class createpurchaseorder(models.TransientModel):
                 'order_id': record.order_id.id,
                 'name': record.name,
                 'product_qty': record.on_change_cantidadpedido_purchase(record.product_uom.name, record.uom_po_id.name),
-                'price_unit': record.price_unit,
-                'product_subtotal': record.price_subtotal,
+
                 'discount': record.discount_supplier,
                 'purchase_price': record.purchase_price,
-                'cantidadpedido': record.cantidadpedido,
-                'tipouom': record.tipouom.id,
-                'bultos': record.bultos,
-                'variedad': record.variedad.id,
-                'confeccion': record.confeccion.id,
-                'calibre': record.calibre.id,
-                'marca': record.marca.id,
-                'envase': record.envase.id,
                 'account_analytic_id': data.analytic_account_id.id,
-                'partner_id': record.supplier_id.id if record.supplier_id else False
+                'partner_id': record.supplier_id.id if record.supplier_id else False,
+                'sale_line_id':record.id,
             }))
         res.update({'new_order_line_ids': update})
         return res
@@ -60,16 +52,9 @@ class createpurchaseorder(models.TransientModel):
                     'taxes_id': order_line.product_id.supplier_taxes_id.ids,
                     'date_planned': order_line.date_planned,
                     'price_unit': order_line.purchase_price,
-                    'cantidadpedido': order_line.cantidadpedido,
-                    'tipouom': order_line.tipouom.id,
-                    'bultos': order_line.bultos,
-                    'variedad': order_line.variedad.id,
-                    'confeccion': order_line.confeccion.id,
-                    'calibre': order_line.calibre.id,
-                    'marca': order_line.marca.id,
-                    'envase': order_line.envase.id,
                     'discount': order_line.discount,
                     'account_analytic_id': order_line.account_analytic_id.id,
+                    'sale_line_id':order_line.sale_line_id.id
                 }])
             res.create({
                 'partner_id': supplier.id,
@@ -86,13 +71,6 @@ class createpurchaseorder(models.TransientModel):
 class Getsaleorderdata(models.TransientModel):
     _inherit = 'getsale.orderdata'
 
-    cantidadpedido = fields.Float(string='Cantidad Pedido')
-    tipouom = fields.Many2one('jovimer.palet', string='Tipo Medida')
-    bultos = fields.Float(string='Bultos')
-    variedad = fields.Many2one('jovimer.variedad', string='Variedad')
-    confeccion = fields.Many2one('jovimer.confeccion', string='Confección')
-    calibre = fields.Many2one('jovimer.calibre', string='Calibre')
-    marca = fields.Many2one('jovimer.marca', string='Marca')
-    envase = fields.Many2one('jovimer.envase', string='Envase')
     account_analytic_id = fields.Many2one('account.analytic.account', string='Expediente')
     discount = fields.Float(string="Descuento", digits="Discount")
+    sale_line_id = fields.Many2one("sale.order.line", string="Sales Order Line")

@@ -24,9 +24,8 @@ class StockPicking(models.Model):
             item.paletgr = 0
             item.totalbultos = 0
             for record in item.move_ids_without_package:
-                item.write({'paleteur': record.paleteur})
-                item.write({'paletgr': record.paletgr})
-                item.write({'totalbultos': record.totalbultos})
+                item.write({'paleteur': record.paleteur, 'paletgr': record.paletgr})
+                # 'totalbultos': record.totalbultos
 
     def action_confirm(self):
         for item in self:
@@ -39,7 +38,7 @@ class StockPicking(models.Model):
                 record.cantidadpedido = record.sale_line_id.cantidadpedido
                 record.product_uom_qty = record.sale_line_id.product_uom_qty
                 record.tipouom = record.sale_line_id.tipouom
-                record.costetrans = record.sale_line_id.costetrans
+                # record.costetrans = record.sale_line_id.costetrans
                 record.analytic_account_id = record.sale_line_id.order_id.analytic_account_id
         res = super(StockPicking, self).action_confirm()
 
@@ -59,24 +58,24 @@ class StockPicking(models.Model):
                         vals['analytic_account_id'] = account_analytic.id
         result = super(StockPicking, self).create(vals)
         return result
-
-    def write(self, vals):
-        result = super(StockPicking, self).write(vals)
-        for item in self:
-            if not item.analytic_account_id and not 'analytic_account_id' in vals:
-                sale = self.env['sale.order'].search([('name', 'ilike', item.origin)])
-                if sale:
-                    vals['analytic_account_id'] = sale.analytic_account_id.id
-                else:
-                    purchase = self.env['purchase.order'].search([('name', 'ilike', item.origin)])
-                    if purchase:
-                        vals['analytic_account_id'] = purchase.account_analytic_id.id
-                    else:
-                        account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', item.origin)])
-                        if account_analytic:
-                            vals['analytic_account_id'] = account_analytic.id
-                item.write(vals)
-        return result
+    #
+    # def write(self, vals):
+    #     result = super(StockPicking, self).write(vals)
+    #     for item in self:
+    #         if not item.analytic_account_id and not 'analytic_account_id' in vals:
+    #             sale = self.env['sale.order'].search([('name', 'ilike', item.origin)])
+    #             if sale:
+    #                 vals['analytic_account_id'] = sale.analytic_account_id.id
+    #             else:
+    #                 purchase = self.env['purchase.order'].search([('name', 'ilike', item.origin)])
+    #                 if purchase:
+    #                     vals['analytic_account_id'] = purchase.account_analytic_id.id
+    #                 else:
+    #                     account_analytic = self.env['account.analytic.account'].search([('name', 'ilike', item.origin)])
+    #                     if account_analytic:
+    #                         vals['analytic_account_id'] = account_analytic.id
+    #             item.write(vals)
+    #     return result
 
 
 class StockPickingBatch(models.Model):

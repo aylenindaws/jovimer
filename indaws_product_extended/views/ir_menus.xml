@@ -9,10 +9,8 @@
             <menuitem id="jovimer_confeccion_config_submenu" name="Confecciones" action="jovimer_confeccion_list_action"/>
             <menuitem id="jovimer_conflote_config_submenu" name="Conflotes" action="jovimer_conflote_list_action"/>
             <menuitem id="jovimer_envase_config_submenu" name="Envases" action="jovimer_envase_list_action"/>
-            <menuitem id="jovimer_etiquetas_config_submenu" name="Etiquetas" action="jovimer_etiquetas_list_action"/>
-            <menuitem id="jovimer_etiquetas_plantilla_config_submenu" name="Plantillas de Etiquetas" action="jovimer_etiquetas_plantilla_list_action"/>
-            <menuitem id="jovimer_expedientes_config_submenu" name="Expedientes" action="jovimer_expedientes_list_action"/>
-            <menuitem id="jovimer_expedientes_series_config_submenu" name="Expedientes Series" action="jovimer_expedientes_series_list_action"/>
+<!--            <menuitem id="jovimer_etiquetas_config_submenu" name="Etiquetas" action="jovimer_etiquetas_list_action"/>-->
+<!--            <menuitem id="jovimer_etiquetas_plantilla_config_submenu" name="Plantillas de Etiquetas" action="jovimer_etiquetas_plantilla_list_action"/>-->
             <menuitem id="jovimer_marca_config_submenu" name="Marcas" action="jovimer_marca_list_action"/>
             <menuitem id="jovimer_variedad_config_submenu" name="Variedades" action="jovimer_variedad_list_action"/>
             <menuitem id="jovimer_palet_config_submenu" name="Palets" action="jovimer_palet_list_action"/>
