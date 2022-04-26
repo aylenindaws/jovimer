@@ -8,6 +8,17 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     traspasocont = fields.Boolean('Traspasado Contabilidad')
+    otras_facturas = fields.Boolean('Otras facturas', related="journal_id.otras_facturas", store=True)
+    journal_ids = fields.Many2many('account.journal', string='Diarios', compute='_compute_journal')
+
+    def _get_default_journal_otras_facturas(self):
+        return self.env['account.journal'].search([('otras_facturas', '=', True)], limit=1)
+
+    journal_otras_facturas_id = fields.Many2one('account.journal', string='Diario', required=True, readonly=True,
+                                 states={'draft': [('readonly', False)]},
+                                 check_company=True, domain="[('id', 'in', journal_ids)]",
+                                 default=_get_default_journal_otras_facturas)
+
 
     def get_invoices_clients(self):
         self.env.cr.execute("""
@@ -46,4 +57,24 @@ class AccountMove(models.Model):
                 'tipotraspaso': 'RECIBIDAS',
                 'invoices_ids': [(6, 0, ids)]
             })
+
+    @api.depends('name')
+    def _compute_journal(self):
+        for move in self:
+            move.journal_ids = self.env['account.journal'].search([('otras_facturas', '=', True)])
+
+    @api.onchange('journal_otras_facturas_id')
+    def _onchenge_journal_otras_facturas_id(self):
+        if self.journal_otras_facturas_id:
+            self.journal_id = self.journal_otras_facturas_id
+        else:
+            self.journal_id = None
+
+    @api.depends('company_id', 'invoice_filter_type_domain')
+    def _compute_suitable_journal_ids(self):
+        for m in self:
+            journal_type = m.invoice_filter_type_domain or 'general'
+            company_id = m.company_id.id or self.env.company.id
+            domain = [('company_id', '=', company_id), ('type', '=', journal_type), ('otras_facturas', '=', False)]
+            m.suitable_journal_ids = self.env['account.journal'].search(domain)
 
